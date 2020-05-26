@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.dm.sche.mapper.HouseHoldItemMapper"> 
+
+	<!-- 대분류 항목 정보 조회 -->
+	<select id="getHouseHoldItemList" resultType="houseHoldItem"> 
+		SELECT 
+			ItemIdx,				<!-- 대분류 항목 PK -->
+			ItemName,				<!-- 품목명 -->
+			ItemCode,				<!-- 품목코드 -->
+			ItemType,				<!-- 품목유형 -->
+			CreateMemberIdx,		<!-- 생성자 PK -->
+			UpdateMemberIdx,		<!-- 수정자 PK -->
+			CreateDate,				<!-- 생성일 -->
+			UpdateDate				<!-- 수정일 -->
+			
+		FROM HouseHoldItem
+	</select> 
+	
+	<!-- 중복확인 -->
+	<select id="keywordCheck" parameterType="com.dm.sche.dto.KeywordDTO" resultType="String">
+		SELECT 
+			<choose>
+				<when test='"name".equals(keywordType)'>
+					ItemName				
+				</when>
+				<when test='"code".equals(keywordType)'>
+					ItemCode
+				</when>
+			</choose>
+		FROM HouseHoldItem
+		
+		<where>
+			<choose>
+				<when test='"name".equals(keywordType)'>
+					ItemName = #{keyword}				
+				</when>
+				<when test='"code".equals(keywordType)'>
+					ItemCode = #{keyword}
+				</when>
+			</choose>
+		</where>
+		
+		LIMIT 1
+	</select>
+	
+	<!-- 대분류 항목 정보 등록 -->
+	<insert id="insert" parameterType="houseHoldItem">
+		INSERT INTO HouseHoldItem
+		(
+			ItemName,
+			ItemCode,
+			ItemType,
+			CreateMemberIdx
+		)
+		VALUES
+		(
+			#{itemName},
+			#{itemCode},
+			#{itemType},
+			#{createMemberIdx}
+		)
+	</insert>
+</mapper>
+

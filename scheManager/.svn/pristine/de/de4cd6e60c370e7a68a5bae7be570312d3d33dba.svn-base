@@ -1,0 +1,124 @@
+package com.dm.sche.model;
+
+import java.util.Date;
+
+import org.apache.ibatis.type.Alias;
+
+import lombok.Data;
+
+@Data
+@Alias("scheduleDetail")
+public class ScheduleDetail {
+	
+	private Integer scheduleIdx;				// 일정 PK
+	private String scheduleName;				// 일정 명
+	private String scheduleComment;				// 일정 상세 설명
+	private Date scheduleStartDate;				// 일정 시작일
+	private Date scheduleEndDate;				// 일정 종료일
+	private String isUse;						// 사용 여부
+	private String color;						// 색상
+	private String place;						// 장소
+	private String link;						// 링크
+	private Date createDate;					// 생성일
+	private Date updateDate;					// 수정일
+	
+	private Schedule schedule;					// 일정 관리
+
+	public Integer getScheduleIdx() {
+		return scheduleIdx;
+	}
+
+	public void setScheduleIdx(Integer scheduleIdx) {
+		this.scheduleIdx = scheduleIdx;
+	}
+
+	public String getScheduleName() {
+		return scheduleName;
+	}
+
+	public void setScheduleName(String scheduleName) {
+		this.scheduleName = scheduleName;
+	}
+
+	public String getScheduleComment() {
+		return scheduleComment;
+	}
+
+	public void setScheduleComment(String scheduleComment) {
+		this.scheduleComment = scheduleComment;
+	}
+
+	public Date getScheduleStartDate() {
+		return scheduleStartDate;
+	}
+
+	public void setScheduleStartDate(Date scheduleStartDate) {
+		this.scheduleStartDate = scheduleStartDate;
+	}
+
+	public Date getScheduleEndDate() {
+		return scheduleEndDate;
+	}
+
+	public void setScheduleEndDate(Date scheduleEndDate) {
+		this.scheduleEndDate = scheduleEndDate;
+	}
+
+	public String getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(String isUse) {
+		this.isUse = isUse;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getPlace() {
+		return place;
+	}
+
+	public void setPlace(String place) {
+		this.place = place;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public Schedule getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(Schedule schedule) {
+		this.schedule = schedule;
+	}
+	
+	
+}

@@ -1,0 +1,392 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<script type="text/javascript" src="/lib/smarteditor2/js/HuskyEZCreator.js" charset="utf-8"></script>
+<!-- <script type="text/javascript" src="/lib/smarteditor2/sample/photo_uploader/attach_photo.js"></script> -->
+
+<script type="text/javascript">
+
+var csrfToken = "${_csrf.token}";
+axios.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken;
+
+var urlParam = ${param.idx};
+	
+$(function(){
+	
+	// 페이징 컴포넌트 추가
+	Vue.component('page-component', {
+		template	: '<ul class="pagination mgn0">{{pagetag}}</ul>',
+		props		: ['pagetag']
+	});
+
+	var board = new Vue({
+		
+		el : "#boardWrap",
+		
+		data : paging.getData(),
+		
+		methods : {
+			
+			list: function (){
+
+				var startCount = (this.page * this.limit - this.limit);
+				
+				var params = new URLSearchParams();
+				params.append("boardIdx", urlParam);
+
+				axios.post("/board/list", params).then(response => {
+					
+					if ( response.status == 200 ){
+						
+						var totalCount = response.data.totalcount;
+						var dataList   = response.data.list;
+						
+						$.each(dataList, function (){
+							
+							this.createDate = converter.date.dateTime.toString(this.createDate, '-');
+							this.updateDate = converter.date.dateTime.toString(this.updateDate, '-');
+							
+							this['rowNo'] = ++startCount;
+							
+						});
+						
+						board.dataList = dataList;
+						
+						paging.init(totalCount, this);
+						
+						$("#totalcount").text(totalCount);
+						
+						if (dataList.length > 0) {
+							$('.empty').remove();
+							$('#limitCount').text(dataList[0].rowNo + ' - ' + dataList[dataList.length - 1].rowNo);
+							
+						} else {
+							
+							paging.emptyList("#boardWrap table tbody", 12);
+							
+						}
+						
+					}
+					
+				});
+				
+			},
+			
+			detail : function (boardIdx){
+				
+				
+				
+				
+			}
+			
+		}
+		
+	});
+	
+	board.list();
+	
+	$("#btnReg").unbind("click").click(function(){
+		editor();
+	});
+	
+});
+</script>
+
+
+<!-- search start-->
+<div class="row pdt20">
+	<div class="col-md-12">
+		<div class="content-panel pdt0 pdb0">
+			<div class="weather-2-header panel-header">
+				<div class="row">
+					<div class="col-sm-6 col-xs-6"><p>검색</p></div>
+				</div>
+			</div>
+			<table class="table mgnb0 search-table">
+				<colgroup>
+					<col style="width: 10%" />
+					<col style="width: 40%" />
+					<col style="width: 10%" />
+					<col style="width: 40%" />
+				</colgroup>
+				<tr>
+					<td class="border-top0"><strong>게시판명</strong></td>
+					<td class="border-top0">
+						<div class="col-md-6 pdl0">
+							<input type="text" class="form-control col-md-6" id="searchBoardName">
+						</div>
+					</td>
+					<td class="border-top0"><strong>타입</strong></td>
+					<td class="border-top0">
+						<div class="col-md-6 pdl0">
+							<select class="form-control" id="searchBoardType">
+								<option value="">전체</option>
+								<option value="1">일반게시판</option>
+								<option value="2">공지사항</option>
+								<option value="3">파일게시판</option>
+								<option value="4">기타게시판</option>
+							</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class=""><strong>사용여부</strong></td>
+					<td class="" style="line-height: 0px;">
+						<div class="checks">
+							<label class="mgnr10">
+								<input type="radio" value="" class="" name="searchIsUse" checked>
+								 전체
+							</label>
+							<label class="mgnr10">
+								<input type="radio" value="Y" class="" name="searchIsUse">
+								 사용
+							</label>
+							<label>
+								<input type="radio" value="N" name="searchIsUse">
+								 미사용
+							</label>
+						</div>					
+					</td>
+					<td class=""><strong>기간</strong></td>
+					<td>
+						<div class="col-md-6 pdl0">
+							<div class="input-group input-large" data-date="01/01/2014" data-date-format="yyyy/mm/dd">
+								<input type="text" class="form-control dpd1" name="daterangepicker_start">
+								<span class="input-group-addon">To</span>
+								<input type="text" class="form-control dpd2" name="daterangepicker_end">
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="tr mgnt20 mgnb20">
+	<button type="button" class="btn btn-outline-success btn-md" id="btnSearch">검색</button>
+	<button type="button" class="btn btn-outline-primary btn-md" id="btnReg" data-toggle="modal" data-target="#addModal">등록</button>
+</div>
+<!-- search end -->
+
+<div>
+	<div class="mgnb10 mgnt20">
+		<div class="fl mgnt15">
+			<span>전체 : </span><strong class="totalcount" id="totalcount">0</strong> 건 중 <strong id="limitCount">0 - 0</strong>
+		</div>
+		<select class="form-control display_ib width100 fr mgnb10">
+			<option value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+		</select>
+		<select class="form-control display_ib width130 fr mgnb10 mgnr10" id="sort">
+			<option value="desc">최신순</option>
+			<option value="asc">오래된순</option>
+		</select>
+	</div>
+</div>
+
+<div class="row" id="boardWrap">
+	<div class="col-md-12">
+		<div class="content-panel  pdt0 pdb0">
+			<div class="weather-2-header panel-header">
+				<div class="row">
+					<div class="col-sm-6 col-xs-6"><p>목록</p></div>
+				</div>
+			</div>
+			<table class="table table-striped table-advance table-hover">
+				<colgroup>
+					<col style="width: 5%" />	<!-- 번호 -->
+					<col style="width: 15%" />	<!-- 제목 -->
+					<col style="width: 4%" />	<!-- 팝업여부 -->
+					<col style="width: 7%" />	<!-- 팝업노출여부 -->
+					<col style="width: 7%" />	<!-- 팝업사이즈 -->
+					<col style="width: 7%" />	<!-- 팝업위치 -->
+					<col style="width: 10%" />	<!-- 팝업기간 -->
+					<col style="width: 5%" />	<!-- 조회수 -->
+					<col style="width: 5%" />	<!-- 작성자 -->
+					<col style="width: 10%" />	<!-- 작성일 -->
+					<col style="width: 3%" />	<!-- 수정버튼 -->
+					<col style="width: 3%" />	<!-- 삭제버튼 -->
+				</colgroup>
+				<thead class="font13">
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>팝업여부</th>
+						<th>팝업노출여부</th>
+						<th>팝업사이즈</th>
+						<th>팝업위치</th>
+						<th>팝업기간</th>
+						<th>조회수</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>수정</th>
+						<th>삭제</th>
+					</tr>
+				</thead>	
+				<tbody>
+					<tr v-for="(item, index) in dataList" @click="detail(item.boardIdx)" data-toggle="modal" data-target="#addModal" v-cloak>
+						<td class="tc">{{ item.rowNo 		}}</td>
+						<td class="tl">{{ item.boardTitle	}}</td>
+						<td class="tc">{{ item.isPopup		}}</td>
+						<template v-if="item.isPopup == 'Y'">
+							<td class="tc">{{ item.isPopupShow	}}</td>
+							<td class="tc">{{ item.popupWidth}} x {{ item.popupHeight }}</td>
+							<td class="tc">{{ item.popupTop }} x {{ item.popupLeft }}</td>
+							<td class="tc">{{ item.popupStartDate }} ~ {{ item.popupEndDate }}</td>
+						</template>
+						<template v-else>
+							<td class="tc"> - </td>
+							<td class="tc"> - </td>
+							<td class="tc"> - </td>
+							<td class="tc"> - </td>
+						</template>
+						<td class="tc">{{ item.hit		  }}</td>
+						<td class="tc">{{ item.memberName }}</td>
+						<td class="tc">{{ item.updateDate }}</td>
+						<td class="tc"><button type="button" class="btn btn-sm btn-default" v-bind:idx="item.boardIdx">수정</button></td>
+						<td class="tc"><button type="button" class="btn btn-sm btn-default" v-bind:idx="item.boardIdx">삭제</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- Pagination START -->
+		<nav class="tr">
+			<page-component v-html:pagetag="pageTag"></page-component>
+		</nav>
+		<!-- Pagination END -->
+	</div>
+</div>
+
+
+<!-- 등록 modal -->
+<div id="modalApp">
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="codeAddModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width: 930px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="addTitle">게시판 수정</h4>
+				</div>
+				<div class="modal-body pdb0">
+					<table class="table mgnb0">
+						<tbody>
+							<tr>
+								<th class="tl vertical-md"><span class="font-red">*</span> 게시판명</th>
+								<td>
+									<form class="row">
+										<div class="col-xs-5 pdr10">
+											<input type="text" class="form-control" placeholder="">
+										</div>
+									</form>
+									<input type="hidden" id="boardIdx"/>
+								</td>
+							</tr>
+							<tr>
+								<th class="tl vertical-md"><span class="font-red">*</span> 타입</th>
+ 								<td>
+ 									<form class="row">
+ 										<div class="col-xs-5">
+											<select class="form-control boardType" id="boardType">
+												<option value="1">일반게시판</option>
+												<option value="2">공지사항</option>
+												<option value="3">파일게시판</option>
+												<option value="4">기타게시판</option>
+											</select>
+ 										</div>
+ 									</form>
+								</td>
+							</tr>
+							<tr>
+								<th class="tl vertical-md"><span class="font-red">*</span> 팝업 여부</th>
+								<td>
+									<div class="checks">
+										<label class="mgnr10"><input type="radio" value="Y" class="" name="isUse" checked> 사용</label>
+										<label><input type="radio" value="N" name="isUse"> 미사용</label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th class="tl vertical-md"><span class="font-red">*</span> 노출 여부</th>
+								<td>
+									<div class="checks">
+										<label class="mgnr10"><input type="radio" value="Y" class="" name="isUse" checked> 사용</label>
+										<label><input type="radio" value="N" name="isUse"> 미사용</label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th>팝업 사이즈</th>
+								<td>
+									<form class="row">
+										<div class="col-xs-5 pdr10">
+											<input type="text" class="form-control" placeholder="가로 사이즈">
+										</div>
+										<span class="fl" style="line-height: 28px;"> X </span>
+										<div class="col-xs-5 pdl10">
+											<input type="text" class="form-control" placeholder="세로 사이즈">
+										</div>
+									</form>
+								</td>
+							</tr>
+							<tr>
+								<th>팝업 위치</th>
+								<td>
+									<form class="row">
+										<div class="col-xs-5 pdr10">
+											<input type="text" class="form-control" placeholder="x축">
+										</div>
+										<span class="fl" style="line-height: 28px;"> X </span>
+										<div class="col-xs-5 pdl10">
+											<input type="text" class="form-control" placeholder="y축">
+										</div>
+									</form>
+								</td>
+							</tr>
+							<tr>
+								<th>내용</th>
+								<td><textarea id="ir" name="ir"></textarea></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" id="codeCloseBtn" data-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary" id="btnDel" @click="save('D')">삭제</button>
+					<button type="button" class="btn btn-primary" @click="save()">저장</button>
+					<!-- <img src="121.140.7.121/FileUpload/테스트.PNG"/> -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+function editor (){
+	var oEditors = [];
+
+	nhn.husky.EZCreator.createInIFrame({
+		oAppRef : oEditors,
+		elPlaceHolder : "ir",
+		sSkinURI : "/lib/smarteditor2/SmartEditor2Skin.html",
+		
+		htParams : {
+			SE_EditingAreaManager : {
+				sDefaultEditingMode : "WYSIWYG"
+			}
+		},
+		
+		// 기존 저장된 내용의 text 내용을 에디터 상에 뿌려줄 때 사용
+	/* 	fOnAppLoad : function (){
+			oEditors.getById["ir"].exec("PASTE_HTML", []);
+		}, */
+		
+		fCreator : "createSEditor2",
+	});
+
+	$("#se2_iframe").css("height", "205px");
+}
+
+
+</script>

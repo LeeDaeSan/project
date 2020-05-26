@@ -1,0 +1,11 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+	<div class="col-lg-6">
+		<table class="table">
+			<tr>
+				<th>이메일</th>
+				<td><input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+	  			</td>	
+			</tr>
+		</table>
+	</div>

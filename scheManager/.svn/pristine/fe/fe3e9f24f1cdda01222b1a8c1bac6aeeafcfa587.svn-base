@@ -1,0 +1,21 @@
+package com.dm.sche.dto;
+
+import lombok.Data;
+
+@Data
+public class PagingDTO <T> {
+
+	private Long totalCount;			// 페이지 총 카운트수
+	private int page = 0;				// 현재 페이지
+	private Long limit;					// limit
+	
+	private String sort;				// 정렬 [190816_KMJ]
+	private String searchBoardName;		// 게시판 명 [190816_KMJ]
+	private String searchBoardType;		// 게시판 타입 [190816_KMJ]
+	private String searchIsUse;			// 사용여부 [190816_KMJ]
+	private String searchStartDate;		// 기간 [190816_KMJ]
+	private String searchEndDate;		// 기간 [190816_KMJ]
+	
+	private T model;
+
+}

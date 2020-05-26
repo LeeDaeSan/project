@@ -1,0 +1,22 @@
+package com.dm.sche.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dm.sche.mapper.TestMapper;
+import com.dm.sche.model.Member;
+import com.dm.sche.service.TestService;
+
+@Service
+public class TestServiceImpl implements TestService {
+
+	@Autowired
+	private TestMapper testMapper;
+	
+	@Override
+	public List<Member> getMembers() {
+		return testMapper.getMembers();
+	}
+}

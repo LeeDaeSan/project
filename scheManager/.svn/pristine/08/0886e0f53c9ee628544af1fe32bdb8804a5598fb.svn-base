@@ -1,0 +1,10 @@
+package com.dm.sche.service;
+
+import java.util.List;
+
+import com.dm.sche.model.Member;
+
+public interface TestService {
+
+	public List<Member> getMembers();
+}

@@ -1,0 +1,17 @@
+package com.dm.sche;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+
+@SpringBootApplication
+//DB Access 임시 막기
+//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+public class ScheManagerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ScheManagerApplication.class, args);
+	}
+
+}

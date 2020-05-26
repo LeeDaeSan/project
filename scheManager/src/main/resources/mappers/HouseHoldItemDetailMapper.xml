@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.dm.sche.mapper.HouseHoldItemDetailMapper"> 
+	
+	<!-- ### 대분류 항목 상세 정보 조회 START ### -->
+	<select id="select" parameterType="int" resultType="houseHoldItemDetail"> 
+		SELECT 
+			ItemDetailIdx,
+			ItemDetailName,
+			ItemDetailCode,
+			ItemDetailRemark
+			
+		FROM HouseHoldItemDetail
+		
+		WHERE ItemIdx = #{itemIdx}
+	</select> 
+	<!-- ### 대분류 항목 상세 정보 조회 END ### -->
+			
+	
+	<!-- ### 대분류 항목 상세 정보 카운트 (가계 PK 기준) START ### -->
+	<select id="houseHoldItemDetailOfCount" parameterType="int" resultType="long">
+		SELECT COUNT(itemDetailIdx) 
+		  FROM HouseHoldItemDetail 
+		 WHERE ItemIdx = #{idx}
+	</select>
+	<!-- ### 대분류 항목 상세 정보 카운트 (가계 PK 기준) END ### -->
+	
+</mapper>
+

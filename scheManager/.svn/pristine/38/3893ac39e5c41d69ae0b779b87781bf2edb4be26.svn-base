@@ -1,0 +1,71 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<script type="text/javascript">
+$(function(){
+
+	// 메뉴 리스트 호출
+	$.getJSON("http://localhost:8081/mainMenu/menuList", function(data){
+		$.each(data.menuList, function(i, item){
+			
+			var subMenuList = item.subMenuList;
+
+			var	menuList  = '<li><a href="#"><b>' + item.mainMenuName + '</b></a></li>';
+			
+			$.each(subMenuList, function (i, item){
+
+				if ( item.subMenuIdx ){
+					
+					menuList += '<div class="subMenu_' + data.menuList[i].mainMenuIdx + "_" + item.subMenuIdx + '">';
+					menuList += '	<ul class="task-list ui-sortable">';
+					menuList += '		<li class="list-primary" idx="' + item.subMenuIdx + '">';
+					menuList += '			<div class="task-title-sp" style="display: inline-block;">';
+					menuList += '				<span>' + item.menuName + '</sapn>';
+					menuList += '			</div>';
+					menuList += '		</li>';
+					menuList += '	</ul>';
+					menuList += '</div>'
+					
+				}
+				
+			});
+ 
+			$('.nav-stacked').append(menuList);
+
+			// 서브 메뉴 클릭 시 버튼 생성 이벤트
+			$("div[class^='subMenu_'] li").unbind('click').click(function(){
+				
+				var btnStr  = '';
+					btnStr += '<button type="button" class="btn btn-default" style="float: right; position: relative; top: -8px; right: 180px; margin-right: 10px;">▲</button>';
+					btnStr += '<button type="button" class="btn btn-default" style="float: right; position: relative; top: -8px; right: 94px;">▼</button>';
+					btnStr += '<button type="button" class="btn btn-default" style="float: right; position: relative; top: -8px; right: 10px; width: 37px; "><i class="fa fa-trash-o"></i> </button>';
+				
+				// 기존 생성 된 버튼 제거
+				$("div[class^='subMenu_'] li").removeClass('active');
+				$("div[class^='subMenu_'] li button").remove();
+				
+				// 클릭 된 요소 버튼 생성
+				$(this).addClass('active');
+				$(this).append(btnStr);
+				
+			});
+			
+		});
+		
+	});
+	
+	
+});
+</script>
+
+<div class="col-lg-12">
+	<div class="content-panel">
+		<section class="panel">
+			<div class="" style="float: right; ">
+				<button type="button" class="btn btn-primary btn-sm" style="position: relative; top: -8px; right: 20px;"><i class="fa fa-check"></i> Save</button>
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-pills nav-stacked mail-nav"></ul>
+			</div>
+		</section>
+	</div>
+</div>

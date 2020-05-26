@@ -1,0 +1,84 @@
+package com.dm.sche.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.dm.sche.constant.Constant;
+import com.dm.sche.security.CustomUserDetailsService;
+
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
+	
+	@Autowired
+	private AuthenticationSuccessHandler authenticationSuccessHandler;
+	
+	@Autowired
+	private AuthenticationFailureHandler authenticationFailureHandler;
+	
+	/**
+	 * 로그인 검증 서비스 패스워드 BCrypt 암호화 설정
+	 */
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(customUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+	}
+	
+	/**
+	 * 정적 경로 시큐리티 제외 설정
+	 */
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/lib/**"	, 
+								   "/js/**"		, 
+								   "/css/**"	, 
+								   "/webjars/**",
+								   "/join/**",
+								   "WEB-INF/jsp/tiles/tiles.xml", 
+								   "WEB-INF/jsp/layout/empty.jsp");
+	}
+	
+	/**
+	 * 시큐리티 설정
+	 */
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		
+		// 로그인 disabled 처리
+		http.cors().and();
+		http.csrf().disable();
+		
+		// 접근권한 설정
+		http.authorizeRequests()
+			.antMatchers("/login", 
+						 "/notiles/join").permitAll()							// css, js, img 경로 -> 전체 권한
+			.anyRequest().authenticated();										// 나머지 경로 		-> 접근 제한
+		
+		// 로그인 설정
+		http.formLogin()
+			.loginPage("/" + Constant.NOTILES + "/login")	// login page
+			.successHandler(authenticationSuccessHandler)	// 로그인 성공 service
+			.failureHandler(authenticationFailureHandler)	// 로그인 실패 service
+			.permitAll()
+		
+		// 로그아웃 설정
+			.and()
+			.logout()
+			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+			.permitAll()
+			.logoutSuccessUrl("/" + Constant.NOTILES + "/login")
+			.invalidateHttpSession(true);
+		
+	}
+}

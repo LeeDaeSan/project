@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.dm.sche.mapper.MainMenuMapper">
+
+	<!-- resultMap -->
+	<!-- type 			: vo class의 alias 명칭 -->
+	<!-- id 			: 실제 resultMap을 호출하는 id -->
+	<!-- autoMapping 	: 조회한 컬럼 정보 자동 맵핑 (주의 : ID 값 필수 선언) -->
+	<resultMap type="mainMenu" id="mainMenuList" autoMapping="true">
+		<id property="mainMenuIdx" column="MainMenuIdx"/>
+		
+		<!-- collection -->
+		<!-- ofType 	: vo class의 alias 명칭 -->
+		<!-- property 	: 상위 vo에서 선언된 변수명-->
+		<collection ofType="subMenu" property="subMenuList" autoMapping="true">
+			<id property="subMenuIdx" column="SubMenuIdx"/>
+		</collection>
+	</resultMap>
+
+	
+	<!-- 메인 메뉴 리스트 -->
+	<select id="selectMainMenuList" resultMap="mainMenuList">
+		SELECT 
+		
+			<!-- MainMenu -->
+			MM.MainMenuIdx		,				<!-- 메인 메뉴 Idx -->
+			MM.MainMenuName		,				<!-- 메인 메뉴 명 -->
+			MM.Remark			,				<!-- 비고 -->
+			MM.IconClass		,				<!-- 아이콘 class명 -->
+			MM.Url				,				<!-- 메인 Url 경로 -->
+			MM.MenuSeq			,				<!-- 대메뉴 번호 -->
+			MM.CreateDate		,				<!-- 생성일 -->
+			MM.UpdateDate		,				<!-- 수정일 -->
+			 
+			<!-- SubMenu --> 
+			SM.SubMenuIdx		,				<!-- 서브 메뉴 Idx -->
+			SM.SubMenuSeq		,				<!-- 서브메뉴 번호 -->
+			SM.MenuName			,				<!-- 서브메뉴 명 -->
+			SM.Comment			,				<!-- 비고 -->
+			SM.MenuType			,				<!-- 서브메뉴 타입 -->
+			SM.SubMenuUrl		,				<!-- 서브메뉴 Url -->
+			SM.IsUse							<!-- 서브메뉴 사용여부 -->
+			
+		  FROM MainMenu MM
+		  LEFT OUTER JOIN SubMenu SM
+		  ON MM.MainMenuIdx = SM.MainMenuIdx
+		  
+		  ORDER BY MM.MenuSeq, SM.SubMenuSeq
+		  
+	</select>
+
+</mapper>

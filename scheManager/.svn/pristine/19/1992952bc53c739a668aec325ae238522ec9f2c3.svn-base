@@ -1,0 +1,102 @@
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title><tiles:getAsString name="title"/></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- css -->
+	<link rel="stylesheet" href="/css/common/reset.min.css">
+	<link rel="stylesheet" href="/css/common/base.css">
+	
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="/webjars/bootstrap/3.3.4/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/webjars/bootstrap/3.3.4/dist/css/bootstrap-theme.min.css">
+
+	<!-- jquery -->
+	<script type="text/javascript" src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+	
+	<!-- amChart -->
+	<script type="text/javascript" src="/lib/amChart/acore.js"></script>
+	<script type="text/javascript" src="/lib/amChart/chart.js"></script>
+	<script type="text/javascript" src="/lib/amChart/de_DE.js"></script>
+	<script type="text/javascript" src="/lib/amChart/germanyLow.js"></script>
+	<script type="text/javascript" src="/lib/amChart/material.js"></script>
+	
+	<!-- jqGrid -->
+	<link rel="stylesheet" href="/lib/Guriddo_jqGrid_JS_5.3.2/css/ui.jqgrid.css">
+	<link rel="stylesheet" href="/lib/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css">
+	<script type="text/javascript" src="/lib/Guriddo_jqGrid_JS_5.3.2/js/jquery.jqGrid.min.js"></script>
+	
+	<!-- vue -->
+	<script type="text/javascript" src="/js/vue.js"></script>
+	
+	<!-- dashio -->
+	<!-- Favicons -->
+	<link href="/lib/Dashio/img/favicon.png" rel="icon">
+	<link href="/lib/Dashio/img/apple-touch-icon.png" rel="apple-touch-icon">
+  
+	<!--external css-->
+	<link href="/lib/Dashio/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/css/zabuto_calendar.css">
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/lib/gritter/css/jquery.gritter.css" />
+	
+	<!-- Custom styles for this template -->
+	<link href="/lib/Dashio/css/style.css" rel="stylesheet">
+	<link href="/lib/Dashio/css/style-responsive.css" rel="stylesheet">
+	
+	
+	<!-- tui calendar -->
+<!-- 	<link rel="stylesheet" href="/lib/tui.calendar-1.11.0/dist/tui-calendar.min.css">
+	<script src="/lib/tui.calendar-1.11.0/dist/tui-calendar.min.js"></script>
+	<script src="/lib/bower_components/tui-code-snippet/dist/tui-code-snippet.min.js"></script>
+	<script src="/lib/tui.calendar-1.11.0/dist/raphael-min.js"></script> -->
+	
+	<script type="text/javascript">
+		$(function(){
+			
+			console.log($("aside").attr("show"));	
+	
+			
+			// 메뉴 Click Event
+			$('.sidebar-toggle-box').unbind("click").click(function(){
+				
+				if( $('aside').attr("show") == "open" ){
+					
+					$('#sidebar').animate({left: "-210px"}, 500);
+					$('#main-content').animate({marginLeft: "0px"}, 500);
+					$('aside').attr("show", "close");
+					
+				} else {
+					
+					$('#sidebar').animate({left: "0px"}, 500);
+					$('#main-content').animate({marginLeft: "210px"}, 500);
+					$('aside').attr("show", "open");
+				}
+				
+			});
+		
+		});
+	</script>
+</head>
+<body>
+
+	<div class="wrap">
+
+		<tiles:insertAttribute name="header" />
+
+		<tiles:insertAttribute name="menu" />
+		
+		<section id="main-content">
+			<section class="wrapper">
+				<tiles:insertAttribute name="body" />
+			</section>
+		</section>
+		
+		<tiles:insertAttribute name="footer" />
+		
+	</div>
+
+</body>
+</html>

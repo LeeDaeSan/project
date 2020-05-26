@@ -1,0 +1,100 @@
+package com.dm.sche.model;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.type.Alias;
+
+import lombok.Data;
+
+/**
+ * 하위 메뉴
+ * @author idaesan
+ *
+ */
+@Data
+@Alias("subMenu")
+public class SubMenu {
+	
+	private Integer subMenuIdx;				// 메뉴 PK
+	private Integer mainMenuIdx;			// 대메뉴 PK
+	private Integer subMenuSeq;				// 메뉴 번호
+	private String menuName;				// 메뉴 명
+	private String comment;					// 상세 설명
+	private String menuType;				// 메뉴 타입
+	private String isUse;					// 사용 여부
+	private Date createDate;				// 생성일
+	private Date updateDate;				// 수정일
+	
+	private MainMenu mainMenu;				// 대메뉴 정보
+	private List<Schedule> scheduleList;	// 일정관리 목록
+	
+	public Integer getSubMenuIdx() {
+		return subMenuIdx;
+	}
+	public void setSubMenuIdx(Integer subMenuIdx) {
+		this.subMenuIdx = subMenuIdx;
+	}
+	public Integer getMainMenuIdx() {
+		return mainMenuIdx;
+	}
+	public void setMainMenuIdx(Integer mainMenuIdx) {
+		this.mainMenuIdx = mainMenuIdx;
+	}
+	public Integer getSubMenuSeq() {
+		return subMenuSeq;
+	}
+	public void setSubMenuSeq(Integer subMenuSeq) {
+		this.subMenuSeq = subMenuSeq;
+	}
+	public String getMenuName() {
+		return menuName;
+	}
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	public String getMenuType() {
+		return menuType;
+	}
+	public void setMenuType(String menuType) {
+		this.menuType = menuType;
+	}
+	public String getIsUse() {
+		return isUse;
+	}
+	public void setIsUse(String isUse) {
+		this.isUse = isUse;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+	public MainMenu getMainMenu() {
+		return mainMenu;
+	}
+	public void setMainMenu(MainMenu mainMenu) {
+		this.mainMenu = mainMenu;
+	}
+	public List<Schedule> getScheduleList() {
+		return scheduleList;
+	}
+	public void setScheduleList(List<Schedule> scheduleList) {
+		this.scheduleList = scheduleList;
+	}
+	
+	
+}

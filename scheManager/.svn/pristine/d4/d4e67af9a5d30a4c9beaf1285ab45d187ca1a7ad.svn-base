@@ -1,0 +1,24 @@
+package com.dm.sche.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.dm.sche.model.Member;
+import com.dm.sche.service.MemberService;
+
+@Controller
+public class JoinController {
+	
+	@Autowired
+	private MemberService memberService;
+	
+	@PostMapping("/join")
+	public String Join(Member member) {
+		
+		memberService.insertMember(member);
+			
+		return "/views/test";
+	}
+	
+}

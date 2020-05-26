@@ -1,0 +1,266 @@
+package com.dm.sche.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.dm.sche.constant.Constant;
+import com.dm.sche.constant.UserConstant;
+import com.dm.sche.dto.MenuDTO;
+import com.dm.sche.mapper.BoardManagerMapper;
+import com.dm.sche.mapper.BoardMappingMapper;
+import com.dm.sche.mapper.MainMenuMapper;
+import com.dm.sche.mapper.ScheduleMapper;
+import com.dm.sche.model.BoardManager;
+import com.dm.sche.model.BoardMapping;
+import com.dm.sche.model.MainMenu;
+import com.dm.sche.model.Schedule;
+import com.dm.sche.model.SubMenu;
+import com.dm.sche.service.MainMenuService;
+import com.dm.sche.util.NumberUtil;
+import com.dm.sche.util.ResponseUtil;
+import com.dm.sche.util.StringUtil;
+import com.dm.sche.util.UrlUtil;
+
+@Service
+public class MainMenuServiceImpl implements MainMenuService {
+
+	private static final Logger logger = LoggerFactory.getLogger(MainMenuServiceImpl.class);
+	
+	@Autowired
+	private MainMenuMapper mainMenuMapper;
+	@Autowired
+	private BoardManagerMapper boardManagerMapper;
+	@Autowired
+	private BoardMappingMapper boardMappingMapper;
+	@Autowired
+	private ScheduleMapper scheduleMapper;
+	
+	/*
+	 * 메인 메뉴 리스트
+	 */
+	@Override
+	public Map<String, Object> select(HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			Integer memberIdx = UserConstant.getUser().getIdx();
+			
+			List<MainMenu> mainMenuList = mainMenuMapper.select(memberIdx);
+
+			// 메뉴 Url Pattern Setting
+			for ( MainMenu mainMenu : mainMenuList ) {
+				
+				// SubMenuUrl Setting
+				mainMenu.getSubMenuList().forEach(sm -> {
+					sm.setSubMenuUrl(UrlUtil.setUrl(request, sm.getSubMenuUrl()));
+				});
+				
+				// MainMenuUrl Setting
+				mainMenu.setUrl(UrlUtil.setUrl(request, mainMenu.getUrl()));
+			}
+
+			resultMap.put("menuList", mainMenuList);
+			
+		} catch (NullPointerException ne) {
+			logger.error("[ERROR] NullPointException!!");
+		} catch (Exception e) {
+			
+		}
+		
+		return resultMap;
+		
+	}
+	
+	/**
+	 * 일정관리 - 하위 메뉴 상세 정보
+	 */
+	@Override
+	public Map<String, Object> detail(int subMenuIdx) {
+
+		Map<String, Object> resultMap = null;
+		
+		try {
+			
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("detail", mainMenuMapper.detail(subMenuIdx));
+			
+		} catch (Exception e) {
+
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
+		
+		}
+		
+		return resultMap;
+	}
+	
+	/**
+	 * 메뉴 순서 수정, 일정관리 - 하위 메뉴 등록, 삭제
+	 */
+	@Override
+	@Transactional
+	public Map<String, Object> merge(MenuDTO menuDTO, SubMenu subMenu) {
+		
+		String [] subIdxArr = StringUtil.split(menuDTO.getSubIdxArr(), ",");
+		String [] subSeqArr = StringUtil.split(menuDTO.getSubSeqArr(), ",");
+		String [] isUseArr  = StringUtil.split(menuDTO.getIsUseArr(),  ",");
+		
+		Map<String, Object> resultMap = null;
+		Integer result = -1;
+		
+		try {
+			
+			Integer memberIdx = UserConstant.getUser().getIdx();
+			
+			resultMap = ResponseUtil.successMap();
+			
+			// Type U
+			if (Constant.MERGE_TYPE_UPDATE.equals(menuDTO.getType())) {
+				
+				int subIdxLength = subIdxArr.length;
+				
+				for (int i = 0; i < subIdxLength; i++) {
+					
+					String subIdx = subIdxArr[i];
+					String subSeq = subSeqArr[i];
+					String isUse  = isUseArr[i];
+					
+					// delete
+					if ( "N".equals(isUse) ) {
+						
+						subMenu.setSubMenuIdx(NumberUtil.parseInt(subIdx));
+						result = mainMenuMapper.delete(subMenu);
+					
+					// seq update
+					} else {
+						
+						subMenu.setSubMenuIdx(NumberUtil.parseInt(subIdx));
+						subMenu.setSubMenuSeq(NumberUtil.parseInt(subSeq));
+						
+						result = mainMenuMapper.updateForSeq(subMenu);
+					}
+					
+				}
+			
+			// Type I / insert
+			} else if ( Constant.MERGE_TYPE_INSERT.equals(menuDTO.getType()) ) {
+				result = mainMenuMapper.insert(subMenu);
+				
+				// 메뉴 등록 완료 후 다음 작업 진행
+				if (result == 1) {
+
+					// 공지 & 게시 메뉴의 하위메뉴 등록
+					if (Constant.MAIN_MENU_BOARD_IDX == subMenu.getMainMenuIdx()) {
+						result = insertForBoardManager(memberIdx, subMenu);
+						
+					// 일정 메뉴의 하위메뉴 등록
+					} else if (Constant.MAIN_MENU_SCHEDULE_IDX == subMenu.getMainMenuIdx()) {
+						result = insertForSchedule(memberIdx, subMenu);
+					}
+				}
+			}
+			
+			resultMap.put("resultCnt", result);
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
+		}
+		
+		return resultMap;
+		
+	}
+	
+	/**
+	 * 하위 메뉴 수정
+	 */
+	@Override
+	public Map<String, Object> update(SubMenu subMenu) {
+		Map<String, Object> resultMap = null;
+		
+		Integer result = -1;
+		
+		try {
+			
+			resultMap = ResponseUtil.successMap();
+			result = mainMenuMapper.update(subMenu);
+			
+			resultMap.put("resultCnt", result);
+			
+		} catch (Exception e) {
+			
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
+			
+		}
+
+		return resultMap;
+		
+	}
+	
+	/**
+	 * 일정관리 등록
+	 * 
+	 * @param memberIdx
+	 * @return
+	 */
+	private Integer insertForSchedule (Integer memberIdx, SubMenu subMenu) {
+		
+		Schedule schedule = new Schedule();
+		schedule.setMemberIdx(memberIdx);
+		schedule.setSubMenuIdx(subMenu.getSubMenuIdx());
+		
+		Integer result = scheduleMapper.insert(schedule);
+		
+		subMenu.setSubMenuUrl(Constant.MENU_SCHEDULE_URL + schedule.getScheduleIdx());
+		result = mainMenuMapper.update(subMenu);
+		
+		return result;
+	}
+	
+	/**
+	 * 게시판관리, 게시판맵핑 등록
+	 * 
+	 * @param memberIdx
+	 * @param subMenu
+	 * @return
+	 */
+	private Integer insertForBoardManager (Integer memberIdx, SubMenu subMenu) {
+		
+		// 게시판 관리 등록
+		BoardManager boardManager = new BoardManager();
+		boardManager.setBoardName(subMenu.getMenuName());
+		boardManager.setIsUse(subMenu.getIsUse());
+		boardManager.setCreateMemberIdx(memberIdx);
+		boardManager.setUpdateMemberIdx(memberIdx);
+		
+		Integer result = boardManagerMapper.insert(boardManager);
+		
+		// 게시판 관리 등록 완료 후 다음 작업 진행
+		if (result == 1) {
+			
+			// 게시판 맵핑 등록
+			BoardMapping boardMapping = new BoardMapping();
+			boardMapping.setSubMenuIdx(subMenu.getSubMenuIdx());
+			boardMapping.setBoardManagerIdx(boardManager.getBoardManagerIdx());
+			
+			result = boardMappingMapper.insert(boardMapping);
+		}
+		
+		// 하위메뉴 url 저장
+		subMenu.setSubMenuUrl(Constant.MENU_BOARD_URL + boardManager.getBoardManagerIdx());
+		result = mainMenuMapper.update(subMenu);
+		
+		return result;
+	}
+}

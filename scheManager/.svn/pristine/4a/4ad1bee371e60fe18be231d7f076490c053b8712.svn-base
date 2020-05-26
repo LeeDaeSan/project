@@ -1,0 +1,94 @@
+package com.dm.sche.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.dm.sche.dto.KeywordDTO;
+import com.dm.sche.model.BoardManager;
+
+@Mapper
+public interface BoardManagerMapper {
+
+	/**
+	 * 
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 9.
+	 * @Comment : 공통 게시판 리스트
+	 *
+	 */
+	public List<BoardManager> select();
+	
+	/**
+	 * 
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 9.
+	 * @Comment : 공통 게시판 총 개수
+	 *
+	 */
+	public long selectForTotalcount();
+	
+	/**
+	 * 
+	 * @param boardManager
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 12.
+	 * @Comment : 공통 게시판 상세 조회
+	 *
+	 */
+	public BoardManager detail(int boardManagerIdx);
+
+	/**
+	 * 
+	 * @param boardManagerIdx
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 11.
+	 * @Comment : 공통 게시판 등록
+	 */
+	public Integer insert(BoardManager boardManager);
+	
+	/**
+	 * 
+	 * @param boardManager
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 12.
+	 * @Comment : 공통 게시판 수정
+	 *
+	 */
+	public Integer update(BoardManager boardManager);
+	
+	/**
+	 * 
+	 * @param boardManager
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 12.
+	 * @Comment : 공통 게시판 삭제
+	 *
+	 */
+	public Integer delete(BoardManager boardManager);
+	
+	/**
+	 * 
+	 * @param keywordDTO
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 12.
+	 * @Comment :등록, 수정 시 중복 확인 
+	 *
+	 */
+	public String keywordCheck(KeywordDTO keywordDTO);
+	
+}

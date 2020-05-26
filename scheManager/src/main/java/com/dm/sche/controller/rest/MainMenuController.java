@@ -1,0 +1,93 @@
+package com.dm.sche.controller.rest;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.dm.sche.constant.UserConstant;
+import com.dm.sche.dto.MenuDTO;
+import com.dm.sche.model.SubMenu;
+import com.dm.sche.security.SecurityUser;
+import com.dm.sche.service.MainMenuService;
+
+@Controller
+@RequestMapping("/mainMenu")
+public class MainMenuController {
+
+	@Autowired
+	private MainMenuService mainMenuService;
+	
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 7. 30.
+	 * @Comment : 메인 메뉴 리스트 조회
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping("/menuList")
+	public Map<String, Object> select ( HttpServletRequest request ){
+		return mainMenuService.select(request);
+	}
+	
+	/**
+	 * 
+	 * @param subMenuIdx
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 7. 30.
+	 * @Comment : 하위메뉴 상세 조회 
+	 *
+	 */
+	@PostMapping(value = "/detail")
+	@ResponseBody
+	public Map<String, Object> detail ( @RequestParam(value="subMenuIdx", required = true) int subMenuIdx ){
+		return mainMenuService.detail(subMenuIdx);
+	}
+	
+	
+	/**
+	 * 
+	 * @param subMenu
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 7. 31.
+	 * @Comment : 하위 메뉴 수정
+	 *
+	 */
+	@PostMapping(value = "/update")
+	@ResponseBody
+	public Map<String, Object> update (SubMenu subMenu){		
+		return mainMenuService.update(subMenu);
+	}
+	
+	/**
+	 * 
+	 * @param menuDTO
+	 * @param subMenu
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 7. 30.
+	 * @Comment : 하위 메뉴 순서 변경, 일정관리 - 하위메뉴 등록, 삭제
+	 *
+	 */
+	@PostMapping(value = "/merge")
+	@ResponseBody
+	public Map<String, Object> merge (MenuDTO menuDTO, SubMenu subMenu){
+		return mainMenuService.merge(menuDTO, subMenu);
+	}
+
+}

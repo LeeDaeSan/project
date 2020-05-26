@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+.calendar-header-wrap {
+	color			: #000000;
+	text-align		: center;
+}
+
+.calendar-header-wrap .header-full-wrap {
+	width 	: 969px;
+	margin 	: 0 auto;	
+}
+
+.calendar-header-wrap .header-year {
+	font-size 	: 23px;
+	font-weight : bold;
+}
+
+.calendar-header-wrap .header-month {
+	font-size 	: 23px;
+	font-weight : bold;
+}
+
+table.calendar-table-layout {
+	table-layout	: fixed;
+	border			: 1px solid #dddddd;
+	color			: #000000;	
+	width			: 100%;
+}
+
+table.calendar-table-layout tbody tr td {
+	height : 115px;	
+	border : 1px solid #dddddd;
+	cursor : pointer;
+}
+
+table.calendar-table-layout tbody tr td .day-div-class {
+	height : 100px;
+}
+
+table.calendar-table-layout tbody tr td.day_hover:hover {
+	background : #f3f3f3;
+}
+
+table.calendar-table-layout tbody tr td.selected {
+	background : #fdffe2 !important;
+}
+
+table.calendar-table-layout tbody tr td.today_selected {
+	background : honeydew;
+}
+
+table.calendar-table-layout tbody tr td.selected:hover {
+	background : #f9fdc8;
+}
+
+table.calendar-table-layout tbody tr td .day-div-class .day-div-number {
+	text-align : right;
+}
+
+/* 특정 요일 color */
+table.calendar-table-layout .red{color:#ff5454;}
+table.calendar-table-layout .blue{color:#4b4bff;}

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.dm.sche.mapper.HouseHoldItemMapper"> 
+	
+	<!-- ### 가계부 코드 항목 정보 조회 START ### -->
+	<select id="select" parameterType="com.dm.sche.dto.PagingDTO" resultType="houseHoldItem"> 
+		SELECT 
+			ItemIdx,				<!-- PK 		-->
+			ParentIdx,				<!-- 부모 품목 PK -->
+			ItemName,				<!-- 품목명 		-->
+			ItemCode,				<!-- 품목코드 		-->
+			ItemType,				<!-- 품목유형 		-->
+			Remark,					<!-- 비고			-->
+			CreateDate,				<!-- 생성일 		-->
+			UpdateDate,				<!-- 수정일 		-->
+			CreateMemberIdx,		<!-- 생성자 PK 	-->
+			UpdateMemberIdx,		<!-- 수정자 PK 	-->
+			
+			(SELECT IFNULL(Name, '') FROM Member WHERE Idx = CreateMemberIdx)
+			AS createMemberName,	<!-- 생성자 이름 -->
+			(SELECT IFNULL(Name, '') FROM Member WHERE Idx = UpdateMemberIdx)
+			AS updateMemberName		<!-- 수정자 이름 -->
+			
+		FROM HouseHoldItem
+		
+		<!-- 검색 조건 -->
+		<include refid="commonWhere"></include>
+		
+		<!-- 코드 order -->
+		ORDER BY ItemCode DESC
+	</select> 
+	<!-- ### 가계부 코드 항목 정보 조회 END ### -->
+	
+	
+	<!-- ### 대분류 항목 정보 total count START ### -->
+	<select id="selectForTotalcount" parameterType="com.dm.sche.dto.PagingDTO" resultType="Long">
+		SELECT
+			COUNT(ItemIdx)
+		FROM HouseHoldItem
+		
+		<!-- 검색 조건 -->
+		<include refid="commonWhere"></include>
+	</select>
+	<!-- ### 대분류 항목 정보 total count END ### -->
+	
+	
+	<!-- ### 대분류 항목 상세 정보 조회 START ### -->
+	<select id="detail" resultType="houseHoldItem" parameterType="int"> 
+		SELECT 
+			ItemIdx,				<!-- 대분류 항목 PK -->
+			ItemName,				<!-- 품목명 -->
+			ItemCode,				<!-- 품목코드 -->
+			ItemType,				<!-- 품목유형 -->
+			CreateDate,				<!-- 생성일 -->
+			UpdateDate,				<!-- 수정일 -->
+			CreateMemberIdx,		<!-- 생성자 PK -->
+			UpdateMemberIdx,		<!-- 수정자 PK -->
+			
+			(SELECT IFNULL(Name, '') FROM Member WHERE Idx = CreateMemberIdx)
+			AS createMemberName,	<!-- 생성자 이름 -->
+			(SELECT IFNULL(Name, '') FROM Member WHERE Idx = UpdateMemberIdx)
+			AS updateMemberName		<!-- 수정자 이름 -->
+			
+		FROM HouseHoldItem
+		WHERE ItemIdx = #{itemIdx}
+		
+	</select> 
+	<!-- ### 대분류 항목 상세 정보 조회 END ### -->
+	
+	
+	<!-- ### 마지막 코드번호 조회 START ### -->
+	<select id="selectOfNextCode" parameterType="houseHoldItem" resultType="String">
+		SELECT
+			MAX(ItemCode)
+		  FROM HouseHoldItem
+		 WHERE Level = #{level}
+		 
+		 <choose>
+			<!-- 1level -->
+			<when test='"1".equals(level)'>
+				AND ParentIdx IS NULL
+			</when>
+			<!-- 2level, 3level -->
+			<when test='!"1".equals(level)'>
+				AND ParentIdx = #{parentIdx}
+			</when>	
+		</choose>
+			
+		
+	</select>
+	<!-- ### 마지막 코드번호 조회 END ### -->
+	
+	
+	<!-- ### 중복확인 START ### -->
+	<select id="keywordCheck" parameterType="com.dm.sche.dto.KeywordDTO" resultType="String">
+		SELECT 
+			<choose>
+				<when test='"name".equals(keywordType)'>
+					ItemName				
+				</when>
+				<when test='"code".equals(keywordType)'>
+					ItemCode
+				</when>
+			</choose>
+		FROM HouseHoldItem
+		
+		<where>
+			<choose>
+				<when test='"name".equals(keywordType)'>
+					ItemName = #{keyword}				
+				</when>
+				<when test='"code".equals(keywordType)'>
+					ItemCode = #{keyword}
+				</when>
+			</choose>
+		</where>
+		LIMIT 1
+	</select>
+	<!-- ### 중복확인 END ### -->
+	
+	
+	<!-- ### 가계부 코드 항목 정보 등록 START ### -->
+	<insert id="insert" parameterType="houseHoldItem">
+		INSERT INTO HouseHoldItem
+		(
+			ParentIdx,
+			Level,
+			ItemName,
+			ItemCode,
+			ItemType,
+			Remark,
+			CreateMemberIdx
+		)
+		VALUES
+		(
+			#{parentIdx},
+			#{level},
+			#{itemName},
+			#{itemCode},
+			#{itemType},
+			#{remark},
+			#{createMemberIdx}
+		)
+	</insert>
+	<!-- ### 가계부 코드 항목 정보 등록 END ### -->
+	
+	
+	<!-- ### 대분류 정보 수정 START ### -->
+	<update id="update" parameterType="houseHoldItem">
+		UPDATE HouseHoldItem
+		SET
+			ItemName 		= #{itemName},
+			ItemCode		= #{itemCode},
+			ItemType		= #{itemType},
+			UpdateMemberIdx = #{updateMemberIdx}
+			
+		WHERE ItemIdx = #{itemIdx}
+	</update>
+	<!-- ### 대분류 정보 수정 END ### -->
+	
+	
+	<!-- ### 대분류 정보 삭제 START ### -->	
+	<delete id="delete" parameterType="int">
+		DELETE FROM HouseHoldItem
+		WHERE ItemIdx = #{itemIdx}
+	</delete>
+	<!-- ### 대분류 정보 삭제 END ### -->
+	
+	
+	<!-- ### 공통 검색 조건 START ### -->
+	<sql id="commonWhere">
+		<where>
+		
+			<choose>
+				<!-- 1level -->
+				<when test='"1".equals(level)'>
+					ParentIdx IS NULL
+				</when>
+				<!-- 2level, 3level -->
+				<when test='!"1".equals(level)'>
+					ParentIdx = #{model.parentIdx}
+				</when>	
+			</choose>
+			
+			AND LEVEL = #{model.level}
+			
+			<!-- 
+			품목명
+			<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchKeyword)">
+				ItemName LIKE CONCAT('%', TRIM(#{searchKeyword}), '%')
+			</if>
+			
+			품목코드
+			<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchCodeType)">
+				AND ItemCode LIKE CONCAT('%', TRIM(#{searchCodeType}), '%')
+			</if>
+			
+			품목유형
+			<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchSelectType)">
+				AND ItemType = #{searchSelectType}
+			</if>
+			
+			기간
+			<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchStartDate) and @com.dm.sche.util.StringUtil@isNotEmpty(searchEndDate)">
+				<choose>
+					<when test='"createDate".equals(searchDateType)'>
+						생성일
+						AND DATE_FORMAT(CreateDate, '%Y%m%d') BETWEEN #{searchStartDate} AND #{searchEndDate}
+					</when>
+					<when test='"updateDate".equals(searchDateType)'>
+						수정일
+						AND DATE_FORMAT(UpdateDate, '%Y%m%d') BETWEEN #{searchStartDate} AND #{searchEndDate}
+					</when>
+				</choose>
+			</if>	 
+			-->
+		</where>
+	</sql>
+	<!-- ### 공통 검색 조건 END ### -->
+
+	
+	<!-- ### 가계 등록시 조회되는 코드 항목 목록 START ### -->
+	<select id="selectOfPopup" parameterType="com.dm.sche.dto.PagingDTO" resultType="houseHoldItem">
+		SELECT 
+			ItemIdx,				<!-- 대분류 항목 PK -->
+			ItemName,				<!-- 품목명 -->
+			ItemCode,				<!-- 품목코드 -->
+			ItemType				<!-- 품목유형 -->
+			
+		FROM HouseHoldItem
+		
+		<!-- 검색 조건 -->
+		<include refid="commonWhere"></include>
+	</select>
+	<!-- ### 가계 등록시 조회되는 코드 항목 목록 END ### -->
+	
+		
+	<!-- ### 가계 코드기준 통계 목록 START ### -->
+	<select id="selectOfStatistics" parameterType="com.dm.sche.dto.PagingDTO" resultType="com.dm.sche.dto.StatisticsDTO">
+		SELECT 
+			(
+				SELECT IFNULL(SUM(Amount), 0) 
+			 	  FROM MemberHoldItem
+			 	 WHERE MemberIdx = #{memberIdx}
+			 	 
+			 	 <choose>
+			 	 	<when test='"1".equals(level)'>
+			 	 		AND Item1Idx = HHI.ItemIdx
+			 	 	</when>
+			 	 	<when test='"2".equals(level)'>
+			 	 		AND Item2Idx = HHI.ItemIdx
+			 	 	</when>
+			 	 	<when test='"3".equals(level)'>
+			 	 		AND Item3Idx = HHI.ItemIdx
+			 	 	</when>
+			 	 </choose> 
+			 	 
+	 	   		<!-- 기간 -->
+				<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchStartDate) and @com.dm.sche.util.StringUtil@isNotEmpty(searchEndDate)">
+					AND DATE_FORMAT(HoldDate, '%Y%m%d') BETWEEN #{searchStartDate} AND #{searchEndDate}
+				</if>
+			) AS visits,
+			
+			HHI.ItemName AS country
+		
+		FROM HouseHoldItem AS HHI 
+		
+		WHERE HHI.Level = #{level}
+		
+ 	 	<if test='"2".equals(level) or "3".equals(level)'>
+ 	 		AND HHI.ParentIdx = #{parentIdx}
+ 	 	</if>
+		
+	</select>
+	<!-- ### 가계 코드기준 통계 목록 END ### -->
+	
+</mapper>
+

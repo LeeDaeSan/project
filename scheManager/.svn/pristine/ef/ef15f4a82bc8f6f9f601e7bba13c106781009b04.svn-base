@@ -1,0 +1,17 @@
+package com.dm.sche.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.dm.sche.model.HouseHoldItem;
+
+@Mapper
+public interface HouseHoldItemService {
+
+	/**
+	 * 대분류 항목 정보 조회
+	 * @return
+	 */
+	public List<HouseHoldItem> getHouseHoldItemList();
+}

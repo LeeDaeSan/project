@@ -1,0 +1,36 @@
+package com.dm.sche.dto;
+
+public class MenuDTO {
+
+	private String type;
+	private String subIdxArr;
+	private String subSeqArr;
+	private String isUseArr;
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getSubIdxArr() {
+		return subIdxArr;
+	}
+	public void setSubIdxArr(String subIdxArr) {
+		this.subIdxArr = subIdxArr;
+	}
+	public String getSubSeqArr() {
+		return subSeqArr;
+	}
+	public void setSubSeqArr(String subSeqArr) {
+		this.subSeqArr = subSeqArr;
+	}
+	public String getIsUseArr() {
+		return isUseArr;
+	}
+	public void setIsUseArr(String isUseArr) {
+		this.isUseArr = isUseArr;
+	}
+	
+	
+}

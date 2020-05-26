@@ -1,0 +1,19 @@
+package com.dm.sche.service;
+
+import com.dm.sche.dto.KeywordDTO;
+import com.dm.sche.model.Member;
+
+public interface MemberService {
+
+	/**
+	 * 사용자 로그인 정보 조회
+	 * @return String
+	 */
+	public Member getMemberInfo(String id);
+	
+	public void insertMember(Member member);
+	
+	public String getId(KeywordDTO keywordDTO);
+	
+	public void updateMember(Member member);
+}

@@ -1,0 +1,34 @@
+package com.dm.sche.controller;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dm.sche.dto.PagingDTO;
+import com.dm.sche.model.Board;
+import com.dm.sche.service.BoardService;
+
+@RestController
+@RequestMapping("/board")
+public class BoardController {
+
+	@Autowired
+	private BoardService boardService;
+	
+	/**
+	 * 
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 9.
+	 * @Comment : 공통 게시판 리스트
+	 *
+	 */
+	@PostMapping("/list")
+	public Map<String, Object> selectBoardList (PagingDTO<Board> pagingDTO){
+		return boardService.select(pagingDTO);
+	}
+}

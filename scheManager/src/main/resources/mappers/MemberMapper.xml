@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.dm.sche.mapper.MemberMapper"> 
+
+	<!-- 사용자 로그인 정보 조회 -->
+	<select id="detail" resultType="member" parameterType="String"> 
+		SELECT 
+			Idx,
+			Id,
+			Password,
+			Name,
+			Birth,
+			Gender,
+			Phone,
+			Auth,
+			JoinDate,
+			CreateDate,
+			UpdateDate
+			
+		FROM Member 
+		WHERE Id = #{id}
+	</select> 
+	
+	<insert id="insert" parameterType="member">
+        INSERT INTO member(
+            id,
+            password,
+            name,
+            birth,
+            gender,
+            phone,
+            Auth,
+            IsDelete
+        )VALUES(
+            #{id},
+            #{password},
+            #{name},
+            #{birth},
+            #{gender},
+            #{phone},
+            'U',
+            '1'
+        )
+    </insert>
+    
+    <select id="selectForId" resultType="String" parameterType="com.dm.sche.dto.KeywordDTO">
+    	SELECT id FROM member WHERE id = #{keyword}
+    </select>
+    
+    <update id="update" parameterType="member">
+        UPDATE member 
+           SET
+           
+        	password 	= #{password},
+        	name		= #{name},
+        	birth		= #{birth},
+        	gender		= #{gender},
+        	phone		= #{phone}
+        	
+        WHERE
+        	id			= #{id}
+    </update>
+    
+    <select id="select" resultType="member">
+    	SELECT 
+    			Id, 
+    			Name, 
+    			Birth, 
+    			Gender, 
+    			Phone, 
+    			Auth, 
+    			JoinDate 
+    			
+    	FROM 	Member
+    	WHERE	IsDelete = '1'
+    	ORDER BY Auth,
+    			 JoinDate Desc
+    </select>
+	
+</mapper>
+

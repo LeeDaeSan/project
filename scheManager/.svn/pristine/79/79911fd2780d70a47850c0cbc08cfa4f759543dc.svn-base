@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+.menuUl { height: 450px; padding-top: 10px; }
+
+.menuLi { margin: 5px 0 5px 0; }
+.menuLi span { color: #337ab7; font-weight: bold; cursor: pointer; }
+
+.subMenuUl li { height: 30px; line-height: 30px; }
+#sidebar > ul > li > ul.sub { display: block !important; }

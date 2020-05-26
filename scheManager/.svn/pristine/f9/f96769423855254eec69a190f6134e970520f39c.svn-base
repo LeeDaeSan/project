@@ -1,0 +1,59 @@
+package com.dm.sche.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.dm.sche.dto.KeywordDTO;
+import com.dm.sche.dto.PagingDTO;
+import com.dm.sche.model.HouseHoldItem;
+
+@Mapper
+public interface HouseHoldItemMapper {
+
+	public List<HouseHoldItem> select(PagingDTO<HouseHoldItem> pagingDTO);
+	
+	/**
+	 * 대분류 항목 정보 total count
+	 * @return
+	 */
+	public Long selectForTotalcount();
+	
+	/**
+	 * 대분류 항목 상세 정보 조회
+	 * 
+	 * @param itemIdx
+	 * @return
+	 */
+	public HouseHoldItem detail(int itemIdx);
+	
+	/**
+	 * 대분류 항목 정보 등록
+	 * 
+	 * @param houseHoldItem
+	 * @return
+	 */
+	public Integer insert(HouseHoldItem houseHoldItem);
+	
+	/**
+	 * 대분류 항목 정보 수정
+	 * @param itemIdx
+	 * @return
+	 */
+	public Integer update(HouseHoldItem houseHoldItem);
+	
+	/**
+	 * 대분류 등록, 수정시 중복확인
+	 * 
+	 * @param keywordDTO
+	 * @return
+	 */
+	public String keywordCheck(KeywordDTO keywordDTO);
+	
+	/**
+	 * 대분류 정보 삭제
+	 * @param itemIdx
+	 * @return
+	 */
+	public Integer delete(int itemIdx);
+}

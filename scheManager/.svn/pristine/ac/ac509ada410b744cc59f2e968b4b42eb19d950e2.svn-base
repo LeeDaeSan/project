@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dm.sche.mapper.BoardManagerMapper">
+
+	<select id="select" parameterType="com.dm.sche.dto.PagingDTO" resultType="boardManager">
+		SELECT BoardManagerIdx	,
+			   BoardName		,
+			   BoardType		,
+			   Remark			,
+			   IsUse			,
+			   CreateMemberIdx	,
+			   UpdateMemberIdx	,
+			   CreateDate		,
+			   UpdateDate
+		  FROM BoardManager
+	  ORDER BY UpdateDate DESC, CreateDate DESC
+	  
+	  LIMIT #{page}, #{limit}
+	  
+	</select>
+	
+	<!-- 대분류 항목 정보 total count -->
+	<select id="selectForTotalcount" resultType="Long">
+		SELECT
+			COUNT(BoardManagerIdx)
+		FROM BoardManager
+	</select>
+	
+	<!-- 상세 정보 -->
+	<select id="detail" resultType="boardManager" parameterType="int">
+		SELECT BoardManagerIdx	,
+			   BoardName		,
+			   BoardType		,
+			   Remark			,
+			   IsUse			,
+			   CreateMemberIdx	,
+			   UpdateMemberIdx	,
+			   CreateDate		,
+			   UpdateDate
+		   FROM BoardManager 
+		  WHERE BoardManagerIdx = #{boardManagerIdx}
+	</select>
+	
+	<!-- 중복 확인 -->
+	<select id="keywordCheck" parameterType="com.dm.sche.dto.KeywordDTO" resultType="String">
+		SELECT BoardName
+		  FROM BoardManager
+		 WHERE BoardName = #{keyword}
+		 LIMIT 1
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="boardManager">
+		INSERT INTO BoardManager 
+		(
+		
+			BoardName		,
+			BoardType		,
+			Remark			,
+			IsUse			,
+			CreateMemberIdx	,
+			UpdateMemberIdx
+			
+		) VALUES (
+		
+			#{boardName}	  ,
+			#{boardType}	  ,
+			#{remark}		  ,
+			#{isUse}		  ,
+			#{createMemberIdx},
+			#{updateMemberIdx}
+			
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="boardManager">
+		UPDATE BoardManager 
+		   SET BoardName		= #{boardName},
+		       BoardType		= #{boardType},
+		       Remark			= #{remark},
+		       IsUse			= #{isUse},
+		       UpdateMemberIdx	= #{updateMemberIdx},
+		       UpdateDate		= NOW()
+		 WHERE BoardManagerIdx = #{boardManagerIdx} 
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="boardManager">
+		DELETE FROM BoardManager WHERE BoardManagerIdx = #{boardManagerIdx}
+	</delete>
+	
+</mapper>

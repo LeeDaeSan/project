@@ -1,0 +1,22 @@
+package com.dm.sche.model;
+
+import java.util.Date;
+
+import org.apache.ibatis.type.Alias;
+
+import lombok.Data;
+
+@Data
+@Alias("menu")
+public class MenuManager {
+
+	private Integer menuIdx;			// 메뉴 PK
+	private Integer menuSeq;			// 메뉴 번호
+	private String menuName;			// 메뉴 명
+	private String comment;				// 상세 설명
+	private String menuType;			// 메뉴 타입
+	private String isUse;				// 사용 여부
+	private Date createDate;			// 생성일
+	private Date updateDate;			// 수정일
+	
+}

@@ -1,0 +1,289 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<head>
+	<link rel="stylesheet" href="/css/views/menuSetting.css">
+</head>
+
+<script type="text/javascript">
+var setMenu;
+
+$(function(){
+	var checkedTag;
+	var changeMenu = new Object();
+	
+	setMenu = new Vue({
+		
+		el 		: "#setMenu",
+		
+		data 	: {
+			menuList : [],
+		},
+		
+		methods : {
+			
+			getList : function (){
+				
+				// 필수 설정
+				axios.defaults.headers.common['X-CSRF-TOKEN'] = '${_csrf.token}';
+				
+				// promise
+				axios.post('/mainMenu/menuList').then(response => {
+
+					if ( response.status == 200 ){
+						
+						$.each(response.data.menuList, function () {
+							
+							var subMenuList = this.subMenuList;
+							var isSub = false;
+
+							// 서브메뉴 목록
+							$.each(subMenuList, function (s, sItem){
+								
+								// 서브메뉴 Idx 가 있을 때에만 하위 메뉴 생성
+								if ( this.subMenuIdx ){
+									isSub = true;
+								}
+
+							});
+							
+							this.isSub = isSub;
+							
+						});
+						
+						setMenu.menuList = response.data.menuList;
+						
+					}
+					
+				});
+				
+			},
+
+			changeMenuLi : function (thisLi){
+				
+				var saveType = "";
+				
+				var thisTag = thisLi;
+				
+				var btnGrp  = '<div class="btnGrp" style="width: 80px; display: inline-block; float: right;">';
+					btnGrp += '    <button type="button" class="btn btn-default btn-xs" id="btnUp"   style="margin-right: 3px;">▲</a>';
+					btnGrp += '    <button type="button" class="btn btn-default btn-xs" id="btnDown" style="margin-right: 3px;">▼</a>';
+					btnGrp += '    <button type="button" class="btn btn-danger btn-xs"  id="btnDel"><i class="fa fa-trash-o"></i></a>';
+					btnGrp += '</div>';
+					
+				// 모든 active 속성 초기화
+				if ( $('li[isActive=Y]') ){
+					
+					$('li[isActive=Y]').css({"background-color" :  "#fff", "font-weight" : "normal"});
+					$('.btnGrp').remove();
+					
+					$('li[isActive=Y]').attr("isActive", "N");
+				}
+				
+				// 현재 클릭 한 요소에 active 속성 적용
+				if ( $(thisTag).attr("isActive") == "N" ){
+					
+					$(thisTag).css({"background-color" : "#eee", "font-weight" : "bold"});
+					
+					$(thisTag).append(btnGrp);
+					
+					$(thisTag).attr("isActive", "Y");
+					
+				}
+				
+				// 서브 메뉴 중 최상위에 있을 떄 ▲ 버튼 제거
+				var isFirstMenu = $(thisTag).prev().length;
+				if ( isFirstMenu == 0 ){
+					$('#btnUp').attr("disabled", "false");
+				}
+
+				// 서브 메뉴 중 최하위에 있을 때 ▼ 버튼 제거
+				var isLastMenu = $(thisTag).next().length;
+				if ( isLastMenu == 0 ){
+					$('#btnDown').attr("disabled", "false");
+				}
+
+				// ▲ 버튼 클릭 이벤트
+				$("#btnUp").unbind("click").click(function(){
+					$(thisTag).after($(thisTag).prev());
+				});
+				
+				// ▼ 버튼 클릭 이벤트
+				$("#btnDown").unbind("click").click(function(){
+					$(thisTag).before($(thisTag).next());
+				});
+				
+				// 삭제 버튼 클릭 이벤트
+				$("#btnDel").unbind("click").click(function(){
+					
+					if ( confirm("선택 한 메뉴를 삭제 하시겠습니까?\n저장을 누르면 완료됩니다.") ){
+						
+						$(thisTag).attr("isUse", "N");
+						$(thisTag).hide();
+						
+					} else {
+						return false;
+					}
+					
+				});
+
+			},
+			
+			// 저장 버튼 이벤트
+			save : function (){
+
+				var csrfToken = '${_csrf.token}';
+				saveType = "U";
+				
+				if ( confirm("저장 하시겠습니까?") ){
+						
+					var mainMenuList = $(".menuUl>li");
+					
+					var subMenuList = mainMenuList.children(".subMenuUl");
+					var subSeqArr   = new Array();
+					var subIdxArr   = new Array();
+					var isUseArr	= new Array();
+					
+					for ( var i = 0; i < mainMenuList.length; i++ ){
+						
+						var subLi = $(mainMenuList[i]).find(".subMenuUl li");
+						
+						for ( var s = 0; s < subLi.length; s++ ){
+							
+							$(subLi[s]).attr("subseq", s + 1);
+							subSeqArr.push($(subLi[s]).attr("subseq"));
+							subIdxArr.push($(subLi[s]).attr("subidx"));
+							isUseArr.push($(subLi[s]).attr("isuse"));
+						}
+						
+					}
+					
+					var params = new URLSearchParams();
+					
+					params.append("type", 		saveType);
+					params.append("subSeqArr", 	subSeqArr);
+					params.append("subIdxArr", 	subIdxArr);
+					params.append("isUseArr", 	isUseArr);
+
+					axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+					axios.post('/mainMenu/merge', params).then(response => {
+						
+						if ( response.status == 200 ){
+							
+							alert("저장 되었습니다.");
+							getMenuSetting();
+							
+						} else {
+							alert("저장에 실패 하였습니다.");
+							return false;
+						}
+						
+					});
+					
+				} else {
+					return false;
+				}
+				
+			},
+			
+			detail : function (){
+				
+				
+				
+			}
+			
+		},
+
+	});
+	setMenu.getList();
+});
+
+</script>
+
+<div id="setMenu" class="col-lg-12" oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+		<div class="custom-box tl" style="height: 600px">
+			<div class="servicetitle">
+				<h4 class="tc">Setting</h4>
+				<hr>
+			</div>
+			<ul class="menuUl">
+				<li class="menuLi" v-for="(item, index) in menuList" v-bind:idx="item.mainMenuIdx" v-bind:seq="item.menuSeq">
+					<i class="fa fa-folder"></i>
+					<span v-if="item.isAdd == 'N' ">&nbsp;{{ item.mainMenuName }}</span>
+					<span v-else-if="item.isAdd == 'Y' ">
+						&nbsp;{{ item.mainMenuName }}
+						<button type="button" class="btn btn-default btn-xs" style="float: right">메뉴 추가</button>
+					</span>
+					<ul class="subMenuUl">
+						<li v-for="(subItem, index) in item.subMenuList" 
+							v-if="item.isSub && subItem.isUse == 'Y'" 
+							v-bind:id="'subMenu_' + item.mainMenuIdx + '_' + subItem.subMenuIdx" 
+							v-on:click="changeMenuLi($event.target)"
+							v-on:dblclick="detail()"
+							isActive="N"
+							v-bind:subSeq="subItem.subMenuSeq"
+							v-bind:subIdx="subItem.subMenuIdx"
+							v-bind:isUse="subItem.isUse">
+							　　{{ subItem.menuName }}
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<div style="text-align: center">
+				<button type="button" class="btn btn btn-theme" id="btnSave" v-on:click="save()">저장</button>
+			</div>
+
+		</div>
+		<!-- end custombox -->
+	</div>
+	
+	<!-- DETAIL -->
+	<div class="col-lg-5 col-md-4 col-sm-4 col-xs-12">
+		<form action="#" class="form-horizontal style-form custom-box tl">
+			<div class="form-group">
+				<label class="control-label col-md-3">메뉴명</label>
+				<div class="col-md-3 col-xs-11">
+					<input class="form-control form-control-inline input-medium default-date-picker" size="16" type="text" value="">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-md-3">생성일</label>
+				<div class="col-md-3 col-xs-11">
+					<div data-date-viewmode="years" data-date-format="dd-mm-yyyy" data-date="01-01-2014" class="input-append date dpYears">
+						<input type="text" readonly="" value="01-01-2014" size="16" class="form-control">
+						<span class="input-group-btn add-on">
+							<button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+					</div>
+					<span class="help-block">Select date</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-md-3">Months Only</label>
+				<div class="col-md-3 col-xs-11">
+					<div data-date-minviewmode="months" data-date-viewmode="years" data-date-format="mm/yyyy" data-date="01/2014" class="input-append date dpMonths">
+						<input type="text" readonly="" value="01/2014" size="16" class="form-control">
+						<span class="input-group-btn add-on">
+							<button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+					</div>
+					<span class="help-block">Select month only</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-md-3">Date Range</label>
+				<div class="col-md-4">
+					<div class="input-group input-large" data-date="01/01/2014" data-date-format="mm/dd/yyyy">
+						<input type="text" class="form-control dpd1" name="from">
+						<span class="input-group-addon">To</span>
+						<input type="text" class="form-control dpd2" name="to">
+					</div>
+					<span class="help-block">Select date range</span>
+				</div>
+			</div>
+		</form>
+		<!-- end custombox -->
+	</div>
+	<!-- end col-4 -->
+</div>
+

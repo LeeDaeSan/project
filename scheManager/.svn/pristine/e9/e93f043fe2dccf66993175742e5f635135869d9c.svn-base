@@ -1,0 +1,15 @@
+package com.dm.sche.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.dm.sche.model.MainMenu;
+
+@Mapper
+public interface MainMenuMapper {
+
+	// 메인 메뉴 리스트
+	public List<MainMenu> selectMainMenuList();
+	
+}

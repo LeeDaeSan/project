@@ -1,0 +1,15 @@
+package com.dm.sche.service;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.dm.sche.model.MainMenu;
+
+@Service
+public interface MainMenuService {
+
+	// 메인 메뉴 리스트
+	public Map<String, Object> selectMainMenuList();
+	
+}

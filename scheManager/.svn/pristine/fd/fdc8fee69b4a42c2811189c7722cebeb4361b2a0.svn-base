@@ -1,0 +1,97 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<head>
+	<link rel="stylesheet" href="/css/views/menuSetting.css">
+</head>
+
+<script type="text/javascript">
+$(function(){
+
+	var setMenu = new Vue({
+		
+		el : "#setMenu",
+		
+		mounted (){
+			
+			var param = {
+					
+			};
+			
+			// 필수 설정
+			axios.defaults.headers.common['X-CSRF-TOKEN'] = '${_csrf.token}';
+			
+			// promise
+			axios.post('/mainMenu/menuList', param).then(response => {
+
+				if ( response.status == 200 ){
+					
+					$.each(response.data.menuList, function () {
+						var subMenuList = this.subMenuList;
+						var isSub = false;
+
+						// 서브메뉴 목록
+						$.each(subMenuList, function (s, sItem){
+							// 서브메뉴 Idx 가 있을 때에만 하위 메뉴 생성
+							if ( this.subMenuIdx ){
+								isSub = true;
+							}
+
+						});
+						
+						this.isSub = isSub;
+						
+					});
+					this.menuList = response.data.menuList;
+					
+				}
+				
+			});
+			
+		},
+		
+		data (){
+			return {
+				menuList : [],
+			}
+		},
+		
+		methods : {
+
+		}
+		
+	});
+	
+
+	
+});
+</script>
+
+<div id="setMenu" class="col-lg-12">
+	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+		<div class="custom-box tl" style="height: 600px">
+			<div class="servicetitle">
+				<h4 class="tc">Setting</h4>
+				<hr>
+			</div>
+			<ul class="menuUl">
+				<li class="menuLi" v-for="(item, index) in menuList">
+					<i class="fa fa-folder"></i>
+					<span>&nbsp;{{ item.mainMenuName }}</span>
+					<ul>
+						<li v-for="(subItem, index) in item.subMenuList" v-if="item.isSub" v-bind:idx="subItem.subMenuIdx">
+							　　 <input type="checkbox">{{ subItem.menuName }}
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<div class="tr">
+				<a class="btn btn-default btn-sm" href="#">▲</a>
+				<a class="btn btn-default btn-sm" href="#">▼</a>
+				<a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o"></i></a>
+			</div>
+		</div>
+		<!-- end custombox -->
+	</div>
+	<!-- end col-4 -->
+
+</div>

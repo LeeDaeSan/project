@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dm.sche.mapper.BoardManagerMapper">
+
+	<!-- common search -->
+	<sql id="search">
+	
+		<!-- 게시판명 -->
+		<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchKeyword)">
+			AND BoardName LIKE CONCAT('%', TRIM(#{searchKeyword}), '%')
+		</if>
+		
+		<!-- 게시판 타입 -->
+		<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchSelectType)">
+			AND BoardType = #{searchSelectType}
+		</if>
+		
+		<!-- 사용 여부 -->
+		<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchIsUse)">
+			AND IsUse = #{searchIsUse}
+		</if>
+		
+		<!-- 기간 -->
+		<if test="@com.dm.sche.util.StringUtil@isNotEmpty(searchStartDate) and @com.dm.sche.util.StringUtil@isNotEmpty(searchEndDate)">
+			<choose>
+				<when test='"createDate".equals(searchDateType)'>
+					<!-- 생성일 -->
+					AND DATE_FORMAT(CreateDate, '%Y%m%d') BETWEEN #{searchStartDate} AND #{searchEndDate}
+				</when>
+				<when test='"updateDate".equals(searchDateType)'>
+					<!-- 수정일 -->
+					AND DATE_FORMAT(UpdateDate, '%Y%m%d') BETWEEN #{searchStartDate} AND #{searchEndDate}
+				</when>
+			</choose>
+		</if>	
+		
+	</sql>
+
+	<select id="select" parameterType="com.dm.sche.dto.PagingDTO" resultType="boardManager">
+	
+		SELECT BoardManagerIdx		,																<!-- 게시판 PK -->
+			   BoardName			,																<!-- 게시판 명 -->
+			   BoardType			,																<!-- 게시판 타입 -->
+			   Remark				,																<!-- 비고 -->
+			   IsUse				,																<!-- 사용 여부 -->
+			   CreateMemberIdx		,																<!-- 생성자 PK -->
+			   UpdateMemberIdx		,																<!-- 수정자 PK -->
+			   (SELECT IFNULL(Name, "") FROM Member WHERE Idx = UpdateMemberIdx) AS MemberName,		<!-- 생성자 이름 -->
+			   CreateDate			,			<!-- 생성일 -->
+			   UpdateDate						<!-- 수정일 -->
+		  FROM BoardManager
+		  
+ 			<where>
+ 				<include refid="search" />
+			</where>
+			
+	  ORDER BY UpdateDate
+			<choose>
+				<when test="sort eq 'desc'">DESC</when>
+				<when test="sort eq 'asc'">ASC</when>
+				<otherwise>DESC</otherwise>
+			</choose>
+		 LIMIT #{page}, #{limit}
+	  
+	</select>
+	
+	<!-- 대분류 항목 정보 total count -->
+	<select id="selectForTotalcount" resultType="Long" parameterType="com.dm.sche.dto.PagingDTO">
+	
+		SELECT COUNT(BoardManagerIdx)
+		  FROM BoardManager
+		<where>
+			<include refid="search" />
+		</where>
+		
+	</select>
+	
+	<!-- 상세 정보 -->
+	<select id="detail" resultType="boardManager" parameterType="int">
+	
+		SELECT BoardManagerIdx	,
+			   BoardName		,
+			   BoardType		,
+			   Remark			,
+			   IsUse			,
+			   CreateMemberIdx	,
+			   UpdateMemberIdx	,
+			   CreateDate		,
+			   UpdateDate
+		  FROM BoardManager 
+		 WHERE BoardManagerIdx = #{boardManagerIdx}
+		 
+	</select>
+	
+	<!-- 중복 확인 -->
+	<select id="keywordCheck" parameterType="com.dm.sche.dto.KeywordDTO" resultType="String">
+	
+		SELECT BoardName
+		  FROM BoardManager
+		 WHERE BoardName = #{keyword}
+		 LIMIT 1
+		 
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="boardManager">
+	
+		INSERT INTO BoardManager 
+		(
+		
+			BoardName		,
+			BoardType		,
+			Remark			,
+			IsUse			,
+			CreateMemberIdx	,
+			UpdateMemberIdx
+			
+		) VALUES (
+		
+			TRIM(#{boardName}),
+			#{boardType}	  ,
+			TRIM(#{remark})	  ,
+			#{isUse}		  ,
+			#{createMemberIdx},
+			#{updateMemberIdx}
+			
+		)
+		
+		<selectKey resultType="Integer" keyProperty="boardManagerIdx" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey> 
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="boardManager">
+	
+		UPDATE BoardManager 
+		   SET BoardName		= TRIM(#{boardName}),
+		       BoardType		= #{boardType},
+		       Remark			= TRIM(#{remark}),
+		       IsUse			= #{isUse},
+		       UpdateMemberIdx	= #{updateMemberIdx},
+		       UpdateDate		= NOW()
+		 WHERE BoardManagerIdx = #{boardManagerIdx} 
+		 
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="boardManager">
+		DELETE FROM BoardManager WHERE BoardManagerIdx = #{boardManagerIdx}
+	</delete>
+	
+</mapper>

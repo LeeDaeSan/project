@@ -1,0 +1,13 @@
+package com.dm.sche.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.dm.sche.model.Member;
+
+@Mapper
+public interface TestMapper {
+
+	public List<Member> getMembers();
+}

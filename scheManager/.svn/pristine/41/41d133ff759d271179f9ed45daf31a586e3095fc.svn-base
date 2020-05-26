@@ -1,0 +1,22 @@
+package com.dm.sche.service;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public interface BoardService {
+
+	/**
+	 * 
+	 * @return
+	 *
+	 * @Author	: Ko MiJung
+	 * @Date	: 2019. 8. 8.
+	 * @Comment : 리스트 호출
+	 *
+	 */
+	public Map<String, Object> selectBoardList();
+	
+	
+}

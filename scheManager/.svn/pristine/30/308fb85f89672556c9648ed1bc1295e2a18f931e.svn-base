@@ -1,0 +1,57 @@
+package com.dm.sche.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dm.sche.dto.KeywordDTO;
+import com.dm.sche.model.HouseHoldItem;
+import com.dm.sche.service.HouseHoldItemService;
+
+@RestController
+@RequestMapping("/houseHoldItem")
+public class HouseHoldItemController {
+
+	@Autowired
+	private HouseHoldItemService houseHoldItemService;
+	
+	/**
+	 * 대분류 항목 정보 조회
+	 * 
+	 * @return
+	 */
+	@PostMapping(value = "/list")
+	public List<HouseHoldItem> list () {
+		
+		return houseHoldItemService.getHouseHoldItemList();
+	}
+	
+	/**
+	 * 품목명 중복확인
+	 * 
+	 * @param itemName
+	 * @return
+	 */
+	@PostMapping(value = "/nameChk")
+	public String nameChk (KeywordDTO keywordDTO) {
+		return houseHoldItemService.keywordCheck(keywordDTO);
+	}
+	
+	/**
+	 * 대분류 항목 정보 등록, 수정, 삭제
+	 * 
+	 * @return
+	 */
+	@PostMapping(value = "/merge")
+	public Integer merge (@RequestParam(value = "type", required = false) String type, 
+						HouseHoldItem houseHoldItem) {
+		
+		return houseHoldItemService.merge(type, houseHoldItem);
+	}
+	
+	
+}

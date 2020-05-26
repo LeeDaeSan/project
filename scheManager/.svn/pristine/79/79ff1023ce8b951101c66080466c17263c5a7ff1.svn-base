@@ -1,0 +1,73 @@
+package com.dm.sche.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dm.sche.dto.KeywordDTO;
+import com.dm.sche.mapper.MemberMapper;
+import com.dm.sche.model.Member;
+import com.dm.sche.service.MemberService;
+import com.dm.sche.util.ResponseUtil;
+
+@Service
+public class MemberServiceImpl implements MemberService {
+
+	@Autowired
+	private MemberMapper memberMapper;
+	
+	/**
+	 * 사용자 로그인 정보 조회
+	 */
+	@Override
+	public Member getMemberInfo (String id) {
+		return memberMapper.getMemberInfo(id);
+	}
+	
+	public void insertMember(Member member) {
+		memberMapper.insertMember(member);
+	}
+	
+	public String getId(KeywordDTO keywordDTO) {
+		return memberMapper.getId(keywordDTO);
+	}
+
+	@Override
+	public void updateMember(Member member) {
+		memberMapper.updateMember(member);
+		
+	}
+
+	@Override
+	public Map<String, Object> getUserList() {
+		
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("list", memberMapper.getUserList());
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
+
+	@Override
+	public Map<String, Object> getUserDetail(String id) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("detail", memberMapper.getUserDetail(id));
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
+}

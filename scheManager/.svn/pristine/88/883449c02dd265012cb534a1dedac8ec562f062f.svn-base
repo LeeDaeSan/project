@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+/* base */
+html, body { margin: 0; height: 100%; overflow: hidden; }
+.wrap { height: 100%; }
+.wrapper { padding-top: 10px !important; }
+
+
+/* menu */
+.userImg { width: 80px; height: 80px; object-fit: cover; }
+
+
+/* contents */
+#main-content { height: calc(100% - 70px); }
+
+
+/* footer */
+@media ( min-width : 767px ) {
+	footer { position: relative; width: calc(100% - 210px); left: 210px; bottom: 0px; z-index: 100; }
+}
+
+@media ( max-width: 767px  ) {
+	footer { position: relative; width: 100%; bottom: 0px; z-index: 100; }
+}
+
+/* Text 정렬 */
+.tl { text-align: left !important; }
+.tc { text-align: center !important; }
+.tr { text-align: right !important; }
+
+/* float 정렬 */
+.fl {float:left;}
+.fr {float:right;}
+
+/* 버튼 관련 */
+.btn-panel{margin-top:20px;margin-bottom:10px;}

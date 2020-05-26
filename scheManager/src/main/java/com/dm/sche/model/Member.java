@@ -1,0 +1,36 @@
+package com.dm.sche.model;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.type.Alias;
+
+import lombok.Data;
+
+/**
+ * 사용자 정보 Table
+ * 
+ * @author idaesan
+ */
+@Data
+@Alias("member")
+public class Member {
+
+	private Integer idx;					// 사용자 정보 PK
+	private String id;						// 아이디
+	private String password;				// 비밀번호
+	private String name;					// 이름
+	private String birth;					// 생년월일 (19990101)
+	private String gender;					// 성별 (1:남자, 2:여자)
+	private String phone;					// 전화번호 (01012341234)
+	private String auth;					// 권한 (A:admin, U:user)
+	private String isDelete;				// 노출여부 (0: 삭제, 1: 사용)
+	private Date joinDate;					// 회원가입일
+	private Date createDate;				// 생성일
+	private Date updateDate;				// 수정일
+	
+	private List<MainMenu> mainMenuList;	// 대메뉴 목록
+	private List<Schedule> scheduleList;	// 일정관리 목록
+	
+	
+}

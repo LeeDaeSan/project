@@ -1,0 +1,117 @@
+package com.dm.sche.model;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.type.Alias;
+
+import lombok.Data;
+
+/**
+ * 사용자 정보 Table
+ * 
+ * @author idaesan
+ */
+@Data
+@Alias("member")
+public class Member {
+
+	private Integer idx;		// 사용자 정보 PK
+	private String id;			// 아이디
+	private String password;	// 비밀번호
+	private String name;		// 이름
+	private String birth;		// 생년월일 (19990101)
+	private String gender;		// 성별 (1:남자, 2:여자)
+	private String phone;		// 전화번호 (01012341234)
+	private String auth;		// 권한 (A:admin, U:user)
+	private String isDelete;	// 노출여부 (0: 삭제, 1: 사용)
+	private Date joinDate;		// 회원가입일
+	private Date createDate;	// 생성일
+	private Date updateDate;	// 수정일
+	
+	private List<MainMenu> mainMenuList;	// 대메뉴 목록
+	private List<Schedule> scheduleList;	// 일정관리 목록
+	
+	
+	public Integer getIdx() {
+		return idx;
+	}
+	public void setIdx(Integer idx) {
+		this.idx = idx;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getBirth() {
+		return birth;
+	}
+	public void setBirth(String birth) {
+		this.birth = birth;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getAuth() {
+		return auth;
+	}
+	public void setAuth(String auth) {
+		this.auth = auth;
+	}
+	public Date getJoinDate() {
+		return joinDate;
+	}
+	public void setJoinDate(Date joinDate) {
+		this.joinDate = joinDate;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+	public List<MainMenu> getMainMenuList() {
+		return mainMenuList;
+	}
+	public void setMainMenuList(List<MainMenu> mainMenuList) {
+		this.mainMenuList = mainMenuList;
+	}
+	public List<Schedule> getScheduleList() {
+		return scheduleList;
+	}
+	public void setScheduleList(List<Schedule> scheduleList) {
+		this.scheduleList = scheduleList;
+	}
+	
+	
+	
+}

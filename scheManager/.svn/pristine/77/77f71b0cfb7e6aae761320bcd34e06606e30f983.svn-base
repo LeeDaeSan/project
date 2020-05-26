@@ -1,0 +1,17 @@
+<head>
+	<script type="text/javascript">
+		$(function(){
+			console.log(111);
+			aaa();
+		});
+		
+		function aaa (){
+			console.log(333);
+		}
+	</script>
+</head>
+<body>
+	<div>jsp test!</div>
+	
+	<button type="button" class="btn btn-info">aaa</button>
+</body>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+	 <!--  base tiles layout add  -->
+	<definition name="base" template="/WEB-INF/jsp/layout/base.jsp">
+		<put-attribute name="title"	 value="일정 관리"/>
+		<put-attribute name="header" value="/WEB-INF/jsp/layout/header.jsp"/>
+		<put-attribute name="menu"	 value="/WEB-INF/jsp/layout/menu.jsp" />
+		<put-attribute name="body"	 value=""/>
+		<put-attribute name="footer" value="/WEB-INF/jsp/layout/footer.jsp"/>
+	</definition>
+	
+	<definition name="*" extends="base">
+		<put-attribute name="body" value="/WEB-INF/jsp/{1}.jsp"/>
+	</definition>
+	
+	<definition name="*/*" extends="base">
+		<put-attribute name="body" value="/WEB-INF/jsp/{1}/{2}.jsp"/>
+	</definition>
+	
+	<definition name="*/*/*" extends="base">
+		<put-attribute name="body" value="/WEB-INF/jsp/{1}/{2}/{3}.jsp"/>
+	</definition>
+	
+</tiles-definitions>

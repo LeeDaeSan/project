@@ -1,0 +1,40 @@
+package com.dm.sche.util;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.dm.sche.constant.Constant;
+
+public class UrlUtil {
+
+	
+	/**
+	 * URL 절대경로 셋팅
+	 * @param request
+	 * @param url
+	 * @return
+	 */
+	public static String setUrl ( HttpServletRequest request, String url ) {
+
+		StringBuffer urlBuffer = new StringBuffer();
+		
+		// url 기본 경로
+		urlBuffer.append(request.getScheme()).append("://")
+			 	 .append(request.getServerName()).append(":")
+			 	 .append(request.getServerPort());
+		
+		// url이 있을 때
+		if ( StringUtil.isNotEmpty(url) ) {
+			
+			urlBuffer.append("/").append(Constant.VIEWS)
+					 .append("/").append(url);
+
+		// url이 없을 때
+		} else {
+			urlBuffer.append("/").append(Constant.VIEWS)
+			 .append("/dashboard");
+		}
+		
+		return urlBuffer.toString();
+	}
+	
+}

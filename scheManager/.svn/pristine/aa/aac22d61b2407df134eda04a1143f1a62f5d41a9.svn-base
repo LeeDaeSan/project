@@ -1,0 +1,40 @@
+package com.dm.sche.dto;
+
+import lombok.Data;
+
+@Data
+public class PagingDTO <T> {
+
+	private Long totalCount;		// 페이지 총 카운트수
+	private int page = 0;			// 현재 페이지
+	private Long limit;				// limit
+	
+	private T model;
+	
+	public Long getTotalCount() {
+		return totalCount;
+	}
+	public void setTotalCount(Long totalCount) {
+		this.totalCount = totalCount;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public Long getLimit() {
+		return limit;
+	}
+	public void setLimit(Long limit) {
+		this.limit = limit;
+	}
+	
+	public T getModel() {
+		return model;
+	}
+	public void setModel(T model) {
+		this.model = model;
+	}
+	
+}

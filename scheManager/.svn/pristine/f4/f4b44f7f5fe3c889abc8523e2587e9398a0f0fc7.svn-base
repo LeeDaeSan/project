@@ -1,0 +1,10 @@
+package com.dm.sche.dto;
+
+public class PagingDTO {
+
+	private Long totalCount;		// 페이지 총 카운트수
+	private int page;				// 현재 페이지
+	private Long limit;				// limit
+	
+	
+}

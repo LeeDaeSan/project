@@ -1,0 +1,60 @@
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title><tiles:getAsString name="title"/></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="/css/common/reset.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/common/base.css">
+	
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.4/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.4/dist/css/bootstrap-theme.min.css">
+
+	<!--external css-->
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/lib/font-awesome/css/font-awesome.css"/>
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/css/zabuto_calendar.css">
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/lib/gritter/css/jquery.gritter.css" />
+	
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/css/style-responsive.css">
+	
+	
+	<!-- jquery -->
+	<script type="text/javascript" src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+	
+	<!-- amChart -->
+	<script type="text/javascript" src="/lib/amChart/acore.js"></script>
+	<script type="text/javascript" src="/lib/amChart/chart.js"></script>
+	<script type="text/javascript" src="/lib/amChart/de_DE.js"></script>
+	<script type="text/javascript" src="/lib/amChart/germanyLow.js"></script>
+	<script type="text/javascript" src="/lib/amChart/material.js"></script>
+	
+	<!-- vue -->
+	<script type="text/javascript" src="/js/vue.js"></script>
+	
+	<!-- dashio -->
+	<!-- Favicons -->
+	<link href="/lib/Dashio/img/favicon.png" rel="icon">
+	<link href="/lib/Dashio/img/apple-touch-icon.png" rel="apple-touch-icon">
+  
+	
+	
+</head>
+<body>
+	
+	<div class="wrap">
+
+		<section>
+			<section class="wrapper">
+				<tiles:insertAttribute name="empty" />
+			</section>
+		</section>
+		
+	</div>
+</body>
+</html>

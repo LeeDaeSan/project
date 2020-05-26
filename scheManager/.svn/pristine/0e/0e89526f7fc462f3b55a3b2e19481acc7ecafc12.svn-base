@@ -1,0 +1,58 @@
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title><tiles:getAsString name="title"/></title>
+	
+	<!-- css -->
+	<link rel="stylesheet" href="/css/common/reset.min.css">
+	
+	
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="/webjars/bootstrap/3.3.4/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/webjars/bootstrap/3.3.4/dist/css/bootstrap-theme.min.css">
+
+	<!-- jquery -->
+	<script type="text/javascript" src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+	
+	<!-- amChart -->
+	<script type="text/javascript" src="/lib/amChart/acore.js"></script>
+	<script type="text/javascript" src="/lib/amChart/chart.js"></script>
+	<script type="text/javascript" src="/lib/amChart/de_DE.js"></script>
+	<script type="text/javascript" src="/lib/amChart/germanyLow.js"></script>
+	<script type="text/javascript" src="/lib/amChart/material.js"></script>
+	
+	<!-- jqGrid -->
+	<link rel="stylesheet" href="/lib/Guriddo_jqGrid_JS_5.3.2/css/ui.jqgrid.css">
+	<link rel="stylesheet" href="/lib/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css">
+	<script type="text/javascript" src="/lib/Guriddo_jqGrid_JS_5.3.2/js/jquery.jqGrid.min.js"></script>
+	
+	
+	<!-- tui calendar -->
+<!-- 	<link rel="stylesheet" href="/lib/tui.calendar-1.11.0/dist/tui-calendar.min.css">
+	<script src="/lib/tui.calendar-1.11.0/dist/tui-calendar.min.js"></script>
+	<script src="/lib/bower_components/tui-code-snippet/dist/tui-code-snippet.min.js"></script>
+	<script src="/lib/tui.calendar-1.11.0/dist/raphael-min.js"></script> -->
+	
+</head>
+<body>
+
+	<div class="container">
+	
+		<div id="header">
+			<tiles:insertAttribute name="header" />
+		</div>
+		
+		<div id="contents">
+			<tiles:insertAttribute name="body" />
+		</div>
+		
+		<div id="footer">
+			<tiles:insertAttribute name="footer" />
+		</div>
+		
+	</div>
+
+</body>
+</html>

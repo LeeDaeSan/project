@@ -1,0 +1,561 @@
+
+/**
+ * 페이징 공통 함수
+ * 
+ */
+var paging = {
+	
+	// 빈 리스트 처리 설정
+	emptyList : function (tag, colspan, text){
+		
+		var	html  = '<tr>';
+			html += '	<td colspan="' + colspan + '" class="emptyList" style="vertical-align: middle;" >';
+			html += 		( text ? text : "데이터가 없습니다." );
+			html += '	</td>';
+			html += '</tr>';
+		
+		$(tag).find("tbody").empty().append(html);
+			
+	},
+		
+	// 페이징 초기 데이터 설정
+	getData : function () {
+		
+		return {
+			dataList	: [],		// 데이터 목록
+			limit		: 10,		// 목록의 limit
+			page		: 1,		// 현재 페이지
+			totalCount 	: 0,		// 목록 총 갯수
+			pageLimit	: 10,		// 페이지의 limit
+			pageTag		: '',		// 바인딩되는 페이징 html
+			firstPage	: 1,		// 전체 페이지의 시작 번호
+			lastPage	: 1,		// 전체 페이지의 마지막 번호
+			startPage	: 1,		// 현재 페이징의 시작 번호
+			endPage		: 1,		// 현재 페이징의 마지막 번호
+		};
+	},
+	
+	// 페이징 목록 조회
+	select : function (page, thisVue) {
+		thisVue.page = page;
+		thisVue.list();
+	},
+	
+	// 페이징 생성
+	init : function (totalcount, thisVue) {
+		
+		thisVue.totalCount = totalcount;
+		
+		var isNext = true;
+		
+		var totalPage = Math.ceil(totalcount / thisVue.limit);
+		
+		var pageHtml = '';
+		
+		// 페이징의 시작 페이지번호
+		var sPage = parseInt(thisVue.page / thisVue.pageLimit);
+		
+		if (thisVue.page % thisVue.pageLimit == 0) {
+			sPage--;
+		}
+		
+		// 페이징의 마지막 페이지번호
+		var ePage = (sPage + 1) * thisVue.pageLimit;
+		
+		if (ePage >= totalPage) {
+			ePage = totalPage;
+			isNext = false;
+		}
+		
+		sPage = sPage * thisVue.pageLimit + 1;
+		
+		// PREVIOUS BUTTON
+		if (thisVue.firstPage < sPage) {
+			pageHtml += '<li class="page_btn" page="' + (sPage - thisVue.pageLimit) + '">';
+			pageHtml += '	<a aria-label="Previous" href="javascript:void(0);">';
+			pageHtml += '		<span aria-hidden="true">&laquo;</span>';
+			pageHtml += '	</a>';
+			pageHtml += '</li>';
+		}
+		
+		// CENTER BUTTONS
+		for (var i = sPage; i <= ePage; i++) {
+			pageHtml += '<li class="page_btn ' + (thisVue.page == i ? 'active' : '') + '" page="' + i + '">';
+			pageHtml += '	<a href="javascript:void(0);">' + i + '</a>';
+			pageHtml += '</li>';
+		}
+		
+		// NEXT BUTTON
+		if (isNext) {
+			pageHtml += '<li class="page_btn" page="' + (ePage + 1) + '">';
+			pageHtml += '	<a aria-label="Next" href="javascript:void(0);" id="nextBtn">';
+			pageHtml += '		<span aria-hidden="true">&raquo;</span>';
+			pageHtml += '	</a>';
+			pageHtml += '</li>';
+		}
+		
+		thisVue.pageTag = pageHtml;
+		
+		// 페이징 버튼 이벤트
+		setTimeout(function () {
+			$('.page_btn').unbind('click').click(function () {
+				paging.select($(this).attr('page'), thisVue);
+			});
+		}, 300);
+	}
+};
+
+/**
+ * Converter Util
+ */
+var converter = {
+		
+		// 날짜 포맷
+		date : {
+			basic : {
+				
+				toString : function (date, pattern) {
+					date = converter.date.gmtToDate(date);
+					return dateToString(date, pattern);
+				},
+				toDate : function (str, pattern) {
+
+				}
+			},
+			
+			dateTime : {
+				
+				toString : function (date, pattern) {
+					date = converter.date.gmtToDate(date);
+					return dateToString(date, pattern) + ' (' + timeToString(date, pattern) + ')';
+				},
+				
+				toDate : function (str, pattern) {
+
+				}
+			},
+			
+			onlyTime : {
+				
+				toString : function (date, pattern) {
+					date = converter.date.gmtToDate(date);
+					return timeToString(date, pattern);
+				},
+				toDate : function (str, pattern) {
+
+				}
+			},
+			
+			gmtToDate : function (date) {
+				date = date.replace('+0000', '');
+				return new Date(date);
+			}
+		},
+		
+		// 생년월일
+		birth	: {
+			addPattern : function (str, pattern) {
+				var year = str.substring(0,4);
+				var month = str.substring(4,6);
+				var day = str.substring(6,8);
+				
+				return [year, month, day].join(pattern);
+			},
+			removePattern : function (str) {
+				
+			}
+		},
+		
+		phone	: {
+			addPattern : function (str, pattern) {
+				var first = str.substring(0,3);
+				var second = str.substring(3,7);
+				var third = str.substring(7,11);
+				
+				return [first, second, third].join(pattern);
+			},
+			removePattern : function (str) {
+				
+			}
+		},
+		
+		// 숫자 포맷
+		number : {
+			
+			// 콤마 추가     ex) 천단위 기준 1000 -> 1,000
+			addComma : function (num) {
+	            
+				num = converter.string.toString(num);
+	            
+	            return converter.string.replaceAll(num, /\B(?=(\d{3})+(?!\d))/, ',');
+			},
+			
+			// 콤마 삭제
+			removeComma : function (str) {
+	            
+	            str = converter.string.toString(str);
+	            
+	            return str.replace(/,/g, '');
+			},
+	         
+			// 소수점 반올림처리
+			toFixed : function (num, point) {
+	            // 숫자 판별
+				if (!converter.check.isNumber(num)) {
+					return num;
+	            }
+	            
+	            point = point ? point : 1;
+	            
+	            return num.toFixed();
+			}
+		},
+		
+		// 문자열 포맷
+		string : {
+			
+			// object toString 처리
+			toString : function (obj) {
+	            
+				if (converter.check.isEmpty(obj)) {
+					return '';
+	            }
+	            
+	            return obj.toString();
+			},
+			
+			// 문자열 치환
+			replaceAll : function (str, search, pattern) {
+	            
+	            str = converter.string.toString(str);
+	            
+	            return str.split(search).join(pattern);
+			},
+			
+			// 문자열 찾기
+			contains : function (str, search) {
+	            
+	            str = converter.string.toString(str);
+	            
+	            if (str.indexOf(search) != -1) {
+	            	return true;
+	            }
+	            
+	            return false;
+			}
+		},
+		
+		// 유형 체크
+		check : {
+			
+			// 공백인 경우 체크
+			isEmpty : function (obj) {
+	            if (!obj) {
+	            	return true;
+	            }
+	            
+	            return false;
+			},
+	         
+	        // 공백이 아닌 경우 체크
+	        isNotEmpty : function (obj) {
+	        	if (obj) {
+	            	return true;
+	            }
+	            
+	            return false;
+	        },
+	         
+	        // Number 체크
+	        isNumber : function (obj) {
+	            // 숫자 아닌 경우
+	            if (isNaN(obj)) {
+	                return false;
+	            }
+	            
+	            return true;
+	        },
+	         
+	        // Object 체크
+	        isObject : function (obj) {
+	            
+	            // Object가 빈값이거나 Object type이 아닐 때
+	            if (Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({})) {
+	                return false;
+	            }
+	            
+	            return true;
+	        }
+		}
+};
+
+/**
+ * Validation Check
+ */
+var validation = {
+		
+		// 중복확인
+		overlap	: function (url, param) {
+
+			var isChecked = false;
+			
+			if (!url) {
+				alert('경로가 없습니다.');
+				return false;
+			}
+			
+			$.ajax({
+				type 		: 'POST',
+				url			: url,
+				data		: param.data,
+				async		: false,
+				success		: function (res) {
+					// 중복있음
+					if (res) {
+						isChecked = true;
+						alert('입력하신 ' + param.name + '은(는) 이미 사용중입니다.');
+						$('#' + param.tag).focus();
+						
+					// 중복없음
+					} else {
+						isChecked = false;
+					}
+				},
+				failure		: function (res) {
+				}
+			});
+			
+			return isChecked;
+		},
+		
+		// 공통 체크 항목
+		common	: function (checkArray) {
+			
+			var isChecked = false;
+			$.each(checkArray, function () {
+				
+				var thisTag = $('#' + this.tag);
+				
+				// 공백 체크
+				if (this.isEmpty && !thisTag.val()) {
+					
+					alert(this.name + '을(를) 입력해 주세요.');
+					thisTag.focus();
+					isChecked = true;
+					return false;
+				}
+			});
+			
+			return isChecked;
+		},
+		
+		// 이벤트 발생시 체크 항목
+		eventCheck : function (checkArray) {
+			
+			$.each(checkArray, function () {
+				var thisTag = $('#' + this.tag);
+				
+				var kor 		= this.isKor;
+				var isLength 	= this.isLength;
+				var leng 		= this.leng;
+				
+				thisTag.keyup(function () {
+					var v = thisTag.val();
+					
+					// 한글 막기
+					if (kor) {
+						thisTag.val(v.replace(/[^a-z0-9]/gi, ''));
+					}
+					
+					// 길이 체크
+					if (isLength) {
+						thisTag.attr('maxLength', leng);
+						
+						if (leng < v.length) {
+							alert(leng + '자 이상 작성할 수 없습니다.');
+						}
+					}
+					
+					return false;
+				});
+				
+				return false;
+			});
+		}
+};
+
+/**
+ * Date 날짜를 String 형태로 변환
+ * @param date
+ * @param pattern
+ * @returns
+ */
+function dateToString (date, pattern) {
+	if (isEmpty(date) || isEmpty(pattern)) {
+		return '';
+	}
+	
+	var y = date.getFullYear(); 
+	var m = (date.getMonth() + 1);
+	var d = date.getDate();
+	
+	m = m <= 9 ? '0' + m : m;
+	d = d <= 9 ? '0' + d : d;
+		
+	return [y, m, d].join(pattern);
+}
+
+/**
+ * 시간을 String 형태로 변환
+ * @param date
+ * @param pattern
+ * @returns
+ */
+function timeToString (date, pattern) {
+	if (isEmpty(date) || isEmpty(pattern)) {
+		return '';
+	}
+	
+	var h = date.getHours();
+	var t = date.getMinutes();
+	
+	h = h <= 9 ? '0' + h : h;
+	t = t <= 9 ? '0' + t : t;
+	
+	return [h, t].join(':');
+}
+
+/**
+ * String 날짜를 Date로 변환
+ * @param str
+ * @param pattern
+ * @returns
+ */
+function stringToDate (str, pattern) {
+	
+}
+
+/**
+ * 공백 체크 (공백이면 true, 아니면 false) 
+ * @param obj
+ * @returns
+ */
+function isEmpty (obj) {
+	
+	if (!obj) {
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+	쿠키 설정
+
+	name    : 저장할 이름
+	value   : 저장할 정보
+  	exp     : 만료일 설정
+*/
+var setCookie = function(name, value, exp) {
+	var date = new Date();
+	date.setTime(date.getTime() + exp*24*60*60*1000);
+	document.cookie = name + '=' + escape(value) + ';expires=' + date.toUTCString() + ';path=/';
+};
+
+
+/**
+* 	쿠키 호출
+
+*/
+var getCookie = function(name) {
+	var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+	return value? value[2] : null;
+};
+
+/**
+* 	쿠키 삭제 
+
+*/
+var deleteCookie = function(name) {
+	var expireDate = new Date();
+	 
+	//어제 날짜를 쿠키 소멸 날짜로 설정한다.
+	expireDate.setDate( expireDate.getDate() - 1 );
+	document.cookie = name + '= ' + '; expires=' + expireDate.toGMTString() + '; path=/';
+}
+
+
+// 메뉴 리스트 호출
+function getMenuSetting () {
+	
+	$.getJSON("http://localhost:8081/mainMenu/menuList", function(data){
+		
+		$('.sub-menu').remove();
+		
+		$.each(data.menuList, function(i, item){
+			
+			if ( thisUrl == item.url) {
+				thisTitle = item.mainMenuName;
+			}
+			
+			var subMenuList = data.menuList[i].subMenuList;
+
+			var	menuList  = "";
+			
+			menuList += '<li class="sub-menu">';
+			menuList += '	<a href="' + item.url + '" idx="' + item.subMenuIdx + '" class="main_menu_class">';
+			menuList += '		<i class="' + item.iconClass + '"></i>';
+			menuList += '		<span>' + item.mainMenuName + '</span>';
+			menuList += '	</a>';
+			
+			menuList += '	<ul class="sub" style="display: block">';
+			
+			// sub menu list binding
+			$.each(subMenuList, function (i, item) {
+				
+				if ( item.subMenuIdx ){
+					
+					if ( thisUrl == item.subMenuUrl ) {
+						thisTitle = item.menuName;
+					}	
+					
+					if ( item.isUse == "Y" ){
+						menuList += '	<li>';
+						menuList += '		<a href="' + item.subMenuUrl + '">' + item.menuName + '</a>';
+						menuList += '	</li>';
+						
+						
+					}
+				}
+
+			});
+			
+			menuList += '	</ul>';
+			menuList += '</li>';
+			
+			$('.sidebar-menu').append(menuList);
+		});
+		
+		// Title binding
+		$('#thisTitle').text(thisTitle ? thisTitle : '');
+		$('a.main_menu_class').unbind('click').click(function(){
+
+			var thisIdx = $('a.main_menu_class').index(this);
+
+			// 기존에 open 되어 있는 서브 메뉴 닫기
+/*				$('a.main_menu_class').each(function (i) {
+				if (i != thisIdx) {
+					$(this).next().slideUp().attr("show", "close");
+				}
+			});
+			*/
+			
+			// 기존에 눌려있는 메인 메뉴의 active class 제거
+			$('.sidebar-menu').find('a.active').removeClass('active');
+
+			// 현재 클릭 한 메인 메뉴에 active class 추가
+			//$(this).addClass('active');
+			
+		});
+	});
+}

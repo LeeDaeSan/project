@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.dm.sche.mapper.MainMenuMapper">
+
+	<!-- resultMap -->
+	<!-- type 			: vo class의 alias 명칭 -->
+	<!-- id 			: 실제 resultMap을 호출하는 id -->
+	<!-- autoMapping 	: 조회한 컬럼 정보 자동 맵핑 (주의 : ID 값 필수 선언) -->
+	<resultMap type="mainMenu" id="mainMenuList" autoMapping="true">
+	
+		<id property="mainMenuIdx" column="MainMenuIdx"/>
+		
+		<!-- collection -->
+		<!-- ofType 	: vo class의 alias 명칭 -->
+		<!-- property 	: 상위 vo에서 선언된 변수명-->
+		<collection ofType="subMenu" property="subMenuList" autoMapping="true">
+			<id property="subMenuIdx" column="SubMenuIdx"/>
+		</collection>
+		
+	</resultMap>
+	
+	<!-- 메인 메뉴 리스트 -->
+	<select id="select" resultMap="mainMenuList">
+		SELECT 
+		
+				<!-- MainMenu -->
+				MM.MainMenuIdx		,					<!-- 메인 메뉴 Idx -->
+				MM.MainMenuName		,					<!-- 메인 메뉴 명 -->
+				MM.Remark			,					<!-- 비고 -->
+				MM.IconClass		,					<!-- 아이콘 class명 -->
+				MM.Url				,					<!-- 메인 Url 경로 -->
+				MM.MenuSeq			,					<!-- 대메뉴 번호 -->
+				MM.IsAdd			,					<!-- 메뉴 추가 가능 여부 -->
+				 
+				<!-- SubMenu --> 
+				SM.SubMenuIdx		,					<!-- 서브 메뉴 Idx -->
+				SM.SubMenuSeq		,					<!-- 서브 메뉴 번호 -->
+				SM.MenuName			,					<!-- 서브 메뉴 명 -->
+				SM.Comment			,					<!-- 비고 -->
+				SM.MenuType			,					<!-- 서브 메뉴 타입 -->
+				SM.SubMenuUrl		,					<!-- 서브 메뉴 Url -->
+				SM.IsUse								<!-- 서브 메뉴 사용여부 -->
+			
+		    FROM MainMenu AS MM
+ LEFT OUTER JOIN SubMenu  AS SM
+		      ON MM.MainMenuIdx = SM.MainMenuIdx
+		ORDER BY MM.MenuSeq, SM.SubMenuSeq
+		  
+	</select>
+	
+	<!-- 하위메뉴 상세 조회 -->
+	<select id="detail" resultType="subMenu" parameterType="int">
+	
+		SELECT SubMenuIdx	,							<!-- 서브 메뉴 Idx -->
+			   MainMenuIdx	,							<!-- 메인 메뉴 Idx -->
+			   SubMenuSeq	,							<!-- 서브 메뉴 번호 -->
+			   MenuName		,							<!-- 서브 메뉴 명 -->
+			   Comment		,							<!-- 서브 메뉴 설명 -->
+			   MenuType		,							<!-- 서브 메뉴 타입 -->
+			   SubMenuUrl	,							<!-- 서브 메뉴 Url -->
+			   IsUse		,							<!-- 서브 메뉴 사용 여부 -->
+			   CreateDate	,							<!-- 생성일 -->
+			   UpdateDate								<!-- 수정일 -->
+		  FROM SubMenu
+		 WHERE SubMenuIdx  = #{subMenuIdx}
+		
+	</select>
+	
+	<!-- 일정관리 - 하위메뉴 등록 -->
+	<insert id="insert" parameterType="subMenu">
+		INSERT INTO SubMenu
+		(
+			SubMenuSeq		,							<!-- 서브 메뉴 번호 -->
+			MainMenuIdx		,							<!-- 메인 메뉴 Idx -->
+			MenuName		,							<!-- 서브 메뉴 명 -->
+			Comment			,							<!-- 서브 메뉴 설명 -->
+			MenuType		,							<!-- 서브 메뉴 타입 -->
+			SubMenuUrl		,							<!-- 서브 메뉴 Url -->
+			IsUse			,							<!-- 서브 메뉴 사용 여부 -->
+			CreateDate									<!-- 생성일 -->
+		)
+		VALUES
+		(
+			#{subMenuSeq}	 ,
+			#{mainMenuIdx}	 ,
+			TRIM(#{menuName}),
+			TRIM(#{comment}) ,
+			#{menuType}		 ,
+			#{subMenuUrl}	 ,
+			#{isUse}		 ,
+			NOW()
+		)
+		
+		<selectKey resultType="Integer" keyProperty="subMenuIdx" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>  
+	</insert>
+		
+	<!-- 하위메뉴 순서 수정 -->
+	<update id="updateForSeq" parameterType="subMenu">
+	
+		UPDATE SubMenu
+		   SET SubMenuSeq = #{subMenuSeq}
+		 WHERE subMenuIdx = #{subMenuIdx}
+		
+	</update>
+	
+	<!-- 일정관리 - 하위 메뉴 수정 -->
+	<update id="update" parameterType="subMenu">
+		UPDATE SubMenu
+		
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="@com.dm.sche.util.StringUtil@isNotEmpty(menuName)">
+					MenuName	= TRIM(#{menuName}),		<!-- 서브 메뉴 명 -->
+				</if>			
+				<if test="@com.dm.sche.util.StringUtil@isNotEmpty(comment)">
+				   Comment		= TRIM(#{comment}) ,		<!-- 서브 메뉴 설명 -->
+				</if>
+				<if test="@com.dm.sche.util.StringUtil@isNotEmpty(isUse)">
+				   IsUse		= #{isUse}		   ,		<!-- 서브 메뉴 사용 여부 -->
+				</if>
+				<if test="@com.dm.sche.util.StringUtil@isNotEmpty(subMenuUrl)">
+				   SubMenuUrl	= #{subMenuUrl}   ,		<!-- 서브 메뉴 경로 -->
+				</if>
+				   UpdateDate	= NOW()						<!-- 수정일 -->
+			</trim>
+			
+		 WHERE SubMenuIdx  = #{subMenuIdx}
+	</update>
+
+	<!-- 일정관리 - 하위메뉴 삭제 -->
+	<delete id="delete" parameterType="subMenu">
+		DELETE FROM SubMenu WHERE SubMenuIdx = #{subMenuIdx}
+	</delete>
+
+</mapper>

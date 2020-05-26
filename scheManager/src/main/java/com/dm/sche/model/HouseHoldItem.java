@@ -1,0 +1,33 @@
+package com.dm.sche.model;
+
+import java.util.Date;
+
+import org.apache.ibatis.type.Alias;
+
+import lombok.Data;
+
+/**
+ * 가계부 대분류 품목 정보
+ * @author idaesan
+ *
+ */
+@Data
+@Alias("houseHoldItem")
+public class HouseHoldItem {
+	
+	private Integer itemIdx;			// 품목 PK
+	private Integer parentIdx;			// 부모 품목 PK
+	private String level;				// 레벨
+	private String itemName;			// 품목명
+	private String itemCode;			// 품목코드
+	private String itemType;			// 품목유형 (R:수익(revenue), E:지출(expense))
+	private String remark;				// 비고
+	private Integer createMemberIdx;	// 생성자 PK
+	private Integer updateMemberIdx;	// 수정자 PK
+	private Date createDate;			// 생성일
+	private Date updatedate;			// 수정일
+	
+	private String createMemberName;
+	private String updateMemberName;
+	
+}

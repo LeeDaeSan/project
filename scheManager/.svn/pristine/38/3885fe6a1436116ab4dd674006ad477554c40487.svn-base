@@ -1,0 +1,99 @@
+package com.dm.sche.model;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.type.Alias;
+
+import lombok.Data;
+
+/**
+ * 대메뉴 관리
+ * @author idaesan
+ *
+ */
+@Data
+@Alias("mainMenu")
+public class MainMenu {
+
+	private Integer mainMenuIdx;		// PK
+	private Integer memberIdx;			// 사용자 PK
+	private String mainMenuName;		// 대메뉴명
+	private String remark;				// 비고
+	private String iconClass;			// 아이콘 Class
+	private String url;					// 메뉴 url
+	private Integer MenuSeq;			// 대메뉴 번호
+	private Date createDate;			// 생성일
+	private Date updateDate;			// 수정일
+	
+	private Member member;				// 사용자 정보
+	private List<SubMenu> subMenuList;	// 하위 메뉴 목록
+	
+	public Integer getMainMenuIdx() {
+		return mainMenuIdx;
+	}
+	public void setMainMenuIdx(Integer mainMenuIdx) {
+		this.mainMenuIdx = mainMenuIdx;
+	}
+	public Integer getMemberIdx() {
+		return memberIdx;
+	}
+	public void setMemberIdx(Integer memberIdx) {
+		this.memberIdx = memberIdx;
+	}
+	public String getMainMenuName() {
+		return mainMenuName;
+	}
+	public void setMainMenuName(String mainMenuName) {
+		this.mainMenuName = mainMenuName;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getIconClass() {
+		return iconClass;
+	}
+	public void setIconClass(String iconClass) {
+		this.iconClass = iconClass;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public Integer getMenuSeq() {
+		return MenuSeq;
+	}
+	public void setMenuSeq(Integer menuSeq) {
+		MenuSeq = menuSeq;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+	public Member getMember() {
+		return member;
+	}
+	public void setMember(Member member) {
+		this.member = member;
+	}
+	public List<SubMenu> getSubMenuList() {
+		return subMenuList;
+	}
+	public void setSubMenuList(List<SubMenu> subMenuList) {
+		this.subMenuList = subMenuList;
+	}
+	
+}

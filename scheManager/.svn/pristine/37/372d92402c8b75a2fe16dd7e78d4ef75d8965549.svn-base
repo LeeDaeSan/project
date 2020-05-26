@@ -1,0 +1,116 @@
+package com.dm.sche.service.impl;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dm.sche.constant.Constant;
+import com.dm.sche.constant.UserConstant;
+import com.dm.sche.dto.KeywordDTO;
+import com.dm.sche.dto.PagingDTO;
+import com.dm.sche.mapper.BoardManagerMapper;
+import com.dm.sche.model.Board;
+import com.dm.sche.model.BoardManager;
+import com.dm.sche.service.BoardManagerService;
+import com.dm.sche.util.ResponseUtil;
+
+@Service
+public class BoardManagerServiceImpl implements BoardManagerService {
+
+	@Autowired
+	private BoardManagerMapper boardManagerMapper;
+	
+	@Override
+	public Map<String, Object> select(PagingDTO<Board> pagingDTO) {
+
+		Map<String, Object> resultMap = null;
+
+		try {
+			
+			resultMap = ResponseUtil.successMap();
+			
+			resultMap.put("list", 		boardManagerMapper.select(pagingDTO));
+			resultMap.put("totalcount", boardManagerMapper.selectForTotalcount());
+			
+		} catch (Exception e) {
+			
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
+			
+		}
+		
+		return resultMap;
+	}
+	
+	
+	@Override
+	public Map<String, Object> detail(int boardManagerIdx) {
+		
+		Map<String, Object> resultMap = null;
+
+		try {
+			
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("detail", boardManagerMapper.detail(boardManagerIdx));
+			
+		} catch (Exception e) {
+			
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
+			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public Map<String, Object> merge(String type, BoardManager boardManager) {
+		
+		Map<String, Object> resultMap = null;
+		
+		Integer result = -1;
+		
+		try {
+			
+			resultMap = ResponseUtil.successMap();
+			
+			int memberIdx = UserConstant.getUser().getIdx();
+			
+			// insert
+			if ( Constant.MERGE_TYPE_INSERT.equals(type) ) {
+				
+				boardManager.setCreateMemberIdx(memberIdx);
+				boardManager.setUpdateMemberIdx(memberIdx);
+				result = boardManagerMapper.insert(boardManager);
+
+			// update	
+			} else if ( Constant.MERGE_TYPE_UPDATE.equals(type) ) {
+				
+				boardManager.setUpdateMemberIdx(memberIdx);
+				result = boardManagerMapper.update(boardManager);
+			
+			// delete	
+			} else if ( Constant.MERGE_TYPE_DELETE.equals(type) ) {
+				
+				result = boardManagerMapper.delete(boardManager);
+				
+			}
+			
+			resultMap.put("resultCnt", result);
+			
+		} catch (Exception e) {
+			
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
+			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public String keywordCheck(KeywordDTO keywordDTO) {
+		return boardManagerMapper.keywordCheck(keywordDTO);
+	}
+	
+}

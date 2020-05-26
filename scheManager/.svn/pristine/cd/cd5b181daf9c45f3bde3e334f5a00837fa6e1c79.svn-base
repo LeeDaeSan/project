@@ -1,0 +1,11 @@
+package com.dm.sche.model;
+
+import lombok.Data;
+
+@Data
+public class User {
+	
+	private String name;	// 이름
+	private String id;		// 아이디
+	private int age;		// 나이
+}

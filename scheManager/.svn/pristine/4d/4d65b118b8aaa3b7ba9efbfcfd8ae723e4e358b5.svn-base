@@ -1,0 +1,11 @@
+package com.dm.sche.constant;
+
+public class Constant {
+
+	//view default path
+	public static final String VIEWS 	= "views";
+	public static final String NOTILES 	= "notiles";
+	
+	public static final String MAIN_MENU_URL_PATTERN = VIEWS;
+	
+}

@@ -1,0 +1,29 @@
+package com.dm.sche.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class ViewController {
+
+	@RequestMapping("/{path1}")
+	public String view (@PathVariable String path1) {
+		return path1;
+	}
+	
+	@RequestMapping("/{path1}/{path2}")
+	public String view (@PathVariable String path1, @PathVariable String path2) {
+		return path1 + "/" + path2;
+	}
+	
+	@RequestMapping("/{path1}/{path2}/{path3}")
+	public String view (@PathVariable String path1, @PathVariable String path2, @PathVariable String path3) {
+		return path1 + "/" + path2 + "/" + path3;
+	}
+	
+	@RequestMapping("/{path1}/{path2}/{path3}/{path4}")
+	public String view (@PathVariable String path1, @PathVariable String path2, @PathVariable String path3, @PathVariable String path4) {
+		return path1 + "/" + path2 + "/" + path3 + "/" + path4;
+	}
+}

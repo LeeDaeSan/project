@@ -1,0 +1,16 @@
+package com.dm.sche.controller.view;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.dm.sche.constant.Constant;
+
+@Controller
+public class TilesController {
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index() {
+        return Constant.VIEWS + "/bashboard";
+    }
+
+}

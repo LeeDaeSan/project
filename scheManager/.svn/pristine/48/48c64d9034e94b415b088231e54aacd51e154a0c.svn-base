@@ -1,0 +1,64 @@
+package com.dm.sche.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dm.sche.constant.Constant;
+import com.dm.sche.constant.UserConstant;
+import com.dm.sche.dto.KeywordDTO;
+import com.dm.sche.mapper.HouseHoldItemMapper;
+import com.dm.sche.model.HouseHoldItem;
+import com.dm.sche.service.HouseHoldItemService;
+
+@Service
+public class HouseHoldItemServiceImpl implements HouseHoldItemService {
+
+	@Autowired
+	private HouseHoldItemMapper houseHoldItemMapper;
+
+	/**
+	 * 대분류 항목 정보 조회
+	 */
+	@Override
+	public List<HouseHoldItem> getHouseHoldItemList() {
+		return houseHoldItemMapper.getHouseHoldItemList();
+	}
+
+	/**
+	 * 대분류 항목 정보 등록, 수정, 삭제
+	 */
+	@Override
+	public Integer merge (String type, HouseHoldItem houseHoldItem) {
+		
+		Integer result = -1;
+		try {
+			
+			// insert
+			if (Constant.MERGE_TYPE_INSERT.equals(type)) {
+				houseHoldItem.setCreateMemberIdx(UserConstant.getUser().getIdx());
+				result = houseHoldItemMapper.insert(houseHoldItem);
+				
+			// update
+			} else if (Constant.MERGE_TYPE_UPDATE.equals(type)) {
+				
+			// delete
+			} else if (Constant.MERGE_TYPE_DELETE.equals(type)) {
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * 대분류 등록, 수정시 중복확인
+	 */
+	@Override
+	public String keywordCheck(KeywordDTO keywordDTO) {
+		return houseHoldItemMapper.keywordCheck(keywordDTO);
+	}
+}

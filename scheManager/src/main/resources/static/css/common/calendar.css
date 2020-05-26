@@ -1,0 +1,87 @@
+@charset "UTF-8";
+
+.calendar-header-wrap {
+	color			: #000000;
+	text-align		: center;
+	margin-bottom	: 15px;
+}
+
+.calendar-header-wrap .header-full-wrap {
+	width 	: 969px;
+	margin 	: 0 auto;	
+}
+
+.calendar-header-wrap .header-year {
+	font-size 	: 23px;
+	font-weight : bold;
+}
+
+.calendar-header-wrap .header-month {
+	font-size 	: 23px;
+	font-weight : bold;
+}
+
+table.calendar-table-layout {
+	table-layout	: fixed;
+	border			: 1px solid #dddddd;
+	color			: #000000;	
+	width			: 100%;
+}
+
+table.calendar-table-layout tbody tr td {
+	height : 115px;	
+	border : 1px solid #dddddd;
+	cursor : pointer;
+}
+
+table.calendar-table-layout tbody tr td .day-div-class {
+	height : 100px;
+}
+
+table.calendar-table-layout tbody tr td.day_hover:hover {
+	background : #f3f3f3;
+}
+
+table.calendar-table-layout tbody tr td.selected {
+	background : #fdffe2 !important;
+}
+
+table.calendar-table-layout tbody tr td.today_selected {
+	background : honeydew;
+}
+
+table.calendar-table-layout tbody tr td.selected:hover {
+	background : #f9fdc8;
+}
+
+table.calendar-table-layout tbody tr td .day-div-class .day-div-number {
+	text-align 	: right;
+	font-weight : bold;
+	font-size	: 11px;
+}
+
+.calendar-shift-btn {
+	font-size		: 25px;
+    font-weight		: bolder;
+    color			: #ff9d00;
+    cursor			: pointer;
+    padding-left	: 5px;
+    padding-right	: 5px;
+}
+.calendar-shift-btn:hover {
+	opacity:0.8;
+	background:#f3f3f3;
+}
+.calendar-shift-btn-left {
+    margin-right : 5px;
+}
+.calendar-shift-btn-right {
+    margin-left : 5px;
+}
+
+/* 특정 요일 color */
+table.calendar-table-layout .red{color:#ff5454;}
+table.calendar-table-layout .blue{color:#4b4bff;}
+.text-in-blue{color:#8280ef !important;}
+.text-out-red{color:#ff7c7c !important;}
+.text-rest{color:#000000 !important;}

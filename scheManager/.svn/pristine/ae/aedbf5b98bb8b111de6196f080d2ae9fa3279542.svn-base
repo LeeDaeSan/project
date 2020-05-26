@@ -1,0 +1,274 @@
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title><tiles:getAsString name="title"/></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	
+<!--------------------------------- CSS LINK START --------------------------------->
+	
+	<!-- default css -->
+	<link rel="stylesheet" href="/css/common/reset.min.css">
+	<link rel="stylesheet" href="/css/common/base.css">
+	
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="/webjars/bootstrap/3.3.4/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/webjars/bootstrap/3.3.4/dist/css/bootstrap-theme.min.css">
+
+	<!--external css-->
+	<link href="/lib/Dashio/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/css/zabuto_calendar.css">
+	<link rel="stylesheet" type="text/css" href="/lib/Dashio/lib/gritter/css/jquery.gritter.css" />
+
+	
+	<!-- Custom styles for this template -->
+	<link href="/lib/Dashio/css/style.css" rel="stylesheet">
+	<link href="/lib/Dashio/css/style-responsive.css" rel="stylesheet">
+	
+<!--------------------------------- CSS LINK END --------------------------------->
+	
+	
+	
+<!--------------------------------- JS LINK START --------------------------------->
+	
+	<!-- jquery -->
+	<script type="text/javascript" src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+	
+	<!-- bootstrap -->
+	<script type="text/javascript" src="/lib/Dashio/lib/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- amChart -->
+	<script type="text/javascript" src="/lib/amChart/acore.js"></script>
+	<script type="text/javascript" src="/lib/amChart/chart.js"></script>
+	<script type="text/javascript" src="/lib/amChart/de_DE.js"></script>
+	<script type="text/javascript" src="/lib/amChart/germanyLow.js"></script>
+	<script type="text/javascript" src="/lib/amChart/material.js"></script>
+	
+	<!-- jqGrid -->
+	<link rel="stylesheet" href="/lib/Guriddo_jqGrid_JS_5.3.2/css/ui.jqgrid.css">
+	<link rel="stylesheet" href="/lib/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css">
+	<script type="text/javascript" src="/lib/Guriddo_jqGrid_JS_5.3.2/js/jquery.jqGrid.min.js"></script>
+	
+	<!-- vue -->
+	<script type="text/javascript" src="/js/vue.js"></script>
+	<script type="text/javascript" src="/js/axios.min.js"></script>
+	
+	<!-- common -->
+	<script type="text/javascript" src="/js/common.js"></script>
+	
+<!--------------------------------- JS LINK END --------------------------------->
+	
+
+
+<!--------------------------------- IMAGE LINK START --------------------------------->	
+
+	<!-- dashio -->
+	<!-- Favicons -->
+	<link href="/lib/Dashio/img/favicon.png" rel="icon">
+	<link href="/lib/Dashio/img/apple-touch-icon.png" rel="apple-touch-icon">
+	
+<!--------------------------------- IMAGE LINK END --------------------------------->
+  
+	
+	<script type="text/javascript">
+	var thisUrl = location.href;
+	var thisTitle = '';
+	
+	$(function(){
+
+		if ($(window).width() < 768) {
+			
+			$('#sidebar').attr("show", "close");
+			$('#sidebar').css({"top":"-880px", "left":"0px"});
+		}
+		
+		// 메뉴 Click Event
+		$('.sidebar-toggle-box').unbind("click").click(function(){
+			
+			// 브라우저 사이즈
+			var scnSize = $(window).width();
+			
+			// 브라우저 사이즈가 768 이하 일 경우
+			if ( scnSize < 768 ){
+				
+				// 메뉴바 속성값이 open 일 경우 클릭시 close 상태로 변경되며 메뉴바 닫힘
+				if( $('#sidebar').attr("show") == "open" ){
+					
+					$('#sidebar').animate({top: "-880px"}, 500);
+					$('#sidebar').attr("show", "close");
+					$('footer').css("width", "100%");
+					
+				
+				// 메뉴바 속성값이 close 일 경우 클릭 시 open 상태로 변경되며 메뉴바 열림
+				} else {
+					
+					$('#sidebar').animate({top: "0"}, 500);
+					$('#sidebar').attr("show", "open");
+					$('footer').css("width", "100%");
+					
+				}
+			
+			// 브라우저 사이즈가 768 이상 일 경우
+			} else {
+
+				// 메뉴바 속성값이 open 일 경우 클릭시 close 상태로 변경되며 메뉴바 닫힘
+				if( $('#sidebar').attr("show") == "open" ){
+					
+					$('#sidebar').animate({left: "-210px"}, 500);
+					$('#sidebar').attr('show', 'close');
+					$('#main-content').animate({marginLeft: "0px"}, 500);
+					$('footer').animate({left: "0px", width: "100%"}, 500);
+					
+				// 메뉴바 속성값이 close 일 경우 클릭 시 open 상태로 변경되며 메뉴바 열림
+				} else {
+					
+					$('#sidebar').css("top", "0px");
+					$('#sidebar').animate({left: "0px", top : "0"}, 500);
+					$('#main-content').animate({marginLeft: "210px"}, 500);
+					$('footer').animate({left: "210px", width:"calc(100% - 210px)"}, 500);
+					$('#sidebar').attr('show', 'open');
+					
+				}
+				
+			}
+			
+		});
+	
+		// Screen Size 감지
+		$(window).resize(function(){
+			
+			var scnSize = $(window).width();
+
+			// 변경 된 브라우저 사이즈가 768 이하 일 경우
+			if( scnSize < 768 ){
+				
+				$('#sidebar').css({"top":"-880px", "left":"0px"});
+				$('#sidebar').attr("show", "close");
+				$('footer').css({"width":"100%", "left":"0px"});
+				
+			// 변경 된 브라우저 사이즈가 768 이상 일 경우
+			} else {
+
+				// 사이즈 변경 전의 메뉴바가 open 상태인 경우 사이즈 변경 후에도 open 상태 유지
+				if( $('#sidebar').attr("show") == "open" ){
+					
+					$('#sidebar').css("top", "0px");
+					$('#sidebar').css({"top":"0px", "left":"0px"});
+					$('#main-content').css("margin-left", "210px");
+					$('footer').css({"width":"calc(100% - 210px)", "left":"210px"});
+
+				// 사이즈 변경 전의 메뉴바가 close 상태인 경우 사이즈 변경 후에도 close 상태 유지
+				} else {
+					
+					$('#sidebar').css({"top":"0px", "left":"-210px"});
+					$('#main-content').css("margin-left", "0px");
+					$('footer').css({"width":"100%", "left":"0px"});
+					
+				}
+			}
+			
+		});
+
+		// 메뉴 리스트 호출
+		$.getJSON("http://localhost:8081/mainMenu/menuList", function(data){
+			
+			$.each(data.menuList, function(i, item){
+				
+				if ( thisUrl == item.url) {
+					thisTitle = item.mainMenuName;
+				}
+				
+				var subMenuList = data.menuList[i].subMenuList;
+
+				var	menuList  = "";
+				
+				menuList += '<li class="sub-menu">';
+				menuList += '	<a href="javascript:void(0)" idx="' + item.subMenuIdx + '" class="main_menu_class">';
+				menuList += '		<i class="' + item.iconClass + '"></i>';
+				menuList += '		<span>' + item.mainMenuName + '</span>';
+				menuList += '	</a>';
+				
+				menuList += '	<ul class="sub" show="close">';
+				
+				// sub menu list binding
+				$.each(subMenuList, function (i, item) {
+					
+					if ( item.subMenuIdx ){
+						
+						if ( thisUrl == item.subMenuUrl ) {
+							thisTitle = item.menuName;
+						}	
+						
+						menuList += '	<li>';
+						menuList += '		<a href="' + item.subMenuUrl + '">' + item.menuName + '</a>';
+						menuList += '	</li>';
+
+					}
+				});
+				menuList += '	</ul>';
+				menuList += '</li>';
+				
+				$('.sidebar-menu').append(menuList);
+					
+			});
+			
+			// Title binding
+			$('#thisTitle').text(thisTitle ? thisTitle : '');
+			$('a.main_menu_class').unbind('click').click(function(){
+
+				var thisIdx = $('a.main_menu_class').index(this);
+
+				// 기존에 open 되어 있는 서브 메뉴 닫기
+/*				$('a.main_menu_class').each(function (i) {
+					if (i != thisIdx) {
+						$(this).next().slideUp().attr("show", "close");
+					}
+				});
+				*/
+				
+				// 기존에 눌려있는 메인 메뉴의 active class 제거
+				$('.sidebar-menu').find('a.active').removeClass('active');
+				
+				// 하위메뉴 펼치기
+				if( $(this).next().attr("show") == "close" ){
+					
+					$(this).next().slideDown().attr("show", "open");
+					
+				} else if ( $(this).next().attr("show") == "open" ){
+					
+					$(this).next().slideUp().attr("show", "close");
+					
+				}
+				// 현재 클릭 한 메인 메뉴에 active class 추가
+				//$(this).addClass('active');
+				
+			});
+			
+			
+		});
+	});
+	</script>
+</head>
+<body>
+
+	<div class="wrap">
+
+		<tiles:insertAttribute name="header" />
+
+		<tiles:insertAttribute name="menu" />
+		
+		<section id="main-content">
+			<section class="wrapper">
+				<h3 id="thisTitle"></h3>
+				<tiles:insertAttribute name="body" />
+			</section>
+		</section>
+		
+		<tiles:insertAttribute name="footer" />
+		
+	</div>
+
+</body>
+</html>

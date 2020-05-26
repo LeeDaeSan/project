@@ -1,0 +1,137 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<!-- fullcalendar -->
+<link href="/lib/fullCalendar/fullcalendar.min.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/lib/fullCalendar/moment.min.js"></script>
+<script type="text/javascript" src="/lib/fullCalendar/moment_de.min.js"></script>
+<script type="text/javascript" src="/js/calendar.js"></script>
+<link href="/css/common/calendar.css" rel="stylesheet" type="text/css"/>
+
+<!-- datepicker -->
+<link href="/lib/Dashio/lib/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/lib/Dashio/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+
+<script>
+
+$(function () {
+	
+	var calendar = new Calendar.init(
+		$('#calendar'),
+		{
+			type 	: 'month',
+			toDay 	: new Date(),
+			week	: ['일', '월', '화', '수', '목', '금', '토']
+		}
+	);
+	
+	// 팝업
+	var holdApp = new Vue({
+		el 		: '#modalApp',
+		data 	: {
+			houseHoldList : [],	// 대분류 품목 목록
+		},
+		methods : {
+			init : function () {
+				var thisApp = this;
+				
+				axios.defaults.headers.common['X-CSRF-TOKEN'] = '${_csrf.token}';
+				axios.post('/houseHoldItem/selectOfPopup').then(response => {
+					if (response.status == 200) {
+
+						thisApp.houseHoldList = response.data.list;
+						
+					} else {
+						alert('대분류 품목 조회 에러');
+					}
+				});
+			}
+		}
+	});
+	
+	// 가계 등록 button event
+	$('#addBtn').unbind('click').click(function (e) {
+		e.preventDefault();
+		holdApp.init();
+	});
+	
+});
+
+
+</script>
+
+<style>
+.modal-header{padding-top:5px;padding-bottom:5px;}
+.close{color:white;opacity:0.8;}
+.form-control{height:25px;padding:6px 6px;}
+.date_hour, .date_time{width:45% !important;float:left;}
+.date_span{float:left;}
+
+#calendar{height:720px;}
+</style>
+
+<div class="row pdt20">
+	<div class="col-md-12">
+		<div class="tr">
+			<button type="button" id="addBtn" class="btn btn-outline-primary" data-toggle="modal" data-target="#addModal">가계 등록</button>
+		</div>
+			
+		<div id="calendar"></div>
+	</div>
+</div>
+
+
+<!-- 가계 등록 modal -->
+<div id="modalApp">
+	<div class="modal fade" id="addModal"  tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+		<div class="modal-dialog width350">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	                <h4 class="modal-title" id="codeAddTitle">가계 등록</h4>
+				</div>
+				<div class="modal-body pdb0">
+					<table class="table mgnb0">
+						<tbody>
+							<tr>
+								<th class="tl"><span class="font-red">*</span> 기간</th>
+								<td>
+									<div class="input-group input-large fl input-group-date" data-date="01/01/2014" data-date-format="yyyy/mm/dd">
+										<input type="text" class="form-control dpd1" name="daterangepicker_start">
+										<span class="input-group-addon">To</span>
+										<input type="text" class="form-control dpd2" name="daterangepicker_end">
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th class="tl"><span class="font-red">*</span> 품목</th>
+								<td>
+									<select class="form-control">
+										<option v-for="(item, index) in houseHoldList" v-cloak>{{item.itemName}}</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th class="tl"><span class="font-red">*</span> 품목 상세</th>
+								<td>
+									<select class="form-control" id="itemType">
+										<option value="R">수익</option>
+										<option value="E">지출</option>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" id="codeCloseBtn" data-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary" id="codeDeleteBtn" style="display:none;">삭제</button>
+					<button type="button" class="btn btn-primary" id="codeInsertBtn"  v-on:click="save()">저장</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+

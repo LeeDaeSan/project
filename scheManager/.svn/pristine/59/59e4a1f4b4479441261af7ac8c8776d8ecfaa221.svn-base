@@ -1,0 +1,29 @@
+package com.dm.sche.config;
+
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	//@Autowired
+	//private UserAuthenticationProvider authenticationProvider;
+	
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+			.antMatchers("/**").permitAll();
+			//.antMatchers("/css/**", "/js/**", "/img/**", "/lib/**").permitAll();	// css, js, img 경로 -> 전체 권한
+			//.antMatchers("/login").permitAll()									// 로그인 경로 		-> 전체 권한
+			//.antMatchers("/views/**").hasRole("ROLE_USER")						// 나머지 jsp 경로 	-> ROLE_USER 권한
+//			.and().formLogin()
+//				  .loginPage("/login")
+//				  .loginProcessingUrl("/login")
+//				  .defaultSuccessUrl("/")
+//				  .failureUrl("/login")
+//			.and().logout();
+//		
+	}
+	
+}

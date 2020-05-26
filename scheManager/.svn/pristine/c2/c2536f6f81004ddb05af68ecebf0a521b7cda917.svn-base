@@ -1,0 +1,107 @@
+<script type="text/javascript">
+$(function(){
+	
+	// 메뉴 리스트 호출
+	$.getJSON("http://localhost:8081/mainMenu/menuList", function(data){
+		
+		$.each(data.menuList, function(i, item){
+			
+			var subMenuList = data.menuList[i].subMenuList;
+			
+			var	menuList  = '<li class="sub-menu">';
+				menuList += '<a href="javascript:void(0)" idx="' + data.menuList[i].mainMenuIdx + '" class="main_menu_class">';
+				//menuList += '	<a href="' + data.menuList[i].url + '">';
+				menuList += '		<i class="' + data.menuList[i].iconClass + '"></i>';
+				menuList += '		<span>' + data.menuList[i].mainMenuName + '</span>';
+				menuList += '	</a>';
+
+				// sub menu list binding
+				$.each(subMenuList, function (i, item) {
+					if ( item.subMenuIdx ){
+						menuList += '<ul class="sub" show="close">';
+						menuList += '	<li>';
+						menuList += '		<a href="javascript:void(0)">' + item.menuName + '</a>';
+						menuList += '	</li>';
+						menuList += '</ul>';
+					}
+				});
+
+				menuList += '</li>';
+				
+				$('.sidebar-menu').append(menuList);
+				
+		});
+		
+		
+		$('.sidebar-menu a.main_menu_class').unbind('click').click(function(){
+			
+			var thisIdx = $('.sidebar-menu a.main_menu_class').index(this);
+
+			// 기존에 open 되어 있는 서브 메뉴 닫기
+			$('.sidebar-menu a.main_menu_class').each(function (i) {
+				if (i != thisIdx) {
+					$(this).next().slideUp().attr("show", "close");
+				}
+			});
+			
+			// 기존에 눌려있는 메인 메뉴의 active class 제거
+			$('.sidebar-menu').find('a.active').removeClass('active');
+			
+			// 하위메뉴 펼치기
+			if( $(this).next().attr("show") == "close" ){
+				
+				$(this).next().slideDown().attr("show", "open");
+				
+			} else if ( $(this).next().attr("show") == "open" ){
+				
+				$(this).next().slideUp().attr("show", "close");
+				
+			}
+			
+			// 현재 클릭 한 메인 메뉴에 active class 추가
+			$(this).addClass('active');
+			
+		});
+		
+		
+	});
+	
+	
+	// 메뉴 클릭 event
+/* 	$('.sidebar-menu li a').unbind('click').click(function(){
+		console.log(this);
+		// 다른 메뉴 눌렀을 때 기존의 active class 제거
+		$('.sidebar-menu').find('a.active').removeClass('active');
+		
+		// 현재 클릭 한 메뉴에 active class 추가
+		$(this).addClass('active');
+		
+	});
+ */	
+	
+});
+</script>
+
+<!--sidebar start-->
+<aside>
+
+	<div id="sidebar" class="nav-collapse" show="open">
+	
+		<!-- sidebar menu start-->
+		<ul class="sidebar-menu" id="nav-accordion">
+			<p class="centered">
+				<a href="profile.html"><img src="/img/daesan.png" class="img-circle userImg"></a>
+			</p>
+			<h5 class="centered">Daesan Lee</h5>
+			<li class="mt">
+				<a class="active" href="http://localhost:8081/views/dashboard">
+					<i class="fa fa-dashboard"></i>
+					<span>Dashboard</span>
+				</a>
+			</li>
+
+		</ul>
+		<!-- sidebar menu end-->
+	</div>
+</aside>
+<!--sidebar end-->

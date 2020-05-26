@@ -1,0 +1,74 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
+<script type="text/javascript">
+$(function(){
+
+	// 메뉴 리스트 호출
+	$.getJSON("http://localhost:8081/mainMenu/menuList", function(data){
+		$.each(data.menuList, function(i, item){
+		
+/* 			var subMenu = data.menuList[i].subMenuList;
+			console.log(item);
+			var	menuList  = '<section class="task-panel tasks-widget">';
+ 				menuList += '	<div class="panel-heading">';
+				menuList += '		<div class="pull-left">';
+				menuList += '			<h5><i class="fa fa-tasks"></i>Menu Setting</h5>';
+				menuList += '		</div>';
+				menuList += '		<br>';
+				menuList += '	</div>';
+				menuList += '	<div class="panel-body">';
+				menuList += '		<div class="task-content">';
+				menuList += '			<ul id="sortable" class="task-list">';
+				menuList += '				<li class="list-primary">';
+				menuList += '					<i class=" fa fa-ellipsis-v"></i>';
+				menuList += '					<div class="task-checkbox">';
+				menuList += '						<input type="checkbox" class="list-child" value="" />';
+				menuList += '					</div>';
+				menuList += '					<div class="task-title">';
+				menuList += '						<span class="task-title-sp">' + data.menuList[i].mainMenuName + '</span>';
+				menuList += '					</div>';
+				menuList += '				</li>';
+				menuList += '			</ul>';
+				menuList += '		</div>';
+				menuList += '	</div>';
+				//menuList += '	<button type="button" class="btn btn-default"><i class="fa fa-plus"></i></button>';
+				//menuList += '	<button type="button" class="btn btn-theme04"><i class="fa fa-minus"></i></button>';
+				
+				// subMenuList
+ 				$.each(subMenu, function (i, item){
+					
+					if( item.subMenuIdx ){
+						console.log(item);
+						menuList += '<li>' + item.menuName + '</li>';
+					}
+					
+				});
+ 
+				menuList += '</section>';*/
+				//$('.pricing').append(menuList);
+				
+		});
+		
+	});
+});
+</script>
+
+<h3><i class="fa fa-angle-right"></i> Morris Charts</h3>
+<div class="col-md-6">
+	<div class="content-panel">
+            <section class="panel">
+              <div class="panel-body">
+                <ul class="nav nav-pills nav-stacked mail-nav">
+                  <li class="active"><a href="inbox.html"> <i class="fa fa-inbox"></i> Inbox  <span class="label label-theme pull-right inbox-notification">3</span></a></li>
+                  <li><a href="#"> <i class="fa fa-envelope-o"></i> Send Mail</a></li>
+                  <li><a href="#"> <i class="fa fa-exclamation-circle"></i> Important</a></li>
+                  <li><a href="#"> <i class="fa fa-file-text-o"></i> Drafts <span class="label label-info pull-right inbox-notification">8</span></a>
+                  </li>
+                  <li><a href="#"> <i class="fa fa-trash-o"></i> Trash</a></li>
+                </ul>
+              </div>
+            </section>
+	</div>
+
+          </div>

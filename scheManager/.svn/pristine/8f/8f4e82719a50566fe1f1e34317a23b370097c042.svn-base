@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.dm.sche.mapper.BoardMapper"> 
+
+	<!-- Board Columns -->
+	<sql id="boardColumn">
+		BoardIdx		,			<!-- 게시판 PK -->
+		BoardManagerIdx	,			<!-- 게시판 관리 PK -->
+		CreateMemberIdx	,			<!-- 작성자 PK -->
+		UpdateMemberIdx	,			<!-- 수정자 PK -->
+		BoardType		,			<!-- 타입(1:일반게시판, 2:공지사항, 3:파일게시판...) -->
+		BoardTitle		,			<!-- 제목 -->
+		BoardContent	,			<!-- 내용 -->
+		BoardSeq		,			<!-- 게시판번호 (게시판 추가시 구분자가 될 번호) + (번호 채번 필요 ex)BOR100, BOR101, BOR102 ...) -->
+		Hit				,			<!-- 조회수 -->
+		isPopup			,			<!-- 팝업여부 (Y:사용, N:미사용) -->
+		isPopupShow		,			<!-- 팝업 노출 여부 (Y:사용, N:미사용) -->
+		PopupWidth		,			<!-- 팝업 가로 사이즈 -->
+		PopupHeight		,			<!-- 팝업 세로 사이즈 -->
+		PopupLeft		,			<!-- 팝업 x축 위치 -->
+		PopupTop		,			<!-- 팝업 y축 위치 -->
+		PopupStartDate	,			<!-- 팝업 시작일 -->
+		PopupEndDate	,			<!-- 팝업 종료일 -->
+		CreateDate		,			<!-- 작성일 -->
+		UpdateDate					<!-- 수정일 -->
+	</sql>
+
+	<!-- 공통 게시판 리스트 -->
+	<select id="selectBoardList" resultType="board">
+		SELECT
+			<include refid="boardColumn" />
+		  FROM BOARD
+	</select>
+
+</mapper>

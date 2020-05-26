@@ -1,0 +1,35 @@
+package com.dm.sche.model;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.type.Alias;
+
+import lombok.Data;
+
+/**
+ * 대메뉴 관리
+ * @author mijung
+ *
+ */
+@Data
+@Alias("mainMenu")
+public class MainMenu {
+
+	private Integer mainMenuIdx;		// PK
+	private Integer memberIdx;			// 사용자 PK
+	private String mainMenuName;		// 대메뉴명
+	private String remark;				// 비고
+	private String iconClass;			// 아이콘 Class
+	private String url;					// 메뉴 url
+	private Integer menuSeq;			// 대메뉴 번호
+	private String isAdd;				// 메뉴 추가 가능 여부
+	private Date createDate;			// 생성일
+	private Date updateDate;			// 수정일
+	
+	private Member member;				// 사용자 정보
+	private List<SubMenu> subMenuList;	// 하위 메뉴 목록
+	
+	
+	
+}

@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<head>
+	<script type="text/javascript">
+	$(function(){
+		new Vue({
+			el : "#vueTest1",
+			data : {
+				message : "ㅎㅇ Vue.js !!!"
+			}
+		});
+		
+	});
+	</script>
+</head>
+<body>
+	<div>jsp test!</div>
+	<hr>
+	
+	<!-- 수정 Button -->
+	<button type="button" class="btn btn-warning">Warning</button>
+	
+	<!-- 삭제 Button -->
+	<button type="button" class="btn btn-danger">Danger</button>
+	
+	<!-- 등록, 저장, 상세 Button -->
+	<button type="button" class="btn btn-primary">Primary</button>
+
+	<button type="button" class="btn btn-info">Info</button>
+	<button type="button" class="btn btn-default">Default</button>
+	<button type="button" class="btn btn-secondary">Secondary</button>
+	<button type="button" class="btn btn-success">Success</button>
+	<button type="button" class="btn btn-light">Light</button>
+	<button type="button" class="btn btn-dark">Dark</button>
+	<button type="button" class="btn btn-link">Link</button>
+	
+	<hr>
+	<div id="vueTest1">
+		{{ message }}
+	</div>
+	
+</body>
