@@ -11,7 +11,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+		System.out.println();
 		// 로그인 disabled 처리 : (에러로 인해 csrf 임시 막기)
 		http.cors().and();
 		http.csrf().disable();
