@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<div>test111</div>
+<div>
+	<input type="button" value="로그아웃"/>
+</div>
 </body>
 </html>

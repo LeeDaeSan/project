@@ -5,14 +5,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.homes.ds.constant.Constant;
+import com.homes.ds.security.CustomUserDetailsService;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
+	
 	@Autowired
 	private AuthenticationSuccessHandler authenticationSuccessHandler;
 	
@@ -21,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		super.configure(auth);
+		auth.userDetailsService(customUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
 	@Override
@@ -37,9 +43,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		// 로그인 설정
 		http.formLogin()
-			.loginPage("/" + Constant.VIEWS + "/login")
+			.loginPage("/" + Constant.NOTILES + "/login")
 			.successHandler(authenticationSuccessHandler)
 			.failureHandler(authenticationFailureHandler)
-			.permitAll();
+			.permitAll()
+			
+		// 로그아웃 설정
+			.and()
+			.logout()
+			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+			.permitAll()
+			.logoutSuccessUrl("/" + Constant.NOTILES + "/login")
+			.invalidateHttpSession(true);
 	}
 }
