@@ -15,7 +15,7 @@ public class ViewController {
 	}
 	
 	/**
-	 * no tiles views
+	 * notiles views
 	 * @param path1
 	 * @return
 	 */
