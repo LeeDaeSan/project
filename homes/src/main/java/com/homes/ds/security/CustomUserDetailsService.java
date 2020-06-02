@@ -3,6 +3,7 @@ package com.homes.ds.security;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -12,12 +13,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.homes.ds.mapper.MemberMapper;
+import com.homes.ds.model.Member;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 	
+	@Autowired
+	private MemberMapper memberMapper;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		String realPassword = "1111"; // db에 저장된 password
+		Member member = memberMapper.getMember(username);
+		
+		String realPassword = member.getPassword(); // db에 저장된 password
 		String password = new BCryptPasswordEncoder().encode(realPassword);
 		
 		List<String> roles = new ArrayList<String>();
