@@ -10,6 +10,11 @@
 	
 	<!-- jquery -->
 	<script type="text/javascript" src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+	
+	<!-- bootstrap -->
+	<script type="text/javascript" src="/api/bootstrap/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/api/bootstrap/bootstrap.min.css"/>
+	
 <!--------------------------------- JS LINK END --------------------------------->
 </head>
 <body>
