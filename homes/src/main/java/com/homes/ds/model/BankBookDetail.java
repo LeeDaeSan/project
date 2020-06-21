@@ -2,9 +2,18 @@ package com.homes.ds.model;
 
 import java.util.Date;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.Data;
 
+/**
+ * 통장 상세 정보 Table
+ * 
+ * @author idaesan
+ *
+ */
 @Data
+@Alias("bankBookDetail")
 public class BankBookDetail {
 
 	private Integer bankBookDetailIdx;
@@ -15,6 +24,13 @@ public class BankBookDetail {
 	private Integer category3Idx;
 	private String content;
 	private Double amount;
-	private String type;
+	private String amountType;
 	private Date amountDate;
+	
+	private String amountDateStr;
+	
+	private Category category1;
+	private Category category2;
+	private Category category3;
+	
 }

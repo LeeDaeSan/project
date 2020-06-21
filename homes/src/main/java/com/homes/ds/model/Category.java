@@ -4,6 +4,12 @@ import java.util.Date;
 
 import lombok.Data;
 
+/**
+ * 분류 정보 Table
+ * 
+ * @author idaesan
+ *
+ */
 @Data
 public class Category {
 

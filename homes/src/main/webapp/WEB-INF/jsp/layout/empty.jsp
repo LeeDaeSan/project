@@ -3,6 +3,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>HOMES</title>
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" type="text/css" href="/api/bootstrap/bootstrap.min.css"/>
+	
+<!--------------------------------- JS LINK START --------------------------------->
+	
+	<!-- jquery -->
+	<script type="text/javascript" src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+	
+	<!-- bootstrap -->
+	<script type="text/javascript" src="/api/bootstrap/bootstrap.min.js"></script>
+	
+	<!-- common js -->
+	<script type="text/javascript" src="/js/common.js"></script>
+	
+<!--------------------------------- JS LINK END --------------------------------->
+	<style>
+	.wrap .wrap-body{margin:5px;}
+	</style>
 </head>
 <body>
 <div class="wrap">

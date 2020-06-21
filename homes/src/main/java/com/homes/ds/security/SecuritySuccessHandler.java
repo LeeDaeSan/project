@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.homes.ds.constant.Constant;
+import com.homes.ds.constant.UserConstant;
+import com.homes.ds.constant.UserConstant;
 
 @Configuration
 public class SecuritySuccessHandler implements AuthenticationSuccessHandler {
@@ -20,7 +22,7 @@ public class SecuritySuccessHandler implements AuthenticationSuccessHandler {
 			Authentication authentication) throws IOException, ServletException {
 		
 		response.setStatus(HttpServletResponse.SC_OK);
-		response.sendRedirect("/" + Constant.VIEWS + "/main");
+		response.sendRedirect("/" + Constant.VIEWS + "/dashboard");
 	}
 
 }

@@ -4,6 +4,12 @@ import java.util.Date;
 
 import lombok.Data;
 
+/**
+ * Home Table
+ * 
+ * @author idaesan
+ *
+ */
 @Data
 public class Home {
 

@@ -7,30 +7,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.homes.ds.model.BankBook;
-import com.homes.ds.service.BankBookService;
+import com.homes.ds.service.DashboardService;
 
 /**
- * 가계부 Controller
+ * Dashboard Controller
  * 
  * @author idaesan
- *
  */
 @RestController
-@RequestMapping("/bankBook")
-public class BankBookController {
+@RequestMapping("/rest/dashboard")
+public class DashboardRestController {
 
 	@Autowired
-	private BankBookService bankBookService;
+	private DashboardService dashboardService;
 	
 	/**
-	 * 가계부 목록 조회
+	 * 대시보드 목록 조회 Controller
 	 * 
-	 * @param bankBook
 	 * @return
 	 */
 	@PostMapping("/list")
-	public Map<String, Object> list (BankBook bankBook) {
-		return bankBookService.list(bankBook);
+	public Map<String, Object> selectChart () {
+		return dashboardService.selectChart();
 	}
 }

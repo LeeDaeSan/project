@@ -1,38 +1,59 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript"></script>
-</head>
-<body>
+<style>
+.login-div{
+	text-align 		: center;
+	width			: 290px;
+	margin			: 0 auto;
+	margin-top		: 10%;
+	border			: 1px solid #c7c7c7;
+	padding			: 10px;
+	border-radius 	: 5px;
+}
+.login-div table {
+	margin-bottom : 0;
+}
+.login-title {
+	margin : 0;
+}
+</style>
+<script></script>
 
-<form method="POST">
-	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
-	<table>
-		<tr>
-			<th>
-				<label for="email">Email</label>
-			</th>
-			<td>
-				<input type="text" id="email" name="username"/>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<label for="password">Password</label>
-			</th>
-			<td>
-				<input type="text" id="password" name="password"/>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<input type="submit" value="로그인"/>
-			</td>
-		</tr>
-	</table>
-</form>
-</body>
-</html>
+<div class="login-div">
+	<form method="POST">
+		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
+		<table class="table">
+			<thead>
+				<tr>
+					<td colspan="2" class="text-left">
+						<h3 class="login-title">LOGIN</h3>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>
+						<label for="email">Email</label>
+					</th>
+					<td>
+						<input type="text" id="email" name="username" class="form-control" placeholder="이메일을 입력해 주세요."/>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<label for="password">Password</label>
+					</th>
+					<td>
+						<input type="password" id="password" name="password" class="form-control" placeholder="비밀번호를 입력해 주세요."/>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="2">
+						<input type="submit" value="로그인" class="btn btn-default"/>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>

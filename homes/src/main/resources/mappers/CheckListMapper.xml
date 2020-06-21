@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homes.ds.mapper.CheckListMapper">
+
+	<!-- 체크리스트 등록 -->
+	<insert id="insert" parameterType="checkList">
+		INSERT INTO CheckList
+		(
+			CheckMemoIdx,
+			IsChecked,
+			Title,
+			Content
+		)
+		VALUES
+		(
+			#{checkMemoIdx},
+			'0',
+			#{title},
+			#{content}
+		)
+	</insert>
+	
+	<!-- 체크리스트 수정 -->
+	<update id="update" parameterType="checkList">
+		UPDATE CheckList
+		
+	   	<trim prefix="SET" suffixOverrides=",">
+	   		<!-- 체크항목 -->
+	   		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(isChecked)">
+	   			IsChecked 	= #{isChecked},
+	   		</if>
+	   		<!-- 내용 -->
+	   		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(title)">
+		   		Title 		= #{title}
+	   		</if>
+	   	</trim>
+		   		
+		 WHERE CheckListIdx = #{checkListIdx}
+	</update>
+	
+	<!-- 체크리스트 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM CheckList
+		 WHERE CheckListIdx = #{checkListIdx}
+	</delete>
+</mapper>

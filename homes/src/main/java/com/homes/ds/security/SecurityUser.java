@@ -5,30 +5,33 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-public class SecurityUser extends User {
+import lombok.Data;
 
+public class SecurityUser extends User {
+	private static final long serialVersionUID = 1L;
+	
 	private Integer idx;
+	private Integer homeIdx;
 	private String id;
 	private String password;
-	private String realPassword;
 	private String name;
 	
 	public SecurityUser (
 				String username, 
 				String password, 
-				String realPassword, 
-				Integer idx, 
+				Integer idx,
+				Integer homeIdx,
 				String name,
 				Collection<? extends GrantedAuthority> authorities) {
 		
-		this(username, password, realPassword, idx, name, true, true, true, true, authorities);
+		this(username, password, idx, homeIdx, name, true, true, true, true, authorities);
 	}
 	
 	public SecurityUser (
 			String username,
 			String password,
-			String realPassword,
 			Integer idx,
+			Integer homeIdx,
 			String name,
 			boolean enabled,
 			boolean accountNonExpired,
@@ -39,10 +42,9 @@ public class SecurityUser extends User {
 		
 		this.id 			= username;
 		this.password 		= password;
-		this.realPassword 	= realPassword;
 		this.idx 			= idx;
+		this.homeIdx		= homeIdx;
 		this.name			= name;
-		
 	}
 
 	public Integer getIdx() {
@@ -51,6 +53,14 @@ public class SecurityUser extends User {
 
 	public void setIdx(Integer idx) {
 		this.idx = idx;
+	}
+
+	public Integer getHomeIdx() {
+		return homeIdx;
+	}
+
+	public void setHomeIdx(Integer homeIdx) {
+		this.homeIdx = homeIdx;
 	}
 
 	public String getId() {
@@ -69,14 +79,6 @@ public class SecurityUser extends User {
 		this.password = password;
 	}
 
-	public String getRealPassword() {
-		return realPassword;
-	}
-
-	public void setRealPassword(String realPassword) {
-		this.realPassword = realPassword;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -84,5 +86,6 @@ public class SecurityUser extends User {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	
 }

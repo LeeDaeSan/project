@@ -2,6 +2,12 @@ package com.homes.ds.model;
 
 import lombok.Data;
 
+/**
+ * 통장 맵핑 Table
+ * 
+ * @author idaesan
+ *
+ */
 @Data
 public class BankBookMapping {
 

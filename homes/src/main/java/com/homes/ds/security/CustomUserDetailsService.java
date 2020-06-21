@@ -35,9 +35,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 		User user = new SecurityUser(
 					username, 
 					password, 
-					realPassword, 
-					1, 
-					"daesan", 
+					member.getMemberIdx(),
+					member.getHomeIdx(),
+					member.getMemberName(), 
 					true,
 					true,
 					true,

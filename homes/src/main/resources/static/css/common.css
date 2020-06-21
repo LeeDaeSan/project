@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+.text-center{text-align:center;}
+.text-right{text-align:right;}
+
+.float-left{float:left;}
+.float-right{float:right;}
+
+.table tbody tr{color:#565656;cursor:pointer;}
+.table tbody tr:hover{background:#e0e0e0;}
+
+.color-red{color:#e24e4c;}
+.color-blue{color:#4d58d6;}
+.color-green{color:#008804;}
+.color-orange{color:#f78a02;}
+.color-gray-remove{text-decoration:line-through;color:#a7a7a7;}
+.font-bold{font-weight:bold;}
+.datepicker{padding:12px !important;}
+
+.text-tooltip{
+	overflow		: hidden; 
+	text-overflow	: ellipsis; 
+	white-space		: nowrap;
+}

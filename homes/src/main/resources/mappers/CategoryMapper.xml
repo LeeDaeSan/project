@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homes.ds.mapper.CategoryMapper">
+
+	<!-- 마지막 코드 정보 조회 -->
+	<select id="selectLastCode" parameterType="category" resultType="String">
+		SELECT
+			MAX(CategoryCode)
+		  FROM Category
+		  
+		 WHERE Level = #{level}
+	</select>
+	
+	<!-- 분류 정보 등록 -->
+	<insert id="insert" parameterType="category">
+		INSERT INTO Category
+		(
+			CategoryName,
+			CategoryCode,
+			Level,
+			ParentIdx
+		)
+		VALUES
+		(
+			#{categoryName},
+			#{categoryCode},
+			#{level},
+			#{parentIdx}
+		)
+	</insert>
+	
+	<!-- 카테고리 목록 조회 -->
+	<select id="select" parameterType="category" resultType="category">
+		SELECT
+			CategoryIdx,
+			CategoryName,
+			CategoryCode,
+			Level,
+			ParentIdx
+			
+		  FROM Category
+		 WHERE Level = #{level}
+		   AND 
+		   <choose>
+		   		<when test="parentIdx == null">
+		   			ParentIdx IS NULL
+		   		</when>
+		   		<otherwise>
+		   			ParentIdx = #{parentIdx}
+		   		</otherwise>
+		   </choose>
+		   
+		<!-- 생성일 기준 정렬 Descending -->
+		ORDER BY CreateDate DESC
+	</select>
+	
+	<!-- 카테고리 상세 조회 -->
+	<select id="detail" parameterType="category" resultType="category">
+		SELECT
+			CategoryIdx,
+			CategoryName,
+			CategoryCode,
+			Level,
+			ParentIdx
+			
+		  FROM Category
+		 WHERE ParentIdx 	= #{parentIdx}
+		   AND Level 		= #{level}	
+	</select>
+</mapper>
