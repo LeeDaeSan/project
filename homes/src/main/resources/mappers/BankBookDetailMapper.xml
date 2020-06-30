@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.homes.ds.mapper.BankBookDetailMapper">
+<mapper namespace="com.ds.homes.model.mapper.BankBookDetailMapper">
 
 	<!-- 가계부 상세 정보 Result Map -->
 	<resultMap type="bankBookDetail" id="bankBookDetailList" autoMapping="true">
@@ -29,7 +29,7 @@
 	</resultMap>
 	
 	<!-- 가계 상세 정보 목록 조회 -->
-	<select id="list" parameterType="com.homes.ds.dto.PagingDTO" resultMap="bankBookDetailList">
+	<select id="list" parameterType="com.ds.homes.model.dto.PagingDTO" resultMap="bankBookDetailList">
 		SELECT
 			<!-- 가계 상세 정보 -->
 			BBD.BankBookDetailIdx,			<!-- PK -->
@@ -67,7 +67,7 @@
 	</select>
 	
 	<!-- 가계 상세 목록 total count -->
-	<select id="listForTotalCount" parameterType="com.homes.ds.dto.PagingDTO" resultType="Long">
+	<select id="listForTotalCount" parameterType="com.ds.homes.model.dto.PagingDTO" resultType="Long">
 		SELECT COUNT(BBD.BankBookDetailIdx)
 		<!-- 공통 조건 -->
 		<include refid="listOfWhere"></include>	  
@@ -88,39 +88,39 @@
 	      AND BBD.HomeIdx		= #{model.homeIdx}
 	    
 	    <!-- 1. 유형 검색 --> 
-	    <if test='@com.homes.ds.util.StringUtil@isNotEmpty(model.amountType) and !"ALL".equals(model.amountType)'>
+	    <if test='@com.ds.homes.tools.util.StringUtil@isNotEmpty(model.amountType) and !"ALL".equals(model.amountType)'>
 	    	AND BBD.AmountType = #{model.amountType}
 	    </if>
 	    
 	    <!-- 2. 금액 범위 검색 -->
-	    <if test='@com.homes.ds.util.StringUtil@isNotEmpty(startAmount) and startAmount != 0'>
+	    <if test='@com.ds.homes.tools.util.StringUtil@isNotEmpty(startAmount) and startAmount != 0'>
 	    	AND BBD.Amount >= #{startAmount}
 	    </if>
-	    <if test='@com.homes.ds.util.StringUtil@isNotEmpty(endAmount) and endAmount != 0'>
+	    <if test='@com.ds.homes.tools.util.StringUtil@isNotEmpty(endAmount) and endAmount != 0'>
 	    	AND BBD.Amount <![CDATA[<=]]> #{endAmount}
 	    </if>
 	    
 	    <!-- 3. 입출금 일자 검색 -->
-		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(startDateStr1)">
+		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(startDateStr1)">
 			AND DATE_FORMAT(BBD.AmountDate, '%y%m%d') >= DATE_FORMAT(#{startDateStr1}, '%y%m%d')
 		</if>
-		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(endDateStr1)">
+		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(endDateStr1)">
 			AND DATE_FORMAT(BBD.AmountDate, '%y%m%d') <![CDATA[<=]]> DATE_FORMAT(#{endDateStr1}, '%y%m%d')
 		</if>
 
 		<!-- 4. 비고 검색 -->		
-		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(model.content)">
+		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(model.content)">
 			AND BBD.Content LIKE CONCAT('%', TRIM(#{model.content}), '%')
 		</if>
 		
 		<!-- 분류 검색 -->
-		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(model.category1Idx)">
+		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(model.category1Idx)">
 			AND BBD.Category1Idx = #{model.category1Idx}
 		</if>
-		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(model.category2Idx)">
+		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(model.category2Idx)">
 			AND BBD.Category2Idx = #{model.category2Idx}
 		</if>
-		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(model.category3Idx)">
+		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(model.category3Idx)">
 			AND BBD.Category3Idx = #{model.category3Idx}
 		</if>
 	</sql>
@@ -210,7 +210,7 @@
 	</update>
 	
 	<!-- 가계 상세 정보 삭제 -->
-	<delete id="delete" parameterType="com.homes.ds.dto.BankBookDetailDTO">
+	<delete id="delete" parameterType="com.ds.homes.model.dto.BankBookDetailDTO">
 		DELETE FROM BankBookDetail
 		 WHERE BankBookDetailIdx IN
 		 <foreach collection="deleteList" item="bankBookDetailIdx" index="index" separator="," open="(" close=")">

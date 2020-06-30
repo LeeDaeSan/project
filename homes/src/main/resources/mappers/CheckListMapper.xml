@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.homes.ds.mapper.CheckListMapper">
+<mapper namespace="com.ds.homes.model.mapper.CheckListMapper">
 
 	<!-- 체크리스트 등록 -->
 	<insert id="insert" parameterType="checkList">
@@ -26,11 +26,11 @@
 		
 	   	<trim prefix="SET" suffixOverrides=",">
 	   		<!-- 체크항목 -->
-	   		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(isChecked)">
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(isChecked)">
 	   			IsChecked 	= #{isChecked},
 	   		</if>
 	   		<!-- 내용 -->
-	   		<if test="@com.homes.ds.util.StringUtil@isNotEmpty(title)">
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(title)">
 		   		Title 		= #{title}
 	   		</if>
 	   	</trim>

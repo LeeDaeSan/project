@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.homes.ds.mapper.CheckMemoMapper">
+<mapper namespace="com.ds.homes.model.mapper.CheckMemoMapper">
 
 	<!-- 체크 메모 정보 Result Map -->
 	<resultMap type="checkMemo" id="checkMemoMap" autoMapping="true">

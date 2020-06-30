@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.homes.ds.mapper.BankBookMapper">
+<mapper namespace="com.ds.homes.model.mapper.BankBookMapper">
 
 	<!-- 가계부 목록 ResultMap -->
 	<resultMap type="bankBook" id="bankBookList" autoMapping="true">
@@ -20,7 +20,7 @@
 	</resultMap>
 	
 	<!-- 가계부 목록 (통장) 조회 -->
-	<select id="list" resultMap="bankBookList" parameterType="com.homes.ds.dto.PagingDTO">
+	<select id="list" resultMap="bankBookList" parameterType="com.ds.homes.model.dto.PagingDTO">
 		SELECT 
 			<!-- 통장 정보 -->
 			BB.BankBookIdx,
@@ -45,7 +45,7 @@
 	</select>
 
 	<!-- 가계부 목록 total count -->	
-	<select id="listOfTotalCount" resultType="Long" parameterType="com.homes.ds.dto.PagingDTO">
+	<select id="listOfTotalCount" resultType="Long" parameterType="com.ds.homes.model.dto.PagingDTO">
 		SELECT COUNT(BB.BankBookIdx)
 		<!-- 공통 검색조건 -->
 		<include refid="listOfWhere"></include>
@@ -68,12 +68,12 @@
 			</if>
 			
 			<!-- 개설일 -->
-			<if test="@com.homes.ds.util.StringUtil@isNotEmpty(startDateStr1) and @com.homes.ds.util.StringUtil@isNotEmpty(endDateStr1)">
+			<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(startDateStr1) and @com.ds.homes.tools.util.StringUtil@isNotEmpty(endDateStr1)">
 				AND DATE_FORMAT(OpenDate, '%y%m%d') BETWEEN DATE_FORMAT(#{startDateStr1}, '%y%m%d') AND DATE_FORMAT(#{endDateStr1}, '%y%m%d')
 			</if>
 			
 			<!-- 만기일 -->
-			<if test="@com.homes.ds.util.StringUtil@isNotEmpty(startDateStr2) and @com.homes.ds.util.StringUtil@isNotEmpty(endDateStr2)">
+			<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(startDateStr2) and @com.ds.homes.tools.util.StringUtil@isNotEmpty(endDateStr2)">
 				AND DATE_FORMAT(CloseDate, '%y%m%d') BETWEEN DATE_FORMAT(#{startDateStr2}, '%y%m%d') AND DATE_FORMAT(#{endDateStr2}, '%y%m%d')
 			</if>
 		</where>

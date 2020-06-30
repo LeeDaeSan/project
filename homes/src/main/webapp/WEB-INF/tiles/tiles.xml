@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
-
 <tiles-definitions>
-
 	<!-- empty tiles layout add -->
 	<definition name="notiles" template="/WEB-INF/jsp/layout/empty.jsp">
-		<put-attribute name="title" value=""/>
+		<put-attribute name="title" value="HOMES"/>
 		<put-attribute name="empty" value=""/>
 	</definition>
 	
@@ -16,10 +13,11 @@
 	
 	<!--  base tiles layout add  -->
 	<definition name="base" template="/WEB-INF/jsp/layout/base.jsp">
-		<put-attribute name="title"	 value="가계부"/>
-		<put-attribute name="header" value="/WEB-INF/jsp/layout/header.jsp"/>
-		<put-attribute name="body"	 value=""/>
-		<put-attribute name="footer" value="/WEB-INF/jsp/layout/footer.jsp"/>
+		<put-attribute name="title"	 	value="HOMES"/>
+		<put-attribute name="header" 	value="/WEB-INF/jsp/layout/header.jsp"/>
+		<put-attribute name="leftMenu" 	value="/WEB-INF/jsp/layout/leftMenu.jsp"/>
+		<put-attribute name="body"	 	value=""/>
+		<put-attribute name="footer" 	value="/WEB-INF/jsp/layout/footer.jsp"/>
 	</definition>
 	
 	<definition name="views/*" extends="base">
@@ -34,5 +32,4 @@
 	<definition name="views/*/*/*/*" extends="base">
 		<put-attribute name="body" value="/WEB-INF/jsp/views/{1}/{2}/{3}/{4}.jsp"/>
 	</definition> 
-	
 </tiles-definitions>

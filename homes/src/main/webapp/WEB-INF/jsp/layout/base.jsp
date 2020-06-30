@@ -1,53 +1,63 @@
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <!DOCTYPE html>
 <html>
-<head>
-	<title>HOMES</title>
-	<meta charset="UTF-8">
-	
-<!--------------------------------- CSS LINK START --------------------------------->
-
-	<!-- bootstrap css -->
-	<link rel="stylesheet" type="text/css" href="/api/bootstrap/bootstrap.min.css"/>
-	<!-- common css -->
-	<link rel="stylesheet" type="text/css" href="/css/common.css"/>
-	<!-- datepicker css -->
-	<link rel="stylesheet" type="text/css" href="/api/bootstrap/bootstrap-datepicker.min.css"/>
-	
-<!--------------------------------- CXX LINK END --------------------------------->
-
-	
-<!--------------------------------- JS LINK START --------------------------------->
-	
-	<!-- jquery -->
-	<script type="text/javascript" src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
-	<!-- bootstrap js -->
-	<script type="text/javascript" src="/api/bootstrap/bootstrap.min.js"></script>
-	<!-- common js -->
-	<script type="text/javascript" src="/js/common.js"></script>
-	<!-- datepicker js -->
-	<script type="text/javascript" src="/api/bootstrap/bootstrap-datepicker.js"></script>
-	
-<!--------------------------------- JS LINK END --------------------------------->
-
-	
-
-	<style>
-	.wrap{margin:5px;}
-	.wrap .wrap-body{margin:5px;}
-	</style>
-</head>
-<body>
-	
-	<div class="wrap">
-		<tiles:insertAttribute name="header"/>
-
-		<div class="wrap-body">
-			<tiles:insertAttribute name="body"/>
-		</div>		
+	<head>
+		<meta charset="UTF-8">
+		<title>HOMES</title>
 		
-		<tiles:insertAttribute name="footer"/>
-	</div>
-</body>
+		<!--------------------------------- CSS LINK START --------------------------------->
+		<!-- fontawesome -->
+		<link href="/lib/sbadmin2/css/all.min.css" rel="stylesheet" type="text/css">
+		<!-- SB Admin 2 -->
+		<link href="/lib/sbadmin2/css/sb-admin-2.min.css" rel="stylesheet">
+		<!-- 
+		bootstrap css
+		<link rel="stylesheet" type="text/css" href="/api/bootstrap/bootstrap.min.css"/>
+		common css
+		<link rel="stylesheet" type="text/css" href="/css/common.css"/>
+		-->	
+		<!--------------------------------- CXX LINK END --------------------------------->
+				
+				
+		<!--------------------------------- JS LINK START --------------------------------->
+		
+		<!-- jQuery -->		
+		<script type="text/javascript" src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
+		<!-- bootstrap bundle -->		
+		<script type="text/javascript" src="/lib/sbadmin2/js/bootstrap.bundle.min.js"></script>
+		<!-- jQuery easing -->		
+		<script type="text/javascript" src="/lib/sbadmin2/js/jquery.easing.min.js"></script>
+		<!-- SB Admin 2 -->
+		<script type="text/javascript" src="/lib/sbadmin2/js/sb-admin-2.min.js"></script>
+		<!-- common js -->
+		<script type="text/javascript" src="/js/common.js"></script>
+		
+		<!-- 
+		bootstrap js
+		<script type="text/javascript" src="/api/bootstrap/bootstrap.min.js"></script>
+		datepicker js
+		<script type="text/javascript" src="/api/bootstrap/bootstrap-datepicker.js"></script>
+		 -->
+		<!--------------------------------- JS LINK END --------------------------------->
+			
+	</head>
+	
+	<body id="page-top">
+		<div id="wrapper">
+			<tiles:insertAttribute name="leftMenu"/>
+			
+			<!-- Content Wrapper -->
+		    <div id="content-wrapper" class="d-flex flex-column">
+		    	<!-- Main Content -->
+		      	<div id="content">
+					<tiles:insertAttribute name="header"/>
+	
+					<tiles:insertAttribute name="body"/>
+					
+					<tiles:insertAttribute name="footer"/>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

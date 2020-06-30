@@ -1,59 +1,54 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<style>
-.login-div{
-	text-align 		: center;
-	width			: 290px;
-	margin			: 0 auto;
-	margin-top		: 10%;
-	border			: 1px solid #c7c7c7;
-	padding			: 10px;
-	border-radius 	: 5px;
-}
-.login-div table {
-	margin-bottom : 0;
-}
-.login-title {
-	margin : 0;
-}
-</style>
-<script></script>
 
-<div class="login-div">
-	<form method="POST">
-		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
-		<table class="table">
-			<thead>
-				<tr>
-					<td colspan="2" class="text-left">
-						<h3 class="login-title">LOGIN</h3>
-					</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th>
-						<label for="email">Email</label>
-					</th>
-					<td>
-						<input type="text" id="email" name="username" class="form-control" placeholder="이메일을 입력해 주세요."/>
-					</td>
-				</tr>
-				<tr>
-					<th>
-						<label for="password">Password</label>
-					</th>
-					<td>
-						<input type="password" id="password" name="password" class="form-control" placeholder="비밀번호를 입력해 주세요."/>
-					</td>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="2">
-						<input type="submit" value="로그인" class="btn btn-default"/>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
-	</form>
+<div class="row justify-content-center">
+
+	<div class="col-xl-6 col-lg-12 col-md-9">
+		<div class="card o-hidden border-0 shadow-lg my-5">
+			<div class="card-body p-0">
+				<!-- Nested Row within Card Body -->
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="p-5">
+							<div class="text-center">
+								<h1 class="h4 text-gray-900 mb-4">Welcome HOMES!</h1>
+							</div>
+							<form class="user" method="POST">
+								<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
+								<div class="form-group">
+									<input 
+										type="text"
+										name="username"
+										class="form-control form-control-user" 
+										id="email" 
+										placeholder="Enter Email Address...">
+								</div>
+								<div class="form-group">
+									<input 
+										type="password" 
+										name="password"
+										class="form-control form-control-user" 
+										id="password" 
+										placeholder="Password">
+								</div>
+								<div class="form-group">
+									<div class="custom-control custom-checkbox small">
+										<input type="checkbox" class="custom-control-input" id="customCheck">
+										<label class="custom-control-label" for="customCheck">Remember Me</label>
+									</div>
+								</div>
+								<button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
+							</form>
+							<hr>
+							<div class="text-center">
+								<a class="small" href="forgot-password.html">Forgot Password?</a>
+							</div>
+							<div class="text-center">
+								<a class="small" href="register.html">Create an Account!</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
