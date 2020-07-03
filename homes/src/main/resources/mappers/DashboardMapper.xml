@@ -32,4 +32,12 @@
 		WHERE HomeIdx 		= 1
 		  AND BankBookIdx 	= 4 <!-- 기준 가계 통장 -->
 	</select>
+	
+	<!-- 총 자산 조회 -->
+	<select id="selectTotalAssets" parameterType="int" resultType="double">
+		SELECT 
+			SUM(TotalAmount) 
+		  FROM BankBook 
+		 WHERE HomeIdx = #{homeIdx}
+	</select>
 </mapper>

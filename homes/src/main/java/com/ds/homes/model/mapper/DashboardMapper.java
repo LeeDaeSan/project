@@ -29,4 +29,12 @@ public interface DashboardMapper {
 	 * @return
 	 */
 	public Double selectOfBankBook(Integer homeIdx);
+	
+	/**
+	 * 총 자산 조회 Mapper
+	 * 
+	 * @param homeIdx
+	 * @return
+	 */
+	public Double selectTotalAssets(Integer homeIdx);
 }

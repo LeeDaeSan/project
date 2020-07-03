@@ -29,6 +29,7 @@ public class DashboardServiceImpl implements DashboardService {
 			resultMap = ResponseUtil.successMap();
 			resultMap.put("list"			, dashboardMapper.selectChart(homeIdx));
 			resultMap.put("remainAmount"	, dashboardMapper.selectOfBankBook(homeIdx));
+			resultMap.put("totalAssets"		, dashboardMapper.selectTotalAssets(homeIdx));
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();

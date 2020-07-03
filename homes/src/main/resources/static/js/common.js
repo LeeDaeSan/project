@@ -54,17 +54,18 @@ var common = {
 		$('#pagination').empty();
 		
 			// first page
-		var html  = '<li class="' + (firstPage == startPage ? 'disabled' : '') + '"><a href="javascript:void(0);" id="firstPage"><span>≪</span></a></li>';
+		var html  = '<li class="paginate_button page-item ' + (firstPage == startPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="firstPage"><span>≪</span></a></li>';
 			// prev page
-			html += '<li class="' + (page == firstPage ? 'disabled' : '') + '"><a href="javascript:void(0);" id="prevBtn"><span>＜</span></a></li>';
+			html += '<li class="paginate_button page-item ' + (page == firstPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="prevBtn"><span>＜</span></a></li>';
 			// page number
 		for (var i = startPage; i <= endPage; i++) {
-			html += '<li class="' + (i == page ? 'active' : '') + '"><a href="javascript:void(0);" class="page_btn" num="' + i + '">' + i + '</a></li>';
+			console.log(123);
+			html += '<li class="paginate_button page-item ' + (i == page ? 'active' : '') + '"><a href="javascript:void(0);" class="page-link page_btn" num="' + i + '">' + i + '</a></li>';
 		}
 			// next page
-			html += '<li class="' + (page == lastPage ? 'disabled' : '') + '"><a href="javascript:void(0);" id="nextBtn"><span>＞</span></a></li>';
+			html += '<li class="paginate_button page-item ' + (page == lastPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="nextBtn"><span>＞</span></a></li>';
 			// last page
-			html += '<li class="' + (endPage >= lastPage ? 'disabled' : '') + '"><a href="javascript:void(0);" id="lastBtn"><span>≫</span></a></li>';
+			html += '<li class="paginate_button page-item ' + (endPage >= lastPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="lastBtn"><span>≫</span></a></li>';
 
 		// 페이징 append
 		$('#pagination').append(html);

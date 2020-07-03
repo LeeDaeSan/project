@@ -38,12 +38,23 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           	<div class="bg-white py-2 collapse-inner rounded">
-	            <a class="collapse-item" href="buttons.html">통장 관리</a>
-	            <a class="collapse-item" href="buttons.html">부동산 관리</a>
+	            <a class="collapse-item" href="/views/accountBook/bankBook/list">통장 관리</a>
           	</div>
         </div>
     </li>
 
+	<li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTw" aria-expanded="true" aria-controls="collapseTwo">
+          	<i class="fas fa-fw fa-cog"></i>
+          	<span>부동산</span>
+        </a>
+        <div id="collapseTw" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          	<div class="bg-white py-2 collapse-inner rounded">
+	            <a class="collapse-item" href="buttons.html">부동산 관리</a>
+          	</div>
+        </div>
+    </li>
+    
 	<!-- Setting Pages -->
 	<li class="nav-item">
 		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
@@ -52,7 +63,7 @@
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           	<div class="bg-white py-2 collapse-inner rounded">
-            	<a class="collapse-item" href="utilities-color.html">가계부 코드 관리</a>
+            	<a class="collapse-item" href="/views/setting/category/list">가계부 코드 관리</a>
             	<a class="collapse-item" href="utilities-other.html">부동산 코드 관리</a>
           	</div>
         </div>

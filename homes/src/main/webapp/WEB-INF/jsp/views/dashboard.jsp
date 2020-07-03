@@ -5,9 +5,12 @@
 <script type="text/javascript" src="/lib/amChart/animated.js"></script>
 
 <style>
-#chartdiv {
+#chartdivBar, #chartdiv {
   width: 100%;
   height: 370px;
+}
+#chartTable td, #chartTable th {
+	padding : 7px 6px 7px 6px !important;
 }
 </style>
 <script type="text/javascript">
@@ -24,9 +27,8 @@ am4core.ready(function() {
 	// Themes end
 	
 	//Create chart instance
-	 var chart = am4core.create("chartdiv", am4charts.PieChart);
-	 var chartData = {};
-	 $.ajax({
+	var chartData = {};
+	$.ajax({
 		url 		: '/rest/dashboard/list',
 		method 		: 'POST',
 		dataType 	: 'JSON',
@@ -40,13 +42,21 @@ am4core.ready(function() {
 				// 지출 총액
 				var outTotalAmount = 0;
 				
-				var list = result.list;
-				var listLength = list.length;
-				var chartList = [];
+				var list 		= result.list;
+				var listLength 	= list.length;
+				var chartList 	= [];
+				var html 		= '';
 				for (var i = 0; i < listLength; i++) {
 					var thisData = list[i];
 					
 					if (thisData.amountType != 'IN') {
+						// 테이블에 필요한 데이터
+						html += '<tr>';
+						html += '	<td>' + thisData.categoryName + '</td>';
+						html += '	<td class="text-right">' + common.number.addComma(thisData.totalAmount) + '</div>';
+						html += '</tr>';
+						
+						// 차트에 필요한 데이터
 						chartList.push({
 							'sector' 	: thisData.categoryName,
 							'size'		: thisData.totalAmount,
@@ -56,20 +66,24 @@ am4core.ready(function() {
 						inTotalAmount += thisData.totalAmount;
 					}
 				}
-
+				
+				// 데이터가 없을 때
+				if (listLength == 0) {
+					html = '<tr><th colspan="2">데이터가 없습니다.</td></tr>';
+				}
+				
+				$('#chartTable tbody').empty().append(html);
+				
 				// 소득 총액 bind
-				$('#inTotalAmount').text(common.number.addComma(inTotalAmount));
+				mountCount(inTotalAmount, $('#inTotalAmount'));
 				// 지출 총액 bind
-				$('#outTotalAmount').text(common.number.addComma(outTotalAmount));
+				mountCount(outTotalAmount, $('#outTotalAmount'));
 				// 차액 bind
 				var diffAmount = inTotalAmount - outTotalAmount;
-				$('#diffAmount').text(common.number.addComma(diffAmount));
-				// 통장 잔액 bind
-				var remainAmount = result.remainAmount;
-				$('#remainAmount').text(common.number.addComma(remainAmount));
-				// 전월 잔액 bind
-				var befAmount = Math.abs(diffAmount) + remainAmount;
-				$('#befAmount').text(common.number.addComma(befAmount));
+				mountCount(diffAmount, $('#diffAmount'));
+				// 총 자산 bind
+				var totalAssets = result.totalAssets;
+				mountCount(totalAssets, $('#totalAssets'));
 				
 				$('#befAmount').text();
 				if (diffAmount < 0) {
@@ -78,27 +92,48 @@ am4core.ready(function() {
 					$('#diffAmount').addClass('color-blue');
 				}
 			
+			// ============= Pie Chart START ============= //
+				var chart = am4core.create('chartdiv', am4charts.PieChart);
 				chartData[nowMonth + '월'] = chartList;
 				chart.data = chartList;
+				// Add label
+				chart.innerRadius = 100;
+				
+				var label 					= chart.seriesContainer.createChild(am4core.Label);
+					label.text 				= nowMonth + '월';
+					label.horizontalCenter 	= 'middle';
+					label.verticalCenter 	= 'middle';
+					label.fontSize 			= 50;
+
+				// Add and configure Series
+				var pieSeries 						= chart.series.push(new am4charts.PieSeries());
+					pieSeries.dataFields.value 		= 'size';
+					pieSeries.dataFields.category 	= 'sector';
+			// ============= Pie Chart END ============= //		
+					
 			} else {
 				alert('서버 에러');
 			}
 		}
 	});
 
-	// Add label
-	chart.innerRadius = 100;
-	var label = chart.seriesContainer.createChild(am4core.Label);
-	label.text = nowMonth + '월';
-	label.horizontalCenter = "middle";
-	label.verticalCenter = "middle";
-	label.fontSize = 50;
-
-	// Add and configure Series
-	var pieSeries = chart.series.push(new am4charts.PieSeries());
-	pieSeries.dataFields.value = "size";
-	pieSeries.dataFields.category = "sector";
 });
+
+/**
+ * 금액 애니메이션
+ 
+ */
+function mountCount (num, thisTag) {
+	$({ val : 0 }).animate({ val : num }, {
+		duration 	: 1000,
+		step 		: function () {
+			thisTag.text(common.number.addComma(Math.floor(this.val)));
+		},
+		complete 	: function () {
+			thisTag.text(common.number.addComma(Math.floor(this.val)));
+		}
+	});
+}
 </script>
 
 <!-- Begin Page Content -->
@@ -112,14 +147,31 @@ am4core.ready(function() {
 	<!-- Content Row START -->
     <div class="row">
     
-    	<!-- Earnings (Monthly) Card Example -->
+    	<!-- 총 소득금액 -->
         <div class="col-xl-3 col-md-6 mb-4">
-        	<div class="card border-left-primary shadow h-100 py-2">
+            <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                   	<div class="row no-gutters align-items-center">
                     	<div class="col mr-2">
-                      		<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)</div>
-                      		<div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                      		<div class="text-xs font-weight-bold text-success text-uppercase mb-1">총 소득금액</div>
+                      		<div class="h5 mb-0 font-weight-bold text-success" id="inTotalAmount">$0</div>
+                    	</div>
+                    	<div class="col-auto">
+                      		<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    	</div>
+                  	</div>
+                </div>
+            </div>
+        </div>
+        
+    	<!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+        	<div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                  	<div class="row no-gutters align-items-center">
+                    	<div class="col mr-2">
+                      		<div class="text-xs font-weight-bold text-danger text-uppercase mb-1">총 지출금액</div>
+                      		<div class="h5 mb-0 font-weight-bold text-danger" id="outTotalAmount">$0</div>
                     	</div>
 	                    <div class="col-auto">
 	                      	<i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -129,44 +181,18 @@ am4core.ready(function() {
             </div>
         </div>
 	
-		<!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                  	<div class="row no-gutters align-items-center">
-                    	<div class="col mr-2">
-                      		<div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div>
-                      		<div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                    	</div>
-                    	<div class="col-auto">
-                      		<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    	</div>
-                  	</div>
-                </div>
-            </div>
-        </div>
-
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                   	<div class="row no-gutters align-items-center">
-                    	<div class="col mr-2">
-                      		<div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
-                   			<div class="row no-gutters align-items-center">
-                     			<div class="col-auto">
-                       				<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                     			</div>
-                     			<div class="col">
-                       				<div class="progress progress-sm mr-2">
-                         				<div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                       				</div>
-                     			</div>
-                   			</div>
-                   		</div>
-                    	<div class="col-auto">
-                      		<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                  		<div class="col mr-2">
+                      		<div class="text-xs font-weight-bold text-info text-uppercase mb-1">차액</div>
+                      		<div class="h5 mb-0 font-weight-bold text-info" id="diffAmount">$0</div>
                     	</div>
+	                    <div class="col-auto">
+	                      	<i class="fas fa-calendar fa-2x text-gray-300"></i>
+	                    </div>
                   	</div>
 				</div>
             </div>
@@ -178,8 +204,8 @@ am4core.ready(function() {
                 <div class="card-body">
                   	<div class="row no-gutters align-items-center">
                     	<div class="col mr-2">
-                      		<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
-                      		<div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                      		<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">총 자산</div>
+                      		<div class="h5 mb-0 font-weight-bold text-warning" id="totalAssets">$0</div>
                     	</div>
                     	<div class="col-auto">
                       		<i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -215,10 +241,24 @@ am4core.ready(function() {
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                  	<div class="col-md-5">
-                  		<div class=""></div>
-                  	</div>
-                  	<div class="col-md-7">
+               		<div class="card shadow col-xl-4 float-left">
+				    	<div class="card-body">
+				          	<div class="table-responsive">
+				               	<table class="table table-bordered" id="chartTable">
+				               		<colgroup>
+										<col width="40%"/>
+										<col width="auto"/>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th colspan="2">데이터가 없습니다.</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+                  	<div class="col-xl-8 float-right">
 						<div id="chartdiv"></div>
 					</div>
                 </div>
