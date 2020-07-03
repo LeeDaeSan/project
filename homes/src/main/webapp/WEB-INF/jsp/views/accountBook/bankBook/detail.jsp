@@ -687,7 +687,7 @@ function categoryList (level, parentIdx) {
 							<td></td>
 						</tr>
 						<tr>
-							<th class="text-right">비고</th>
+							<th class="text-right">분류</th>
 							<td colspan="3">
 								<select class="form-control form-control-sm category1_select float-left" id="searchCategory1">
 									<option value="">선택없음</option>
@@ -699,7 +699,7 @@ function categoryList (level, parentIdx) {
 									<option value="">선택없음</option>
 								</select>
 							</td>
-							<th class="text-right">분류</th>
+							<th class="text-right">비고</th>
 							<td colspan="2">
 								<input type="text" class="form-control form-control-sm search_content_input"/>
 							</td>

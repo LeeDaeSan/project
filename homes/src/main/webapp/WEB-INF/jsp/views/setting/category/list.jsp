@@ -8,6 +8,9 @@
 .selected{background:#d2d2d2;font-weight:bold;}
 ul.list-group li.list-group-item{cursor:pointer;}
 ul.list-group li.list-group-item:hover{background:#e6e6e6;font-weight:bold;}
+
+#category1Ul, #category2Ul, #category3Ul{height:500px;overflow:auto;}
+.list-group-item{padding:6px 4px 6px 8px !important;}
 </style>
 <script type="text/javascript">
 var choiceCategory1 = '';
@@ -215,57 +218,59 @@ function list (level) {
 }
 </script>
 
-<!-- 대분류 -->
-<div class="col-md-4">
-	<div class="panel panel-default">
-		<div class="panel-heading">대분류 코드</div>
-		<div class="panel-body">
-			<ul class="list-group" id="category1Ul">
-				<li class="list-group-item data_empty">코드가 없습니다.</li>
-			</ul>
-		</div>
-		<div class="panel-footer text-center">
-			<button class="btn btn-primary btn-sm category_popup_btn" level="1" data-toggle="modal" data-target="#category1Modal">추가하기</button>
-		</div>
+<div class="row container-fluid">
+	<!-- 대분류 -->
+	<div class="col-lg-4">
+		<div class="card mb-4">
+        	<div class="card-header">대분류 코드</div>
+            <div class="card-body">
+            	<ul class="list-group" id="category1Ul">
+					<li class="list-group-item data_empty">코드가 없습니다.</li>
+				</ul>
+            </div>
+            <div class="card-footer text-center">
+            	<button class="btn btn-primary btn-sm category_popup_btn" level="1" data-toggle="modal" data-target="#category1Modal">추가하기</button>
+            </div>
+        </div>
 	</div>
-</div>
-
-<!-- 중분류 -->
-<div class="col-md-4">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			중분류 코드
-			<span id="category2Parent"></span>
-			<input type="hidden" id="category1Idx"/>
-		</div>
-		<div class="panel-body">
-			<ul class="list-group" id="category2Ul">
-				<li class="list-group-item data_empty">코드가 없습니다.</li>
-			</ul>
-		</div>
-		<div class="panel-footer text-center">
-			<button class="btn btn-primary btn-sm category_popup_btn" level="2" data-toggle="modal">추가하기</button>
-		</div>
-	</div>
-</div>
-
-<!-- 소분류 -->
-<div class="col-md-4">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			소분류 코드
-			<span id="category3Parent"></span>
-			<input type="hidden" id="category2Idx"/>
-		</div>
-		<div class="panel-body">
-			<ul class="list-group" id="category3Ul">
-				<li class="list-group-item data_empty">코드가 없습니다.</li>
-			</ul>
-		</div>
-		<div class="panel-footer text-center">
-			<button class="btn btn-primary btn-sm category_popup_btn" level="3" data-toggle="modal">추가하기</button>
-		</div>
-	</div>
+	
+	<!-- 중분류 -->
+	<div class="col-lg-4">
+		<div class="card mb-4">
+        	<div class="card-header">
+        		중분류 코드
+        		<span id="category2Parent"></span>
+				<input type="hidden" id="category1Idx"/>
+			</div>
+            <div class="card-body">
+            	<ul class="list-group" id="category2Ul">
+					<li class="list-group-item data_empty">코드가 없습니다.</li>
+				</ul>
+       		</div>
+       		<div class="card-footer text-center">
+       			<button class="btn btn-primary btn-sm category_popup_btn" level="2" data-toggle="modal">추가하기</button>
+      		</div>
+   		</div>
+    </div>
+	
+	<!-- 소분류 -->
+	<div class="col-lg-4">
+		<div class="card mb-4">
+        	<div class="card-header">
+        		소분류 코드
+        		<span id="category3Parent"></span>
+				<input type="hidden" id="category2Idx"/>
+       		</div>
+            <div class="card-body">
+            	<ul class="list-group" id="category3Ul">
+					<li class="list-group-item data_empty">코드가 없습니다.</li>
+				</ul>
+       		</div>
+       		<div class="card-footer text-center">
+       			<button class="btn btn-primary btn-sm category_popup_btn" level="3" data-toggle="modal">추가하기</button>
+      		</div>
+   		</div>
+    </div>
 </div>
 
 <!-- 대분류 등록 Modal -->
@@ -273,13 +278,17 @@ function list (level) {
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
+				<h5 class="modal-title" id="category1ModalLabel">대분류 등록</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title" id="category1ModalLabel">대분류 등록</h4>
 			</div>
 			<div class="modal-body">
 				<table class="table">
+					<colgroup>
+						<col width="30%"/>
+						<col width="auto"/>
+					</colgroup>
 					<tr>
 						<th>코드</th>
 						<td><input type="text" id="categoryCode1" class="form-control" readOnly/></td>
@@ -291,8 +300,8 @@ function list (level) {
 				</table>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary insert_category_btn" level="1">등록</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-primary btn-sm insert_category_btn" level="1">등록</button>
+				<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">닫기</button>
 			</div>
 		</div>
 	</div>
@@ -303,13 +312,17 @@ function list (level) {
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
+				<h5 class="modal-title" id="category2ModalLabel">중분류 등록</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title" id="category2ModalLabel">중분류 등록</h4>
 			</div>
 			<div class="modal-body">
 				<table class="table">
+					<colgroup>
+						<col width="30%"/>
+						<col width="auto"/>
+					</colgroup>
 					<tr>
 						<th>코드</th>
 						<td><input type="text" id="categoryCode2" class="form-control" readOnly/></td>
@@ -321,8 +334,8 @@ function list (level) {
 				</table>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary insert_category_btn" level="2">등록</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-primary btn-sm insert_category_btn" level="2">등록</button>
+				<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">닫기</button>
 			</div>
 		</div>
 	</div>
@@ -333,13 +346,17 @@ function list (level) {
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
+				<h5 class="modal-title" id="category3ModalLabel">소분류 등록</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title" id="category3ModalLabel">소분류 등록</h4>
 			</div>
 			<div class="modal-body">
 				<table class="table">
+					<colgroup>
+						<col width="30%"/>
+						<col width="auto"/>
+					</colgroup>
 					<tr>
 						<th>코드</th>
 						<td><input type="text" id="categoryCode3" class="form-control" readOnly/></td>
@@ -351,8 +368,8 @@ function list (level) {
 				</table>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary insert_category_btn" level="3">등록</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-primary btn-sm insert_category_btn" level="3">등록</button>
+				<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">닫기</button>
 			</div>
 		</div>
 	</div>
