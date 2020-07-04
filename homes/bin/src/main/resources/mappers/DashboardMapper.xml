@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.homes.model.mapper.DashboardMapper">
+	
+	<!-- 차트 목록 조회 -->
+	<select id="selectChart" parameterType="int" resultType="com.ds.homes.model.dto.DashboardDTO">
+		SELECT 
+			BBD.AmountType 		AS AmountType,
+			BBD.Category1Idx	AS Category1Idx, 
+			C.CategoryName		AS CategoryName, 
+			SUM(BBD.Amount) 	AS TotalAmount 
+			
+		FROM BankBookDetail AS BBD
+		
+		INNER JOIN BankBook AS BB 	ON BB.BankBookIdx 	= BBD.BankBookIdx
+		 LEFT JOIN Category AS C 	ON C.CategoryIdx 	= BBD.Category1Idx
+		
+		WHERE BBD.HomeIdx 			= #{homeIdx}
+		  AND BB.BankBookTypeIdx 	= 1			<!-- 기준 가계 통장 -->
+		  AND DATE_FORMAT(BBD.AmountDate, '%y%m') = DATE_FORMAT(NOW(), '%y%m')
+		
+		GROUP BY BBD.Category1Idx
+		
+		ORDER BY TotalAmount DESC
+	</select>
+	
+	<!-- 현재월 기준 가계 통장의 남은 잔액 -->
+	<select id="selectOfBankBook" parameterType="int" resultType="double">
+		SELECT
+			TotalAmount
+		 FROM BankBook
+		WHERE HomeIdx 		= 1
+		  AND BankBookIdx 	= 4 <!-- 기준 가계 통장 -->
+	</select>
+	
+	<!-- 총 자산 조회 -->
+	<select id="selectTotalAssets" parameterType="int" resultType="double">
+		SELECT 
+			SUM(TotalAmount) 
+		  FROM BankBook 
+		 WHERE HomeIdx = #{homeIdx}
+	</select>
+</mapper>

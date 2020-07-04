@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.homes.model.mapper.CheckMemoMapper">
+
+	<!-- 체크 메모 정보 Result Map -->
+	<resultMap type="checkMemo" id="checkMemoMap" autoMapping="true">
+		<id property="checkMemoIdx" column="CheckMemoIdx"/>
+		
+		<collection ofType="checkList" property="checkList" autoMapping="true">
+			<id property="checkListIdx" column="CheckListIdx"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 체크 메모 정보 조회 -->
+	<select id="select" parameterType="checkMemo" resultMap="checkMemoMap">
+		SELECT
+			CM.CheckMemoIdx,
+			CM.HomeIdx,
+			CM.Memo,
+			
+			CL.CheckListIdx,
+			CL.IsChecked,
+			CL.Title,
+			CL.Content
+			
+		  FROM CheckMemo AS CM
+		  
+		  LEFT JOIN CheckList AS CL ON CL.CheckMemoIdx = CM.CheckMemoIdx
+		  
+		 WHERE CM.HomeIdx = #{homeIdx}
+	</select>
+	
+	<!-- 체크 메모 등록 -->	
+	<insert id="insert" parameterType="checkMemo">
+		INSERT INTO CheckMemo
+		(
+			HomeIdx,
+			Memo
+		)
+		VALUES
+		(
+			#{homeIdx},
+			#{memo}
+		)
+		
+		<selectKey resultType="Integer" keyProperty="checkMemoIdx" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey> 
+	</insert>	
+	
+	<!-- 체크 메모 수정 -->
+	<update id="update" parameterType="checkMemo">
+		UPDATE CheckMemo
+		   SET
+		   		Memo = #{memo}
+		   		
+		 WHERE CheckMemoIdx = #{checkMemoIdx} 
+		   AND HomeIdx 		= #{homeIdx}
+	</update>
+</mapper>
