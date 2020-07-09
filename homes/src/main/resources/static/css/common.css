@@ -6,8 +6,18 @@
 .float-left{float:left;}
 .float-right{float:right;}
 
-.table tbody tr{color:#565656;cursor:pointer;}
-.table tbody tr:hover{background:#e0e0e0;}
+.table {
+	font-size 	: 13px !important;
+}
+.table tbody tr {
+	color		: #565656;
+	cursor		: pointer;
+}
+.table td, .table th {
+	padding : 5px 10px 5px 10px !important;
+}
+	
+/* .table tbody tr:hover{background:#e0e0e0;} */
 
 .color-red{color:#e24e4c;}
 .color-blue{color:#4d58d6;}
@@ -17,7 +27,7 @@
 .font-bold{font-weight:bold;}
 .datepicker{padding:12px !important;}
 
-.text-tooltip{
+.text-tooltip {
 	overflow		: hidden; 
 	text-overflow	: ellipsis; 
 	white-space		: nowrap;

@@ -3,7 +3,7 @@
 <mapper namespace="com.ds.homes.model.mapper.DashboardMapper">
 	
 	<!-- 차트 목록 조회 -->
-	<select id="selectChart" parameterType="int" resultType="com.ds.homes.model.dto.DashboardDTO">
+	<select id="selectChart" parameterType="bankBookDetail" resultType="com.ds.homes.model.dto.DashboardDTO">
 		SELECT 
 			BBD.AmountType 		AS AmountType,
 			BBD.Category1Idx	AS Category1Idx, 
@@ -17,7 +17,7 @@
 		
 		WHERE BBD.HomeIdx 			= #{homeIdx}
 		  AND BB.BankBookTypeIdx 	= 1			<!-- 기준 가계 통장 -->
-		  AND DATE_FORMAT(BBD.AmountDate, '%y%m') = DATE_FORMAT(NOW(), '%y%m')
+		  AND DATE_FORMAT(BBD.AmountDate, '%Y%m') = #{amountDateStr}
 		
 		GROUP BY BBD.Category1Idx
 		
@@ -29,7 +29,7 @@
 		SELECT
 			TotalAmount
 		 FROM BankBook
-		WHERE HomeIdx 		= 1
+		WHERE HomeIdx 		= #{homeIdx}
 		  AND BankBookIdx 	= 4 <!-- 기준 가계 통장 -->
 	</select>
 	

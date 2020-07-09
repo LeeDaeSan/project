@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date"%>
+<%@ page import="com.ds.homes.tools.util.DateUtil"%>
 
 <!-- Topbar -->
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+	<div><%= DateUtil.dateToString(new Date(), "yyyy년 MM월 dd일, EEE요일") %></div>
 	<ul class="navbar-nav ml-auto">
 		<li class="nav-item dropdown no-arrow">
 	      	<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

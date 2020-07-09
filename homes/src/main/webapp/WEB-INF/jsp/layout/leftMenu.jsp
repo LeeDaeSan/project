@@ -417,8 +417,8 @@ function checkMemoMerge (checkMemoIdx) {
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           	<div class="bg-white py-2 collapse-inner rounded">
 	            <a class="collapse-item" href="/views/accountBook/bankBook/list">통장 관리</a>
-	            <a class="collapse-item" href="/views/accountBook/calculate/list">정산</a>
-	            <a class="collapse-item" href="/views/accountBook/statistics/list">통계</a>
+	            <a class="collapse-item" href="/views/accountBook/calculate/list">월말 정산</a>
+	            <a class="collapse-item" href="/views/accountBook/statistics/list">연말 통계</a>
           	</div>
         </div>
     </li>

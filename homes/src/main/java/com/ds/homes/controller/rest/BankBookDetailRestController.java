@@ -59,10 +59,22 @@ public class BankBookDetailRestController {
 	/**
 	 * 가계 정산 목록 조회 Controller
 	 * 
+	 * @param bankBookDetail
 	 * @return
 	 */
 	@PostMapping("/calculate/list")
-	public Map<String, Object> calculateList () {
-		return bankBookDetailService.calculateList();
+	public Map<String, Object> calculateList (BankBookDetail bankBookDetail) {
+		return bankBookDetailService.calculateList(bankBookDetail);
+	}
+	
+	/**
+	 * 정산 전 목록 조회 Controller (팝업 용)
+	 * 
+	 * @param bankBookDetail
+	 * @return
+	 */
+	@PostMapping("/calculate/list/popup")
+	public Map<String, Object> calculateListPopup (BankBookDetail bankBookDetail) {
+		return bankBookDetailService.befCalculateList(bankBookDetail);
 	}
 }

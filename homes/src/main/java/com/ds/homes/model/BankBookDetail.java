@@ -28,6 +28,8 @@ public class BankBookDetail {
 	private Date amountDate;
 	
 	private String amountDateStr;
+	private Double totalAmount;
+	private Integer totalCount;
 	
 	private Category category1;
 	private Category category2;

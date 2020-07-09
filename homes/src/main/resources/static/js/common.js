@@ -34,6 +34,9 @@ var common = {
 		addComma : function (n) {
 			n = n + '';
 			return n == null || n == 'null' || n == 0 ? 0 : n.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+		},
+		percentage : function (num, totalNum, fix) {
+			return (num / totalNum * 100).toFixed(fix) + '%';
 		}
 	},
 	

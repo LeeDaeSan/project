@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ds.homes.model.BankBookDetail;
 import com.ds.homes.model.dto.DashboardDTO;
 
 /**
@@ -20,7 +21,7 @@ public interface DashboardMapper {
 	 * @param homeIdx
 	 * @return
 	 */
-	public List<DashboardDTO> selectChart(Integer homeIdx);
+	public List<DashboardDTO> selectChart(BankBookDetail bankBookDetail);
 	
 	/**
 	 * 현재월 기준 가계 통장의 남은 잔액 Mapper

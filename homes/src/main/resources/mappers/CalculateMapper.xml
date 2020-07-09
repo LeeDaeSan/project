@@ -2,24 +2,97 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ds.homes.model.mapper.CalculateMapper">
 
+	<!-- 가계부 상세 정보 Result Map -->
+	<resultMap type="bankBookDetail" id="bankBookDetailList" autoMapping="true">
+		<id property="bankBookDetailIdx" column="BankBookDetailIdx"/>
+		
+		<!-- 대분류 collection -->
+		<collection ofType="category" property="category1">
+			<id 	property="categoryIdx" 	column="Category1Idx"/>
+			<result property="categoryCode" column="Category1Code"/>
+			<result property="categoryName"	column="Category1Name"/>
+		</collection>
+		
+		<!-- 중분류 collection -->
+		<collection ofType="category" property="category2">
+			<id 	property="categoryIdx" 	column="Category2Idx"/>
+			<result property="categoryCode" column="Category2Code"/>
+			<result property="categoryName"	column="Category2Name"/>
+		</collection>
+		
+		<!-- 소분류 collection -->
+		<collection ofType="category" property="category3">
+			<id 	property="categoryIdx" 	column="Category3Idx"/>
+			<result property="categoryCode" column="Category3Code"/>
+			<result property="categoryName"	column="Category3Name"/>
+		</collection>
+	</resultMap>
+	
 	<!-- 현재월 기준 정산 목록 조회 -->
-	<select id="select" resultType="bankBookDetail">
+	<select id="select" parameterType="bankBookDetail" resultMap="bankBookDetailList">
 		SELECT
-			BankBookDetailIdx,
-			Category1Idx,
-			Category2Idx,
-			Category3Idx,
-			Amount,
-			AmountType,
-			AmountDate
+			BBD.BankBookDetailIdx,
+			BBD.Category1Idx,
+			BBD.Category2Idx,
+			BBD.Category3Idx,
+			BBD.Amount,
+			BBD.AmountType,
+			BBD.AmountDate,
+			BBD.Content,
 			
-		FROM BankBookDetail 
+			(
+				SELECT SUM(Amount) 
+				  FROM BankBookDetail 
+				 WHERE Category1Idx = BBD.Category1Idx 
+				   AND BankBookIdx 	= (SELECT BankBookIdx FROM BankBook WHERE BankBookTypeIdx = 1)
+				   AND DATE_FORMAT(AmountDate, '%Y%m') = #{amountDateStr}	
+				 GROUP BY Category1Idx
+			) AS TotalAmount,
+			
+			(
+				SELECT COUNT(Category1Idx) 
+				  FROM BankBookDetail 
+				 WHERE Category1Idx = BBD.Category1Idx 
+				   AND BankBookIdx 	= (SELECT BankBookIdx FROM BankBook WHERE BankBookTypeIdx = 1)
+				   AND DATE_FORMAT(AmountDate, '%Y%m') = #{amountDateStr}	
+				 GROUP BY Category1Idx
+			) AS TotalCount,
+			
+			<!-- 대분류 정보 -->
+			C1.CategoryIdx		AS Category1Idx,
+			C1.CategoryCode		AS Category1Code,
+			C1.CategoryName		AS Category1Name,
+			
+			<!-- 중분류 정보 -->
+			C2.CategoryIdx		AS Category2Idx,
+			C2.CategoryCode		AS Category2Code,
+			C2.CategoryName		AS Category2Name,
+			
+			<!-- 소분류 정보 -->
+			C3.CategoryIdx		AS Category3Idx,
+			C3.CategoryCode		AS Category3Code,
+			C3.CategoryName		AS Category3Name
+			
+		FROM BankBookDetail AS BBD
+		  
+		<!-- 대분류 JOIN -->
+	  	LEFT JOIN Category AS C1 ON C1.CategoryIdx = BBD.Category1Idx
+		<!-- 중분류 JOIN --> 
+		LEFT JOIN Category AS C2 ON C2.CategoryIdx = BBD.Category2Idx
+	  	<!-- 소분류 JOIN -->
+		LEFT JOIN Category AS C3 ON C3.CategoryIdx = BBD.Category3Idx
+		    
 		<!-- 가계 통장 Idx -->
-		WHERE BankBookIdx = (SELECT BankBookIdx FROM BankBook WHERE BankBookTypeIdx = 1) 
+		WHERE BBD.BankBookIdx 	= (SELECT BankBookIdx FROM BankBook WHERE BankBookTypeIdx = 1) 
+		<!-- Home Idx -->
+		  AND BBD.HomeIdx 		= #{homeIdx}
 		<!-- 기간 (현재월 기준) -->
-		AND DATE_FORMAT(AmountDate, '%y%m') = DATE_FORMAT(NOW(), '%y%m')
+		  AND DATE_FORMAT(BBD.AmountDate, '%Y%m') = #{amountDateStr}
 				
-		<!-- 기간 정렬 ASC -->
-		ORDER BY AmountType ASC, AmountDate ASC
+		<!-- 정렬 -->
+		ORDER BY 
+			TotalAmount		 	DESC,	<!-- 총금액 내림차순 --> 
+			BBD.AmountDate 		ASC, 	<!-- 날짜 오름차순 -->
+			BBD.Category1Idx 	ASC		<!-- 카테고리1 오름차순 -->
 	</select>
 </mapper>

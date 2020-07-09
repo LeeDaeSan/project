@@ -14,6 +14,7 @@ import com.ds.homes.model.dto.PagingDTO;
 import com.ds.homes.model.mapper.BankBookDetailMapper;
 import com.ds.homes.model.mapper.BankBookMapper;
 import com.ds.homes.model.mapper.CalculateMapper;
+import com.ds.homes.model.mapper.DashboardMapper;
 import com.ds.homes.model.service.BankBookDetailService;
 import com.ds.homes.tools.constant.Constant;
 import com.ds.homes.tools.constant.UserConstant;
@@ -32,6 +33,8 @@ public class BankBookDetailServiceImpl implements BankBookDetailService {
 	private BankBookMapper bankBookMapper;
 	@Autowired
 	private CalculateMapper calculateMapper;
+	@Autowired
+	private DashboardMapper dashboardMapper;
 	
 	/**
 	 * 가계 상세 정보 목록 조회
@@ -218,13 +221,57 @@ public class BankBookDetailServiceImpl implements BankBookDetailService {
 		return resultMap;
 	}
 	
+	/**
+	 * 정산 목록 조회
+	 * 
+	 */
 	@Override
-	public Map<String, Object> calculateList() {
+	public Map<String, Object> calculateList(BankBookDetail bankBookDetail) {
 		Map<String, Object> resultMap = null;
 		
 		try {
+			bankBookDetail.setHomeIdx(UserConstant.getUser().getHomeIdx());
+			
+			List<BankBookDetail> bankBookDetailList = calculateMapper.select(bankBookDetail);
+			
+			double inTotalAmount 	= 0;
+			double outTotalAmount 	= 0;
+			
+			// 총 수입 / 지출 금액 계산
+			for (BankBookDetail detail : bankBookDetailList) {
+				if ("IN".equals(detail.getAmountType())) {
+					inTotalAmount += detail.getAmount();
+				} else {
+					outTotalAmount += detail.getAmount();
+				}
+			}
+			
 			resultMap = ResponseUtil.successMap();
-			resultMap.put("list", calculateMapper.select());
+			resultMap.put("list"			, bankBookDetailList);
+			resultMap.put("inTotalAmount"	, inTotalAmount);
+			resultMap.put("outTotalAmount"	, outTotalAmount);
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
+	
+	/**
+	 * 정산 전 목록 조회 (정산 팝업)
+	 * 
+	 * @param bankBookDetail
+	 * @return
+	 */
+	public Map<String, Object> befCalculateList (BankBookDetail bankBookDetail) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			bankBookDetail.setHomeIdx(UserConstant.getUser().getHomeIdx());
+			
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("list", dashboardMapper.selectChart(bankBookDetail));
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();

@@ -37,5 +37,13 @@ public interface BankBookDetailService {
 	 * 
 	 * @return
 	 */
-	public Map<String, Object> calculateList ();
+	public Map<String, Object> calculateList(BankBookDetail bankBookDetail);
+	
+	/**
+	 * 정산 전 목록 조회 (정산 팝업)
+	 * 
+	 * @param bankBookDetail
+	 * @return
+	 */
+	public Map<String, Object> befCalculateList (BankBookDetail bankBookDetail);
 }

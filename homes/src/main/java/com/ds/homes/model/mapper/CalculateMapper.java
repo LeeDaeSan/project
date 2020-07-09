@@ -17,8 +17,9 @@ public interface CalculateMapper {
 	/**
 	 * 현재월 기준 정산 목록 조회
 	 * 
+	 * @param homeIdx
 	 * @return
 	 */
-	public List<BankBookDetail> select();
+	public List<BankBookDetail> select(BankBookDetail bankBookDetail);
 	
 }
