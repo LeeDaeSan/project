@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.homes.model.mapper.BankBookMapper">
+
+	<!-- 가계부 목록 ResultMap -->
+	<resultMap type="bankBook" id="bankBookList" autoMapping="true">
+		<id property="bankBookIdx" column="BankBookIdx"/>
+		
+		<collection ofType="member" property="member" autoMapping="true">
+			<id property="memberIdx" column="MemberIdx"/>
+		</collection>
+		
+		<collection ofType="bank" property="bank" autoMapping="true">
+			<id property="bankIdx" column="BankIdx"/>
+		</collection>
+		
+		<collection ofType="bankBookType" property="bankBookType" autoMapping="true">
+			<id property="bankBookTypeIdx" column="BankBookTypeIdx"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 가계부 목록 (통장) 조회 -->
+	<select id="list" resultMap="bankBookList" parameterType="com.ds.homes.model.dto.PagingDTO">
+		SELECT 
+			<!-- 통장 정보 -->
+			BB.BankBookIdx,
+			BB.BankBookName,
+			BB.AcountNumber,
+			BB.TotalAmount,
+			BB.OpenDate,
+			BB.CloseDate,
+			<!-- 사용자 정보 -->
+			M.MemberIdx,
+			M.MemberName,
+			<!-- 은행 정보 -->
+			B.BankIdx,
+			B.BankName,
+			<!-- 통장 유형 정보 -->
+			T.BankBookTypeIdx,
+			T.TypeName,
+			T.TypeCode
+			
+		<!-- 공통 검색조건 -->
+		<include refid="listOfWhere"></include>
+	</select>
+
+	<!-- 가계부 목록 total count -->	
+	<select id="listOfTotalCount" resultType="Long" parameterType="com.ds.homes.model.dto.PagingDTO">
+		SELECT COUNT(BB.BankBookIdx)
+		<!-- 공통 검색조건 -->
+		<include refid="listOfWhere"></include>
+	</select>
+	
+	<!-- 목록 공통 검색조건 -->
+	<sql id="listOfWhere">
+		FROM BankBook AS BB
+		
+		INNER JOIN Member 		AS M ON M.MemberIdx 		= BB.MemberIdx
+		 LEFT JOIN Bank 		AS B ON B.BankIdx 			= BB.BankIdx
+		 LEFT JOIN BankBookType AS T ON T.BankBookTypeIdx 	= BB.BankBookTypeIdx
+		 
+		<where>
+			<if test='!allChecked'>
+				BB.BankIdx IN
+				<foreach collection="checkedList" item="bankIdx" index="index" separator="," open="(" close=")">
+					#{bankIdx}
+				</foreach>
+			</if>
+			
+			<!-- 개설일 -->
+			<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(startDateStr1) and @com.ds.homes.tools.util.StringUtil@isNotEmpty(endDateStr1)">
+				AND DATE_FORMAT(OpenDate, '%y%m%d') BETWEEN DATE_FORMAT(#{startDateStr1}, '%y%m%d') AND DATE_FORMAT(#{endDateStr1}, '%y%m%d')
+			</if>
+			
+			<!-- 만기일 -->
+			<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(startDateStr2) and @com.ds.homes.tools.util.StringUtil@isNotEmpty(endDateStr2)">
+				AND DATE_FORMAT(CloseDate, '%y%m%d') BETWEEN DATE_FORMAT(#{startDateStr2}, '%y%m%d') AND DATE_FORMAT(#{endDateStr2}, '%y%m%d')
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 가계부 등록 -->
+	<insert id="insert" parameterType="bankBook">
+		INSERT INTO BankBook
+		(
+			MemberIdx,
+			HomeIdx,
+			BankIdx,
+			BankBookTypeIdx,
+			BankBookName,
+			AcountNumber,
+			TotalAmount,
+			OpenDate,
+			CloseDate
+		)
+		VALUES
+		(
+			#{memberIdx},
+			#{homeIdx},
+			#{bankIdx},
+			#{bankBookTypeIdx},
+			#{bankBookName},
+			#{acountNumber},
+			0,
+			#{openDate},
+			#{closeDate}
+		)
+	</insert>
+	
+	<!-- 가계부 수정 -->
+	<update id="update" parameterType="bankBook">
+		UPDATE BankBook
+		   SET
+		   		BankIdx 			= #{bankIdx},
+		   		BankBookName 		= #{bankBookName},
+		   		AcountNumber 		= #{acountNumber},
+		   		BankBookTypeIdx 	= #{bankBookTypeIdx},
+		   		TotalAmount 		= #{totalAmount},
+		   		OpenDate 			= #{openDate},
+		   		CloseDate 			= #{closeDate}
+		   		
+		 WHERE BankBookIdx = #{bankBookIdx}
+	</update>
+	
+	<!-- 가계부 총금액 update -->
+	<update id="updateForTotalAmount" parameterType="bankBook">
+		UPDATE BankBook
+		   SET
+		   		TotalAmount = #{totalAmount}
+		   		
+		 WHERE BankBookIdx = #{bankBookIdx}
+	</update>
+	
+	<!-- 가계부 상세 조회 -->
+	<select id="detail" parameterType="int" resultType="bankBook">
+		SELECT
+			BankBookIdx,
+			BankBookName,
+			BankBookTypeIdx,
+			AcountNumber,
+			TotalAmount,
+			OpenDate,
+			CloseDate
+			
+		  FROM BankBook
+		 WHERE BankBookIdx = #{bankBookIdx}
+	</select>
+	
+	<!-- 메인통장 정보 조회 -->
+	<select id="selectOfMainType" parameterType="bankBook" resultType="bankBook">
+		SELECT
+			BankBookIdx,
+			BankBookTypeIdx
+			
+		  FROM BankBook
+		 WHERE HomeIdx 			= #{homeIdx}
+		   AND BankBookTypeIdx 	= 1
+	</select>
+	
+	<!-- 통장 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM BankBook WHERE BankBookIdx = #{bankBookIdx}
+	</delete>
+</mapper>
