@@ -31,4 +31,11 @@ public interface BankBookDetailService {
 	 * @return
 	 */
 	public Map<String, Object> change(BankBookDetailDTO bankBookDetailDTO, String type);
+	
+	/**
+	 * 가계 정산 조회 Service
+	 * 
+	 * @return
+	 */
+	public Map<String, Object> calculateList ();
 }

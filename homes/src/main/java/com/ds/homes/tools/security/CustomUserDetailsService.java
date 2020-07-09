@@ -24,8 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println("username : " + username);
-		
 		Member member = memberMapper.getMember(username);
 		
 		String realPassword = member.getPassword(); // db에 저장된 password

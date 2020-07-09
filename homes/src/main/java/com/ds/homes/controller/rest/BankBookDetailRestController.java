@@ -55,4 +55,14 @@ public class BankBookDetailRestController {
 	public Map<String, Object> change (BankBookDetailDTO bankBookDetailDTO, @RequestParam(value = "type") String type) {
 		return bankBookDetailService.change(bankBookDetailDTO, type); 
 	}
+	
+	/**
+	 * 가계 정산 목록 조회 Controller
+	 * 
+	 * @return
+	 */
+	@PostMapping("/calculate/list")
+	public Map<String, Object> calculateList () {
+		return bankBookDetailService.calculateList();
+	}
 }

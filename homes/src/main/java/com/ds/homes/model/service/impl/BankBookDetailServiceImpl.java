@@ -13,6 +13,7 @@ import com.ds.homes.model.dto.BankBookDetailDTO;
 import com.ds.homes.model.dto.PagingDTO;
 import com.ds.homes.model.mapper.BankBookDetailMapper;
 import com.ds.homes.model.mapper.BankBookMapper;
+import com.ds.homes.model.mapper.CalculateMapper;
 import com.ds.homes.model.service.BankBookDetailService;
 import com.ds.homes.tools.constant.Constant;
 import com.ds.homes.tools.constant.UserConstant;
@@ -29,7 +30,9 @@ public class BankBookDetailServiceImpl implements BankBookDetailService {
 	private BankBookDetailMapper bankBookDetailMapper;
 	@Autowired
 	private BankBookMapper bankBookMapper;
-
+	@Autowired
+	private CalculateMapper calculateMapper;
+	
 	/**
 	 * 가계 상세 정보 목록 조회
 	 * 
@@ -211,6 +214,21 @@ public class BankBookDetailServiceImpl implements BankBookDetailService {
 			resultMap = ResponseUtil.failureMap();
 			e.printStackTrace();
 		} 
+		
+		return resultMap;
+	}
+	
+	@Override
+	public Map<String, Object> calculateList() {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("list", calculateMapper.select());
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
 		
 		return resultMap;
 	}

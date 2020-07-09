@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.homes.model.mapper.CalculateMapper">
+
+	<!-- 현재월 기준 정산 목록 조회 -->
+	<select id="select" resultType="bankBookDetail">
+		SELECT
+			BankBookDetailIdx,
+			Category1Idx,
+			Category2Idx,
+			Category3Idx,
+			Amount,
+			AmountType,
+			AmountDate
+			
+		FROM BankBookDetail 
+		<!-- 가계 통장 Idx -->
+		WHERE BankBookIdx = (SELECT BankBookIdx FROM BankBook WHERE BankBookTypeIdx = 1) 
+		<!-- 기간 (현재월 기준) -->
+		AND DATE_FORMAT(AmountDate, '%y%m') = DATE_FORMAT(NOW(), '%y%m')
+				
+		<!-- 기간 정렬 ASC -->
+		ORDER BY AmountType ASC, AmountDate ASC
+	</select>
+</mapper>
