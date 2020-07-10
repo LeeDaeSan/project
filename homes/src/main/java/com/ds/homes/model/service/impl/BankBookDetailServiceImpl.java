@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ds.homes.model.BankBook;
 import com.ds.homes.model.BankBookDetail;
 import com.ds.homes.model.dto.BankBookDetailDTO;
+import com.ds.homes.model.dto.DashboardDTO;
 import com.ds.homes.model.dto.PagingDTO;
 import com.ds.homes.model.mapper.BankBookDetailMapper;
 import com.ds.homes.model.mapper.BankBookMapper;
@@ -270,8 +271,25 @@ public class BankBookDetailServiceImpl implements BankBookDetailService {
 		try {
 			bankBookDetail.setHomeIdx(UserConstant.getUser().getHomeIdx());
 			
+			List<DashboardDTO> dashboardList = dashboardMapper.selectChart(bankBookDetail);
+			
+			double inTotalAmount 	= 0;
+			double outTotalAmount 	= 0;
+			
+			// 총 수입 / 지출 금액 계산
+			for (DashboardDTO detail : dashboardList) {
+				if ("IN".equals(detail.getAmountType())) {
+					inTotalAmount += detail.getTotalAmount();
+				} else {
+					outTotalAmount += detail.getTotalAmount();
+				}
+			}
+			
 			resultMap = ResponseUtil.successMap();
-			resultMap.put("list", dashboardMapper.selectChart(bankBookDetail));
+			resultMap.put("list"			, dashboardList);
+			resultMap.put("inTotalAmount"	, inTotalAmount);
+			resultMap.put("outTotalAmount"	, outTotalAmount);
+			resultMap.put("remainAmount"	, inTotalAmount - outTotalAmount);
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();

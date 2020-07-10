@@ -16,6 +16,7 @@
 <script type="text/javascript">
 //현재 달
 var nowMonth = (new Date().getMonth() + 1);
+var duration = 1000;
 
 am4core.ready(function() {
 	
@@ -75,15 +76,15 @@ am4core.ready(function() {
 				$('#chartTable tbody').empty().append(html);
 				
 				// 소득 총액 bind
-				mountCount(inTotalAmount, $('#inTotalAmount'));
+				common.number.mountCount(inTotalAmount, $('#inTotalAmount'), duration);
 				// 지출 총액 bind
-				mountCount(outTotalAmount, $('#outTotalAmount'));
+				common.number.mountCount(outTotalAmount, $('#outTotalAmount'), duration);
 				// 차액 bind
 				var diffAmount = inTotalAmount - outTotalAmount;
-				mountCount(diffAmount, $('#diffAmount'));
+				common.number.mountCount(diffAmount, $('#diffAmount'), duration);
 				// 총 자산 bind
 				var totalAssets = result.totalAssets;
-				mountCount(totalAssets, $('#totalAssets'));
+				common.number.mountCount(totalAssets, $('#totalAssets'), duration);
 				
 				$('#befAmount').text();
 				if (diffAmount < 0) {
@@ -119,21 +120,6 @@ am4core.ready(function() {
 
 });
 
-/**
- * 금액 애니메이션
- 
- */
-function mountCount (num, thisTag) {
-	$({ val : 0 }).animate({ val : num }, {
-		duration 	: 1000,
-		step 		: function () {
-			thisTag.text(common.number.addComma(Math.floor(this.val)));
-		},
-		complete 	: function () {
-			thisTag.text(common.number.addComma(Math.floor(this.val)));
-		}
-	});
-}
 </script>
 
 <!-- Begin Page Content -->

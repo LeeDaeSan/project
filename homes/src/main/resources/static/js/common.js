@@ -28,15 +28,52 @@ var common = {
 		
 		// 문자열에서 숫자 외의 문자 제외
 		onlyNumber : function (n) {
-			return n.replace(/[^0-9]/g, '');
+			var isRg = false;
+			// - 음수인 경우
+			if (n.indexOf('-') != -1) {
+				isRg = true;
+			}
+			
+			n = n.replace(/[^0-9]/g, '');
+			return isRg ? -n : n;
 		},
 		
+		// 금액 콤마 추가
 		addComma : function (n) {
 			n = n + '';
 			return n == null || n == 'null' || n == 0 ? 0 : n.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
 		},
+		
+		// 금액 백분율 구하기
 		percentage : function (num, totalNum, fix) {
 			return (num / totalNum * 100).toFixed(fix) + '%';
+		},
+		
+		// 금액 수치 오르는 효과
+		mountCount : function (num, thisTag, duration, order) {
+			var start 	= 0;
+			var end 	= num;
+			
+			// 내림차순
+			if (order == 'DESC') {
+				start 	= num;
+				end 	= 0;
+				
+			// 오름차순
+			} else if (order == 'ASC') {
+				start 	= 0;
+				end 	= num;
+			}
+			
+			$({ val : start }).animate({ val : end }, {
+				duration 	: duration,
+				step 		: function () {
+					thisTag.text(common.number.addComma(Math.floor(this.val)));
+				},
+				complete 	: function () {
+					thisTag.text(common.number.addComma(Math.floor(this.val)));
+				}
+			});
 		}
 	},
 	

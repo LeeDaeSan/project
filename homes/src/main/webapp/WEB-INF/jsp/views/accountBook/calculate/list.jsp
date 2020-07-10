@@ -26,12 +26,30 @@
     opacity		: 0.3;
     left		: 0;
 }
-#calculateBtn {
+#calculatePopupBtn {
 	margin-bottom : 5px;
 }
 .calculate-div {
 	width 	: 100%;
 	height 	: 37px;
+}
+.in_tbody {
+	background : #f5f5ff;
+}
+.out_tbody {
+	background : #fff6f6;
+}
+#calculateBtn {
+	width : 100%;
+}
+#befParamTable {
+	margin-bottom : 5px;
+}
+#befParamTable td, #befParamTable th {
+	border : 0 !important;
+}
+#befParamTable #statisticsDate {
+	height : 23px;
 }
 </style>
 <script type="text/javascript">
@@ -39,8 +57,19 @@ var dateNow 	= new Date();
 var nowYear 	= dateNow.getFullYear();
 var nowMonth 	= (dateNow.getMonth() + 1);
 	nowMonth	= nowMonth < 10 ? '0' + nowMonth : nowMonth;
-	
+
+// 정산 상세 정보
+var detailInfo = null;
+
 $(function () {
+	
+	// datepicker
+	$('#statisticsDate').datepicker({
+		format 		: 'yyyy-mm-dd',		// 포맷 형식
+		autoclose 	: true,				// 날짜 선택시 자동 close
+	})
+	.datepicker('setDate', new Date());
+
 	
 	// 현재 날짜 지정
 	$('#yearSelect').val(nowYear);
@@ -60,10 +89,147 @@ $(function () {
 		// 목록 조회
 		calculateList();
 	});
+
+	// 정산 팝업
+	$('#calculatePopupBtn').unbind('click').click(function () {
+		$('#calculatePopupTitle').text($('#yearSelect').val() + '년' + $('#monthSelect').val() + '월');
+		
+		// 정산 전 목록 조회
+		befCalculateList();
+	});
 	
-	$('#calculatePopupTitle').text($('#yearSelect').val() + '년' + $('#monthSelect').val() + '월');
+	// 정산 시작 이벤트
+	$('#calculateBtn').unbind('click').click(function (e) {
+		e.preventDefault();
+		
+		if (confirm('정산하시겠습니까?')) {
+			
+			// 정산 이벤트 효과
+			$('table tbody tr td.bef_number').each(function () {
+				common.number.mountCount(
+					common.number.onlyNumber($(this).text()),
+					$(this),
+					1000,
+					'DESC'	
+				);
+			});
+			
+			setTimeout(function () {
+				
+				$.ajax({
+					url 		: '/rest/statistics/merge',
+					method 		: 'POST',
+					dataType	: 'JSON',
+					data 		: {
+						type				: 'I',
+						amountDateStr 		: thisSearchDate(),
+						statisticsDateStr 	: $('#statisticsDate').val(),
+						incomeAmount 		: common.number.onlyNumber($('#befInTotalAmount').text()),
+						spendingAmount 		: common.number.onlyNumber($('#befOutTotalAmount').text()),
+						remainingAmount 	: common.number.onlyNumber($('#befRemainAmount').text()),
+					}
+				
+				}).done(function (result) {
+					
+					if (result.status) {
+						alert('정산이 완료되었습니다.\n정산 내역은 연말 통계에서 확인하실 수 있습니다.');
+					} else {
+						alert('정산중 장애가 발생하였습니다.\n관리자에게 문의해 주세요.');
+					}
+					
+					// 팝업 닫기
+					$('#calculateModal .close').click();
+					// 목록 재조회
+					calculateList();
+					
+				});
+				
+			}, 1200);
+		}
+		
+	});
+	
+	// 정산 취소
+	$('#calculateCancelBtn').unbind('click').click(function (e) {
+		e.preventDefault();
+		
+		if (confirm('정산을 취소하시겠습니까?\n정산된 내역이 전부 삭제됩니다.')) {
+			
+			$.ajax({
+				url 		: '/rest/statistics/merge',
+				method 		: 'POST',
+				dataType	: 'JSON',
+				data		: {
+					type 			: 'D',
+					statisticsIdx 	: detailInfo.statisticsIdx
+				}
+			
+			}).done(function (result) {
+				if (result.status) {
+					alert('정산내역 취소가 완료되었습니다.');
+					
+					statisticsDetail();
+					
+				} else {
+					alert('서버 에러');
+				}	
+				
+			}).fail(function (result) {
+				
+			});
+		}
+	});
 });
 
+/**
+ * 선택된 연도, 월
+ */
+function thisSearchDate () {
+	var searchYear 		= $('#yearSelect').val();
+	var searchMonth 	= $('#monthSelect').val();
+	
+	return searchYear + '' + searchMonth;
+}
+
+/**
+ * 정산 통계 정보 조회 Function
+ 	-> 정산 됬는지 확인 용도
+ */
+function statisticsDetail () {
+	
+	$.ajax({
+		url 		: '/rest/statistics/detail',
+		method		: 'POST',
+		dataType	: 'JSON',
+		async		: false,
+		data		: {
+			statisticsRealDate : thisSearchDate()
+		}
+	}).done(function (result) {
+		if (result.status) {
+			detailInfo = result.detail;	
+		} else {
+			detailInfo = null;
+		}
+	});
+	
+	// 정산 된 내역
+	if (detailInfo) {
+		// 블라인드 처리
+		$('#hideDiv').addClass('hide-div');
+		
+		$('#calculatePopupBtn').hide();
+		$('#calculateCancelBtn').show();
+		
+	// 정산이 아직 안된 내역
+	} else {
+		// 블라인드 해제
+		$('#hideDiv').removeClass('hide-div');
+		
+		$('#calculatePopupBtn').show();
+		$('#calculateCancelBtn').hide();
+	}
+}
 /**
  * 정산 목록 조회 Function
  */
@@ -72,13 +238,10 @@ function calculateList () {
 	var searchMonth 	= $('#monthSelect').val();
 	var amountDateStr 	= searchYear + '' + searchMonth;
 	
-	if (nowYear == searchYear && nowMonth == searchMonth) {
-		$('#hideDiv').removeClass('hide-div');
-	} else {
-		$('#hideDiv').addClass('hide-div');
-	}
 	
 	$('#calculateTitle').text(searchYear + '년 ' + searchMonth + '월 ');
+	
+	statisticsDetail();
 	
 	$.ajax({
 		url 		: '/rest/bankBookDetail/calculate/list',
@@ -177,26 +340,59 @@ function calculateList () {
 			// 남은 금액
 			$('#remainTotalAmount').text(common.number.addComma(inTotalAmount - outTotalAmount));
 			
-			$('.table tbody tr td').hover(function () {
-				var tdCount = $(this).closest('tr').find('td').length;
-
-				$(this).closest('tr').find('td').each(function (i) {
-					if (tdCount == 8 && i > 3) {
-						$(this).css('background', '#e0e0e0');
-					} else if (tdCount == 7 && i > 2) {
-						$(this).css('background', '#e0e0e0');
-					} else if (tdCount < 7) {
-						$(this).css('background', '#e0e0e0');
-					} 
-				});
-			}, function () {
-				$(this).closest('tr').find('td').css('background', '#ffffff');
-			});
-			
 		} else {
 			alert('정보 조회 실패');
 		}
 		
+	}).fail(function (result) {
+		
+	});
+}
+
+/**
+ * 정산 전 목록 조회 Function
+ */
+function befCalculateList () {
+	$.ajax({
+		url 		: '/rest/bankBookDetail/calculate/list/popup',
+		method 		: 'POST',
+		dataType	: 'JSON',
+		data 		: {
+			amountDateStr : thisSearchDate()
+		},
+		
+	}).done(function (result) {
+		if (result.status) {
+	
+			var list 		= result.list;
+			var listLength 	= list.length;
+			
+			$('#befBankBookDetailTable #befInTable tbody, #befBankBookDetailTable #befOutTable tbody').empty();
+			for (var i = 0; i < listLength; i++) {
+				var thisData = list[i];
+				
+				var html  = '<tr>';
+					html += '	<td>' + thisData.categoryName + '</td>';
+					html += '	<td class="text-right bef_number">' + common.number.addComma(thisData.totalAmount) + '</td>';
+					html += '</tr>';
+					
+				if (thisData.amountType == 'IN') {
+					$('#befBankBookDetailTable #befInTable tbody').append(html);
+				} else {
+					$('#befBankBookDetailTable #befOutTable tbody').append(html);
+				}
+			}
+			
+			// 수입 총액
+			$('#befInTotalAmount').text(common.number.addComma(result.inTotalAmount));
+			// 지출 총액
+			$('#befOutTotalAmount').text(common.number.addComma(result.outTotalAmount));
+			// 남은 금액
+			$('#befRemainAmount').text(common.number.addComma(result.remainAmount));
+			
+		} else {
+			alert('서버 에러');
+		}
 	}).fail(function (result) {
 		
 	});
@@ -243,15 +439,16 @@ function calculateList () {
     </div>
 	
 	<div class="calculate-div">
-		<button type="button" class="btn btn-primary btn-sm float-right" id="calculateBtn" data-toggle="modal" data-target="#calculateModal">정산하기</button>
+		<button type="button" style="display:none;" class="btn btn-primary btn-sm float-right" 	id="calculatePopupBtn" data-toggle="modal" data-target="#calculateModal">정산하기</button>
+		<button type="button" style="display:none;" class="btn btn-danger btn-sm float-right" 	id="calculateCancelBtn">정산취소</button>
 	</div>
 	
 	<!-- list START -->
     <div class="card shadow mb-4">
-		<div class="hide-div" id="hideDiv"></div>
+		<div id="hideDiv"></div>
     			
 	    <div class="card-header py-3">
-	      	<h6 class="m-0 font-weight-bold text-primary"><span id="calculateTitle"></span> 정산 목록</h6>
+	      	<h6 class="m-0 font-weight-bold text-primary"><span id="calculateTitle"></span> 정산 상세 목록</h6>
 	    </div>
 	    
 	    <div class="card-body">
@@ -308,6 +505,71 @@ function calculateList () {
 				</button>
 			</div>
 			<div class="modal-body">
+				<div class="table-responsive">
+					<table class="table" id="befParamTable">
+						<colgroup>
+							<col width="30%"/>
+							<col width="40%"/>
+							<col width="auto"/>
+						</colgroup>
+						<tr>
+							<td></td>
+           					<th class="text-right">정산일자</th>
+           					<td><input type="text" class="form-control form-control-sm" id="statisticsDate"/></td>
+           				</tr>
+					</table>
+					
+	               	<table class="table" id="befBankBookDetailTable">
+	               		<colgroup>
+	               			<col width="50%"/>
+	               			<col width="50%"/>
+               			</colgroup>
+	           			<tbody>
+	           				<tr>
+	           					<td>
+	           						<table class="table" id="befInTable">
+	           							<thead>
+		           							<tr><th class="text-center" colspan="2">수입 내역</th></tr>
+	           							</thead>
+	           							<tbody>
+	           							</tbody>
+	           						</table>
+	           					</td>
+	           					<td>
+	           						<table class="table" id="befOutTable">
+	           							<thead>
+	           								<tr><th class="text-center" colspan="2">지출 내역</th></tr>
+	           							</thead>
+	           							<tbody>
+	           							</tbody>
+	           						</table>
+	           					</td>
+	           				</tr>
+	           			</tbody>
+	           			<tbody>
+	           				<tr>
+	           					<th class="text-center">수입 총액</th>
+	           					<td id="befInTotalAmount" class="color-blue text-right">0</td>
+	           				</tr>
+	           				<tr>
+	           					<th class="text-center">지출 총액</th>
+	           					<td id="befOutTotalAmount" class="color-red text-right">0</td>
+	           				</tr>
+	           				<tr>
+	           					<th class="text-center">남은 금액</th>
+	           					<td id="befRemainAmount" class="color-green text-right">0</td>
+	           				</tr>
+	           			</tbody>
+	           			<tbody>
+	           				<tr>
+	           					<td colspan="2" class="text-center">
+	           						<button type="button" class="btn btn-primary btn-sm" id="calculateBtn">정산 시작</button>
+	           					</td>
+	           				</tr>
+	           			</tbody>
+           			</table>
+           			
+       			</div>
 			</div>
 		</div>
 	</div>

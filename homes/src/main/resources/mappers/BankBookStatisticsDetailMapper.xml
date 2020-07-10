@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.homes.model.mapper.BankBookStatisticsDetailMapper">
+
+	<!-- 정산 통계 상세 등록 -->
+	<insert id="insert" parameterType="com.ds.homes.model.dto.BankBookStatisticsDetailDTO">
+		INSERT INTO BankBookStatisticsDetail
+		(
+			StatisticsIdx	,
+			CategoryIdx		,
+			AmountType		,
+			Amount
+		)
+		
+		SELECT 
+			#{statisticsIdx}	,
+			BBD.Category1Idx	,	<!-- Category FK -->
+			BBD.AmountType		,	<!-- 금액 유형 -->
+			SUM(BBD.Amount)			<!-- 금액 -->
+
+		 FROM BankBookDetail AS BBD
+		INNER JOIN BankBook AS BB 	ON BB.BankBookIdx 	= BBD.BankBookIdx
+		 LEFT JOIN Category AS C 	ON C.CategoryIdx 	= BBD.Category1Idx
+		WHERE BBD.HomeIdx 			= #{homeIdx}
+		  AND BB.BankBookTypeIdx 	= 1
+		  AND DATE_FORMAT(BBD.AmountDate, '%Y%m') = #{amountDateStr}
+		GROUP BY BBD.Category1Idx
+		ORDER BY TotalAmount DESC
+	</insert>
+	
+	<!-- 정산 상세 내역 삭제 (취소) -->
+	<delete id="delete" parameterType="bankBookStatistics">
+		DELETE FROM BankBookStatisticsDetail
+		 WHERE StatisticsIdx = #{statisticsIdx}
+	</delete>
+</mapper>
