@@ -1,5 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<script type="text/javascript">
+$(function () {
+	
+	var cookieCheck = common.cookie.getCookie('check');
+	if (cookieCheck == 'true') {
+		$('#customCheck').prop('checked', true);
+		$('#email').val(common.cookie.getCookie('email'));
+		$('#password').val(common.cookie.getCookie('pass'));
+	}
+	
+	// 로그인
+	$('#loginBtn').unbind('click').click(function () {
+		// 아이디, 패스워드 cookie 저장
+		if ($('#customCheck').prop('checked')) {
+			
+			common.cookie.setCookie('check'	, 'true'				, 365);
+			common.cookie.setCookie('email'	, $('#email').val()		, 365);
+			common.cookie.setCookie('pass'	, $('#password').val()	, 365);
+			
+		// cookie 삭제
+		} else {
+			
+			common.cookie.deleteCookie('check');
+			common.cookie.deleteCookie('email');
+			common.cookie.deleteCookie('pass');
+		}
+		
+		$('#loginForm').submit();
+	});
+	
+});
+</script>
 <div class="row justify-content-center">
 
 	<div class="col-xl-6 col-lg-12 col-md-9">
@@ -12,7 +43,7 @@
 							<div class="text-center">
 								<h1 class="h4 text-gray-900 mb-4">Welcome HOMES!</h1>
 							</div>
-							<form class="user" method="POST">
+							<form class="user" id="loginForm" method="POST">
 								<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
 								<div class="form-group">
 									<input 
@@ -36,7 +67,7 @@
 										<label class="custom-control-label" for="customCheck">Remember Me</label>
 									</div>
 								</div>
-								<button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
+								<button type="button" id="loginBtn" class="btn btn-primary btn-user btn-block">Login</button>
 							</form>
 							<hr>
 							<div class="text-center">

@@ -32,15 +32,9 @@
 		<script type="text/javascript" src="/lib/sbadmin2/js/jquery.easing.min.js"></script>
 		<!-- SB Admin 2 -->
 		<script type="text/javascript" src="/lib/sbadmin2/js/sb-admin-2.min.js"></script>
-		
-		<!-- 
-		bootstrap js
-		<script type="text/javascript" src="/api/bootstrap/bootstrap.min.js"></script>
-		common js
+		<!-- common js -->
 		<script type="text/javascript" src="/js/common.js"></script>
-		datepicker js
-		<script type="text/javascript" src="/api/bootstrap/bootstrap-datepicker.js"></script>
-		 -->
+		
 		<!--------------------------------- JS LINK END --------------------------------->
 			
 	</head>

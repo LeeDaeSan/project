@@ -430,7 +430,7 @@ function checkMemoMerge (checkMemoIdx) {
         </a>
         <div id="collapseTw" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           	<div class="bg-white py-2 collapse-inner rounded">
-	            <a class="collapse-item" href="buttons.html">부동산 관리</a>
+	            <a class="collapse-item" href="/views/realEstate/manage/list">부동산 관리</a>
           	</div>
         </div>
     </li>

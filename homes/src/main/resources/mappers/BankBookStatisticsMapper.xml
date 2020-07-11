@@ -41,6 +41,7 @@
 		  <!-- 정산 상세 내역 -->
 		  LEFT JOIN BankBookStatisticsDetail BBSD 
 		    ON BBSD.StatisticsIdx = BBS.StatisticsIdx
+		   AND BBSD.AmountType <![CDATA[<>]]> 'IN'
 		  <!-- 카테고리 -->
 		  LEFT JOIN Category C 
 		    ON BBSD.CategoryIdx = C.CategoryIdx
@@ -48,7 +49,7 @@
 		 WHERE BBS.HomeIdx = #{homeIdx}
 		   AND SUBSTR(BBS.StatisticsRealDate, 1, 4) = #{statisticsRealDate}
 		   
-		 ORDER BY BBS.StatisticsRealDate ASC
+		 ORDER BY BBS.StatisticsRealDate ASC, BBSD.Amount DESC
 	</select>
 	
 	<!-- 정산 조회 -->
@@ -86,7 +87,7 @@
 			#{statisticsRealDate}	,
 			#{incomeAmount}			,
 			#{spendingAmount}		,
-			#{incomeAmount - spendingAmount}
+			#{remainingAmount}
 		)
 		
 		<!-- return Last Key -->

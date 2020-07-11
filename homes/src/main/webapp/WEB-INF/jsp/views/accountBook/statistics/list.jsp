@@ -70,14 +70,16 @@ function statisticsList () {
 				var thisTr 		= $('#bankBookStatisticsTable tbody tr:eq(' + (thisMonth - 1) + ')');
 				var tdIndex 	= 1;
 				
+				var incomeAmount 	= thisData.incomeAmount;
+				var spendingAmount 	= thisData.spendingAmount;
+				var remainingAmount = thisData.remainingAmount;
 				
-
 				// 수입 총액의 총액
 				var incomeTotalTag = $('.total_row_tr td:eq(' + tdIndex + ')');
 				var incomeAmountTotal = common.number.onlyNumber(incomeTotalTag.text());
 				incomeTotalTag.text(
 					common.number.addComma(
-						Number(incomeAmountTotal) + Number(thisData.incomeAmount)));
+						Number(incomeAmountTotal) + Number(incomeAmount)));
 				// 수입 총액
 				thisTr.find('td:eq(' + tdIndex++ + ')').append(
 						'<span class="color-blue">' + common.number.addComma(thisData.incomeAmount) + '</span>');
@@ -87,7 +89,7 @@ function statisticsList () {
 				var spendingAmountTotal = common.number.onlyNumber(spendingTotalTag.text());
 				spendingTotalTag.text(
 					common.number.addComma(
-						Number(spendingAmountTotal) + Number(thisData.spendingAmount)));
+						Number(spendingAmountTotal) + Number(spendingAmount)));
 				// 지출 총액
 				thisTr.find('td:eq(' + tdIndex++ + ')').append(
 						'<span class="color-red">' + common.number.addComma(thisData.spendingAmount) + '</span>');
@@ -97,7 +99,7 @@ function statisticsList () {
 				var remainingAmountTotal = common.number.onlyNumber(remainingTotalTag.text());
 				remainingTotalTag.text(
 					common.number.addComma(
-						Number(remainingAmountTotal) + Number(thisData.remainingAmount)));
+						Number(remainingAmountTotal) + Number(remainingAmount)));
 				// 남은 금액
 				thisTr.find('td:eq(' + tdIndex++ + ')').append(
 						'<span class="color-green">' + common.number.addComma(thisData.remainingAmount) + '</span>');
@@ -118,7 +120,8 @@ function statisticsList () {
 							var thisIndex = $(this).index();
 							
 							thisTr.find('td:eq(' + thisIndex + ')').append(
-								common.number.addComma(thisDetailData.amount ? thisDetailData.amount : 0));
+								common.number.addComma(thisDetailData.amount ? thisDetailData.amount : 0)
+								+ '<b class="color-blue">[' + common.number.percentage(thisDetailData.amount, spendingAmount, 1) + ']</b>');
 							
 							var totalTag = $('.total_row_tr td:eq(' + thisIndex + ')');
 							var amountTotal = common.number.onlyNumber(totalTag.text());
@@ -225,11 +228,9 @@ function statisticsList () {
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
-               				<td class="text-right"></td>
                			</tr>
                			<tr>
                				<td class="text-right">2월</td>
-               				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
@@ -269,11 +270,9 @@ function statisticsList () {
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
-               				<td class="text-right"></td>
                			</tr>
                			<tr>
                				<td class="text-right">4월</td>
-               				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
@@ -313,11 +312,9 @@ function statisticsList () {
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
-               				<td class="text-right"></td>
                			</tr>
                			<tr>
                				<td class="text-right">6월</td>
-               				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
@@ -357,11 +354,9 @@ function statisticsList () {
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
-               				<td class="text-right"></td>
                			</tr>
                			<tr>
                				<td class="text-right">8월</td>
-               				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
@@ -401,11 +396,9 @@ function statisticsList () {
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
-               				<td class="text-right"></td>
                			</tr>
                			<tr>
                				<td class="text-right">10월</td>
-               				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
@@ -445,11 +438,9 @@ function statisticsList () {
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
-               				<td class="text-right"></td>
                			</tr>
                			<tr>
                				<td class="text-right">12월</td>
-               				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
@@ -473,11 +464,10 @@ function statisticsList () {
                		
                		<tfoot>
                			<tr>
-               				<td colspan="20"></td>
+               				<td colspan="19"></td>
                			</tr>
                			<tr class="total_row_tr">
                    			<td class="text-right"><b>합계</b></td>
-               				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>
                				<td class="text-right"></td>

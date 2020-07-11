@@ -107,6 +107,7 @@ public class BankBookStatisticsServiceImpl implements BankBookStatisticsService 
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
 		}
 		
 		resultMap.put("resultCount", result);

@@ -152,5 +152,25 @@ var common = {
 				callback(lastPage);
 			}
 		});
+	},
+	
+	cookie : {
+		// 쿠키 저장
+		setCookie : function (name, value, day) {
+	        var date = new Date();
+	        date.setTime(date.getTime() + day * 60 * 60 * 24 * 1000);
+	        document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+	    },
+	    // 쿠키 조회
+	    getCookie : function(name) {
+	        var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+	        return value? value[2] : null;
+	    },
+	    // 쿠키 삭제
+	    deleteCookie : function(name) {
+	        var date = new Date();
+	        document.cookie = name + "= " + "; expires=" + date.toUTCString() + "; path=/";
+	    }
+
 	}
 };

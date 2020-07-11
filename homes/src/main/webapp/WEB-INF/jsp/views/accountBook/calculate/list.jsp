@@ -113,6 +113,14 @@ $(function () {
 					'DESC'	
 				);
 			});
+			$('.totalamount-td-number').each(function () {
+				common.number.mountCount(
+					common.number.onlyNumber($(this).text()),
+					$(this),
+					1000,
+					'DESC'
+				);
+			});
 			
 			setTimeout(function () {
 				
@@ -124,9 +132,9 @@ $(function () {
 						type				: 'I',
 						amountDateStr 		: thisSearchDate(),
 						statisticsDateStr 	: $('#statisticsDate').val(),
-						incomeAmount 		: common.number.onlyNumber($('#befInTotalAmount').text()),
-						spendingAmount 		: common.number.onlyNumber($('#befOutTotalAmount').text()),
-						remainingAmount 	: common.number.onlyNumber($('#befRemainAmount').text()),
+						incomeAmount 		: $('#befInTotalAmount').attr('num'),
+						spendingAmount 		: $('#befOutTotalAmount').attr('num'),
+						remainingAmount 	: $('#befRemainAmount').attr('num'),
 					}
 				
 				}).done(function (result) {
@@ -384,11 +392,19 @@ function befCalculateList () {
 			}
 			
 			// 수입 총액
-			$('#befInTotalAmount').text(common.number.addComma(result.inTotalAmount));
+			$('#befInTotalAmount')
+				.text(common.number.addComma(result.inTotalAmount))
+				.attr('num', result.inTotalAmount);
+			
 			// 지출 총액
-			$('#befOutTotalAmount').text(common.number.addComma(result.outTotalAmount));
+			$('#befOutTotalAmount')
+				.text(common.number.addComma(result.outTotalAmount))
+				.attr('num', result.outTotalAmount);
+			
 			// 남은 금액
-			$('#befRemainAmount').text(common.number.addComma(result.remainAmount));
+			$('#befRemainAmount')
+				.text(common.number.addComma(result.remainAmount))
+				.attr('num', result.remainAmount);
 			
 		} else {
 			alert('서버 에러');
@@ -549,15 +565,15 @@ function befCalculateList () {
 	           			<tbody>
 	           				<tr>
 	           					<th class="text-center">수입 총액</th>
-	           					<td id="befInTotalAmount" class="color-blue text-right">0</td>
+	           					<td id="befInTotalAmount" class="totalamount-td-number color-blue text-right">0</td>
 	           				</tr>
 	           				<tr>
 	           					<th class="text-center">지출 총액</th>
-	           					<td id="befOutTotalAmount" class="color-red text-right">0</td>
+	           					<td id="befOutTotalAmount" class="totalamount-td-number color-red text-right">0</td>
 	           				</tr>
 	           				<tr>
 	           					<th class="text-center">남은 금액</th>
-	           					<td id="befRemainAmount" class="color-green text-right">0</td>
+	           					<td id="befRemainAmount" class="totalamount-td-number color-green text-right">0</td>
 	           				</tr>
 	           			</tbody>
 	           			<tbody>
