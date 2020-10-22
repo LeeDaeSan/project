@@ -1,5 +1,7 @@
 package com.ds.homes.model.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ds.homes.model.CheckMemo;
@@ -19,7 +21,7 @@ public interface CheckMemoMapper {
 	 * @param checkMemo
 	 * @return
 	 */
-	public CheckMemo select(CheckMemo checkMemo);
+	public List<CheckMemo> select(CheckMemo checkMemo);
 	
 	/**
 	 * 체크 메모 정보 등록 Mapper
@@ -36,4 +38,12 @@ public interface CheckMemoMapper {
 	 * @return
 	 */
 	public Integer update(CheckMemo checkMemo);
+	
+	/**
+	 * 체크 메모 정보 삭제 Mapper
+	 * 
+	 * @param checkMemoIdx
+	 * @return
+	 */
+	public Integer delete(Integer checkMemoIdx);
 }

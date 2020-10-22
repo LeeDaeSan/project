@@ -45,5 +45,5 @@ public interface BankBookDetailService {
 	 * @param bankBookDetail
 	 * @return
 	 */
-	public Map<String, Object> befCalculateList (BankBookDetail bankBookDetail);
+	public Map<String, Object> befCalculateList(BankBookDetail bankBookDetail);
 }

@@ -232,26 +232,26 @@ public class BankBookDetailServiceImpl implements BankBookDetailService {
 		
 		try {
 			bankBookDetail.setHomeIdx(UserConstant.getUser().getHomeIdx());
-			
-			List<BankBookDetail> bankBookDetailList = calculateMapper.select(bankBookDetail);
-			
-			double inTotalAmount 	= 0;
-			double outTotalAmount 	= 0;
-			
-			// 총 수입 / 지출 금액 계산
-			for (BankBookDetail detail : bankBookDetailList) {
-				if ("IN".equals(detail.getAmountType())) {
-					inTotalAmount += detail.getAmount();
-				} else {
-					outTotalAmount += detail.getAmount();
-				}
-			}
-			
-			resultMap = ResponseUtil.successMap();
-			resultMap.put("list"			, bankBookDetailList);
-			resultMap.put("inTotalAmount"	, inTotalAmount);
-			resultMap.put("outTotalAmount"	, outTotalAmount);
-			
+//			
+//			List<BankBookDetail> bankBookDetailList = calculateMapper.select(bankBookDetail);
+//			
+//			double inTotalAmount 	= 0;
+//			double outTotalAmount 	= 0;
+//			
+//			// 총 수입 / 지출 금액 계산
+//			for (BankBookDetail detail : bankBookDetailList) {
+//				if ("IN".equals(detail.getAmountType())) {
+//					inTotalAmount += detail.getAmount();
+//				} else {
+//					outTotalAmount += detail.getAmount();
+//				}
+//			}
+//			
+//			resultMap = ResponseUtil.successMap();
+//			resultMap.put("list"			, bankBookDetailList);
+//			resultMap.put("inTotalAmount"	, inTotalAmount);
+//			resultMap.put("outTotalAmount"	, outTotalAmount);
+//			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
 		}

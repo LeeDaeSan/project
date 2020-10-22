@@ -6,11 +6,15 @@
 
 <style>
 #chartdivBar, #chartdiv {
-  width: 100%;
-  height: 370px;
+  width			: 100%;
+  height		: 370px;
 }
 #chartTable td, #chartTable th {
-	padding : 7px 6px 7px 6px !important;
+	padding 	: 7px 6px 7px 6px !important;
+}
+.daily-check-memo-table {
+	height 		: 200px;
+	overflow 	: auto;
 }
 </style>
 <script type="text/javascript">
@@ -19,6 +23,9 @@ var nowMonth = (new Date().getMonth() + 1);
 var duration = 1000;
 
 am4core.ready(function() {
+	
+	// 체크 메모 목록 조회
+	dailyCheckMemo();
 	
 	// 통계 타이틀 append
 	$('#monthTitle').text(nowMonth + '월  가계 통계');
@@ -38,34 +45,24 @@ am4core.ready(function() {
 		success 	: function (result) {
 			if (result.status) {
 				
-				// 소득 총액
-				var inTotalAmount = 0;
-				// 지출 총액
-				var outTotalAmount = 0;
-				
 				var list 		= result.list;
 				var listLength 	= list.length;
 				var chartList 	= [];
 				var html 		= '';
 				for (var i = 0; i < listLength; i++) {
 					var thisData = list[i];
+				
+					// 테이블에 필요한 데이터
+					html += '<tr>';
+					html += '	<td>' + thisData.categoryName + '</td>';
+					html += '	<td class="text-right">' + common.number.addComma(thisData.totalAmount) + '</div>';
+					html += '</tr>';
 					
-					if (thisData.amountType != 'IN') {
-						// 테이블에 필요한 데이터
-						html += '<tr>';
-						html += '	<td>' + thisData.categoryName + '</td>';
-						html += '	<td class="text-right">' + common.number.addComma(thisData.totalAmount) + '</div>';
-						html += '</tr>';
-						
-						// 차트에 필요한 데이터
-						chartList.push({
-							'sector' 	: thisData.categoryName,
-							'size'		: thisData.totalAmount,
-						});
-						outTotalAmount += thisData.totalAmount;
-					} else {
-						inTotalAmount += thisData.totalAmount;
-					}
+					// 차트에 필요한 데이터
+					chartList.push({
+						'sector' 	: thisData.categoryName,
+						'size'		: thisData.totalAmount,
+					});
 				}
 				
 				// 데이터가 없을 때
@@ -75,13 +72,13 @@ am4core.ready(function() {
 				
 				$('#chartTable tbody').empty().append(html);
 				
+				var totalData = result.totalData;
 				// 소득 총액 bind
-				common.number.mountCount(inTotalAmount, $('#inTotalAmount'), duration);
+				common.number.mountCount(totalData.inTotalAmount, $('#inTotalAmount'), duration);
 				// 지출 총액 bind
-				common.number.mountCount(outTotalAmount, $('#outTotalAmount'), duration);
+				common.number.mountCount(totalData.outTotalAmount, $('#outTotalAmount'), duration);
 				// 차액 bind
-				var diffAmount = inTotalAmount - outTotalAmount;
-				common.number.mountCount(diffAmount, $('#diffAmount'), duration);
+				common.number.mountCount(totalData.otherTotalAmount, $('#diffAmount'), duration);
 				// 총 자산 bind
 				var totalAssets = result.totalAssets;
 				common.number.mountCount(totalAssets, $('#totalAssets'), duration);
@@ -120,6 +117,60 @@ am4core.ready(function() {
 
 });
 
+function dailyCheckMemo () {
+	$.ajax({
+		url			: '/rest/dashboard/checkMemo/daily',
+		method		: 'POST',
+		dataType	: 'JSON',
+		async		: false,
+		data		: {}
+	
+	}).done(function (result) {
+		
+		if (result.status) {
+			
+			// 목록 초기화
+			$('#todayCheckMemoTable tbody, #befdayCheckMemoTable tbody').empty();
+			
+			var todayList 		= result.todayList;
+			var todayListLength = todayList.length;
+			for (var i = 0; i < todayListLength; i++) {
+				var thisData = todayList[i];
+				
+				var html  = '<tr class="text-tooltip">';
+					html += '	<td>' + thisData.transferDate + '일</td>';
+					html += '</tr>';
+			}
+			if (todayListLength == 0) {
+				$('#todayCheckMemoTable tbody').append('<tr><td class="text-center" colspan="6">내용이 없습니다.</td></tr>');
+			}
+			
+			var befdayList 			= result.befdayList;
+			var befdayListLength 	= befdayList.length;
+			for (var i = 0; i < befdayListLength; i++) {
+				var thisData = befdayList[i];
+				var html  = '<tr class="text-tooltip">';
+					html += '	<td>' + thisData.transferDate + '일</td>';
+					html += '	<td class="text-left">' + thisData.bank.bankName + '</td>';
+					html += '	<td class="text-left">' + thisData.accountNumber + '</td>';
+					html += '	<td class="text-left">' + thisData.accountHolder + '</td>';
+					html += '	<td class="text-right">' + common.number.addComma(thisData.amount) + '</td>';
+					html += '	<td class="text-left">' + thisData.content + '</td>';
+					html += '</tr>';
+				$('#befdayCheckMemoTable tbody').append(html);
+			}
+			if (befdayListLength == 0) {
+				$('#befdayCheckMemoTable tbody').append('<tr><td class="text-center" colspan="6">내용이 없습니다.</td></tr>');
+			}
+			
+		} else {
+			alert('서버 에러');
+		}
+		
+	}).fail(function (result) {
+		alert('서버 에러');
+	});
+}
 </script>
 
 <!-- Begin Page Content -->
@@ -130,7 +181,7 @@ am4core.ready(function() {
 		<h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
 	</div>
 	
-	<!-- Content Row START -->
+	<!-- Count Row START -->
     <div class="row">
     
     	<!-- 총 소득금액 -->
@@ -202,7 +253,98 @@ am4core.ready(function() {
         </div>
         
     </div>
-    <!-- Content Row END -->
+    <!-- Count Row END -->
+    
+    <!-- Check Memo Row START -->
+    <div class="row">
+    	<div class="col-md-6">
+    		<div class="card shadow mb-4">
+    			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  	<h6 class="m-0 font-weight-bold text-primary" id="">금일 납일 예정 내역</h6>
+                  	<div class="dropdown no-arrow">
+                    	<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      		<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    	</a>
+                  	</div>
+                </div>
+                
+                <div class="card-body">
+               		<div class="card shadow">
+				    	<div class="card-body">
+				          	<div class="table-responsive daily-check-memo-table">
+				               	<table class="table table-bordered" id="todayCheckMemoTable">
+				               		<colgroup>
+										<col width="10%"/>
+										<col width="10%"/>
+										<col width="10%"/>
+										<col width="10%"/>
+										<col width="10%"/>
+										<col width="auto"/>
+									</colgroup>
+									<thead>
+										<tr class="text-tooltip">
+											<th class="text-center">이체일</th>
+											<th class="text-center">은행</th>
+											<th class="text-center">계좌번호</th>
+											<th class="text-center">예금주</th>
+											<th class="text-center">금액</th>
+											<th class="text-center">내용</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+                </div>
+    		</div>
+    	</div>
+    	<div class="col-md-6">
+    		<div class="card shadow mb-4">
+    			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  	<h6 class="m-0 font-weight-bold text-primary" id="">지난 미납 내역</h6>
+                  	<div class="dropdown no-arrow">
+                    	<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      		<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    	</a>
+                  	</div>
+                </div>
+                
+                <div class="card-body">
+               		<div class="card shadow">
+				    	<div class="card-body">
+				          	<div class="table-responsive daily-check-memo-table">
+				               	<table class="table table-bordered" id="befdayCheckMemoTable">
+				               		<colgroup>
+										<col width="10%"/>
+										<col width="10%"/>
+										<col width="10%"/>
+										<col width="10%"/>
+										<col width="10%"/>
+										<col width="auto"/>
+									</colgroup>
+									<thead>
+										<tr class="text-tooltip">
+											<th class="text-center">이체일</th>
+											<th class="text-center">은행</th>
+											<th class="text-center">계좌번호</th>
+											<th class="text-center">예금주</th>
+											<th class="text-center">금액</th>
+											<th class="text-center">내용</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+                </div>
+    		</div>
+    	</div>
+    </div>
+    <!-- Check Memo Row END -->
     
     <!-- Content Row START -->
     <div class="row">

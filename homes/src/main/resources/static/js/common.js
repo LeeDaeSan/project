@@ -29,12 +29,12 @@ var common = {
 		// 문자열에서 숫자 외의 문자 제외
 		onlyNumber : function (n) {
 			var isRg = false;
-			// - 음수인 경우
+			// (-) 음수인 경우
 			if (n.indexOf('-') != -1) {
 				isRg = true;
 			}
 			
-			n = n.replace(/[^0-9]/g, '');
+			n = Number(n.replace(/[^0-9]/g, ''));
 			return isRg ? -n : n;
 		},
 		
@@ -99,7 +99,6 @@ var common = {
 			html += '<li class="paginate_button page-item ' + (page == firstPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="prevBtn"><span>＜</span></a></li>';
 			// page number
 		for (var i = startPage; i <= endPage; i++) {
-			console.log(123);
 			html += '<li class="paginate_button page-item ' + (i == page ? 'active' : '') + '"><a href="javascript:void(0);" class="page-link page_btn" num="' + i + '">' + i + '</a></li>';
 		}
 			// next page

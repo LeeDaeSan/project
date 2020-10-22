@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ds.homes.model.mapper.DashboardMapper">
 	
+	<!-- 체크 메모 정보 Result Map -->
+	<resultMap type="checkMemo" id="checkMemoMap" autoMapping="true">
+		<id property="checkMemoIdx" column="CheckMemoIdx"/>
+		
+		<collection ofType="bank" property="bank" autoMapping="true">
+			<id property="bankIdx" column="BankIdx"/>
+		</collection>
+	</resultMap>
+	
+	 <!-- 최상단 통계 -->
+	 <select id="getTotalAmount" resultType="com.ds.homes.model.dto.DashboardDTO">
+		SELECT 
+			SUM(IF(Category1Idx = 2, Amount, 0)) AS InTotalAmount,
+			SUM(IF(Category1Idx = 1, Amount, 0)) AS OutTotalAmount,
+		
+			(SUM(IF(Category1Idx = 2, Amount, 0)) - SUM(IF(Category1Idx = 1, Amount, 0))) AS OtherTotalAmount
+		 FROM AccountBook
+		 
+		 WHERE DATE_FORMAT(AccountDate, '%Y%m') =  DATE_FORMAT(NOW(), '%Y%m')
+	 </select>
+	 
 	<!-- 차트 목록 조회 -->
 	<select id="selectChart" parameterType="bankBookDetail" resultType="com.ds.homes.model.dto.DashboardDTO">
 		SELECT 
@@ -39,5 +60,45 @@
 			SUM(TotalAmount) 
 		  FROM BankBook 
 		 WHERE HomeIdx = #{homeIdx}
+	</select>
+	
+	<!-- 금일 체크 리스트 조회 -->
+	<select id="selectTodayCheckMemoList" parameterType="com.ds.homes.model.dto.CheckMemoDTO" resultMap="checkMemoMap">
+		SELECT
+			
+			CM.CheckMemoIdx,
+			CM.HomeIdx,
+			CM.AccountNumber,
+			CM.AccountHolder,
+			CM.Amount,
+			CM.Content,
+			CM.TransferType,
+			CM.TransferDate,
+			
+			B.BankIdx,
+			B.BankName
+			
+		  FROM CheckMemo AS CM
+		  
+		  LEFT JOIN Bank AS B ON B.BankIdx = CM.BankIdx
+		  
+		 WHERE CM.HomeIdx 		= #{checkMemo.homeIdx}
+		   AND CM.IsChecked 	= '0'
+   		   AND 
+  			(
+	   			(CM.TransferDate = '말' AND DATE_FORMAT(NOW(), '%Y-%m-%d') = LAST_DAY(NOW()))	
+	   			OR
+	   			(CM.TransferDate <![CDATA[<>]]> '말' 
+	   				
+	   				AND DATE_FORMAT(NOW(), '%Y-%m-%d') 
+	   				<choose>
+	   					<!-- 오늘 -->
+	   					<when test='"T".equals(type)'>=</when>
+	   					<!-- 오늘이전 (지난 날짜) -->
+	   					<when test='"B".equals(type)'>></when>
+	   				</choose>
+	   			 	CONCAT(DATE_FORMAT(NOW(), '%Y-%m-'), CM.TransferDate)
+	   			)
+	   		)
 	</select>
 </mapper>

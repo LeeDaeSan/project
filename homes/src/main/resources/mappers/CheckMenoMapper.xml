@@ -6,8 +6,8 @@
 	<resultMap type="checkMemo" id="checkMemoMap" autoMapping="true">
 		<id property="checkMemoIdx" column="CheckMemoIdx"/>
 		
-		<collection ofType="checkList" property="checkList" autoMapping="true">
-			<id property="checkListIdx" column="CheckListIdx"/>
+		<collection ofType="bank" property="bank" autoMapping="true">
+			<id property="bankIdx" column="BankIdx"/>
 		</collection>
 	</resultMap>
 	
@@ -16,18 +16,24 @@
 		SELECT
 			CM.CheckMemoIdx,
 			CM.HomeIdx,
-			CM.Memo,
+			CM.IsChecked,
+			CM.Content,
+			CM.AccountNumber,
+			CM.AccountHolder,
+			CM.Amount,
+			CM.TransferType,
+			CM.TransferDate,
 			
-			CL.CheckListIdx,
-			CL.IsChecked,
-			CL.Title,
-			CL.Content
+			B.BankIdx,
+			B.BankName
 			
 		  FROM CheckMemo AS CM
 		  
-		  LEFT JOIN CheckList AS CL ON CL.CheckMemoIdx = CM.CheckMemoIdx
-		  
+	 	  LEFT JOIN Bank AS B ON B.BankIdx = CM.BankIdx
+	 	  		  
 		 WHERE CM.HomeIdx = #{homeIdx}
+		 
+		 ORDER BY CM.TransferDate ASC
 	</select>
 	
 	<!-- 체크 메모 등록 -->	
@@ -35,26 +41,81 @@
 		INSERT INTO CheckMemo
 		(
 			HomeIdx,
-			Memo
+			BankIdx,
+			AccountNumber,
+			AccountHolder,
+			Amount,
+			IsChecked,
+			Content,
+			TransferType,
+			TransferDate
 		)
 		VALUES
 		(
 			#{homeIdx},
-			#{memo}
+			#{bankIdx},
+			#{accountNumber},
+			#{accountHolder},
+			#{amount},
+			'0',
+			#{content},
+			#{transferType},
+			#{transferDate}
 		)
 		
+		<!-- 
 		<selectKey resultType="Integer" keyProperty="checkMemoIdx" order="AFTER">
 	        SELECT LAST_INSERT_ID()
 	    </selectKey> 
+	    --> 
 	</insert>	
 	
 	<!-- 체크 메모 수정 -->
 	<update id="update" parameterType="checkMemo">
 		UPDATE CheckMemo
-		   SET
-		   		Memo = #{memo}
+		   
+		<trim prefix="SET" suffixOverrides=",">
+	   		<!-- 체크항목 -->
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(isChecked)">
+	   			IsChecked 		= #{isChecked},
+	   		</if>
+	   		<!-- 내용 -->
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(content)">
+		   		Content 		= #{content},
+	   		</if>
+	   		<!-- 은행 FK -->
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(bankIdx)">
+		   		BankIdx 		= #{bankIdx},
+	   		</if>
+	   		<!-- 계좌번호 -->
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(accountNumber)">
+		   		AccountNumber 	= #{accountNumber},
+	   		</if>
+	   		<!-- 예금주 -->
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(accountHolder)">
+		   		AccountHolder 	= #{accountHolder},
+	   		</if>
+	   		<!-- 금액 -->
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(amount)">
+		   		Amount 			= #{amount},
+	   		</if>
+	   		<!-- 이체유형 -->
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(transferType)">
+		   		TransferType 	= #{transferType},
+	   		</if>
+	   		<!-- 이체일 -->
+	   		<if test="@com.ds.homes.tools.util.StringUtil@isNotEmpty(transferDate)">
+		   		TransferDate 	= #{transferDate}
+	   		</if>
+	   	</trim>
 		   		
 		 WHERE CheckMemoIdx = #{checkMemoIdx} 
 		   AND HomeIdx 		= #{homeIdx}
 	</update>
+	
+	<!-- Check Memo Delete -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM CheckMemo
+		 WHERE CheckMemoIdx = #{checkMemoIdx}
+	</delete>
 </mapper>

@@ -25,7 +25,7 @@
 			<!-- 통장 정보 -->
 			BB.BankBookIdx,
 			BB.BankBookName,
-			BB.AcountNumber,
+			BB.AccountNumber,
 			BB.TotalAmount,
 			BB.OpenDate,
 			BB.CloseDate,
@@ -88,7 +88,7 @@
 			BankIdx,
 			BankBookTypeIdx,
 			BankBookName,
-			AcountNumber,
+			AccountNumber,
 			TotalAmount,
 			OpenDate,
 			CloseDate
@@ -100,7 +100,7 @@
 			#{bankIdx},
 			#{bankBookTypeIdx},
 			#{bankBookName},
-			#{acountNumber},
+			#{accountNumber},
 			0,
 			#{openDate},
 			#{closeDate}
@@ -113,7 +113,7 @@
 		   SET
 		   		BankIdx 			= #{bankIdx},
 		   		BankBookName 		= #{bankBookName},
-		   		AcountNumber 		= #{acountNumber},
+		   		AccountNumber 		= #{accountNumber},
 		   		BankBookTypeIdx 	= #{bankBookTypeIdx},
 		   		TotalAmount 		= #{totalAmount},
 		   		OpenDate 			= #{openDate},
@@ -137,7 +137,7 @@
 			BankBookIdx,
 			BankBookName,
 			BankBookTypeIdx,
-			AcountNumber,
+			AccountNumber,
 			TotalAmount,
 			OpenDate,
 			CloseDate

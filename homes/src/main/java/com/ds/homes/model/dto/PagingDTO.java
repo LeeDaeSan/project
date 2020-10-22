@@ -17,6 +17,9 @@ public class PagingDTO <T> {
 	private Boolean allChecked;
 	private List<String> checkedList;
 	
+	private String startDateStr;
+	private String endDateStr;
+	
 	private String startDateStr1;
 	private String endDateStr1;
 	private String startDateStr2;

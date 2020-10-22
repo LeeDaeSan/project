@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.homes.model.mapper.AccountBookMapper">
+
+	<resultMap type="accountBook" id="accountBookList" autoMapping="true">
+		<id property="accountBookIdx" column="AccountBookIdx"/>
+		
+		<!-- 분류1 collection -->
+		<collection ofType="accountCategory" property="accountCategory1">
+			<id 	property="categoryIdx" 	column="Category1Idx"/>
+			<result property="categoryName"	column="Category1Name"/>
+		</collection>
+		<!-- 분류2 collection -->
+		<collection ofType="accountCategory" property="accountCategory2">
+			<id 	property="categoryIdx" 	column="Category2Idx"/>
+			<result property="categoryName"	column="Category2Name"/>
+		</collection>
+		<!-- 분류3 collection -->
+		<collection ofType="accountCategory" property="accountCategory3">
+			<id 	property="categoryIdx" 	column="Category3Idx"/>
+			<result property="categoryName"	column="Category3Name"/>
+		</collection>
+		<!-- 분류4 collection -->
+		<collection ofType="accountCategory" property="accountCategory4">
+			<id 	property="categoryIdx" 	column="Category4Idx"/>
+			<result property="categoryName"	column="Category4Name"/>
+		</collection>
+		<!-- 분류5 collection -->
+		<collection ofType="accountCategory" property="accountCategory5">
+			<id 	property="categoryIdx" 	column="Category5Idx"/>
+			<result property="categoryName"	column="Category5Name"/>
+		</collection>
+		
+	</resultMap>
+	
+	<!-- 가계부 목록 조회 -->
+	<select id="select" parameterType="com.ds.homes.model.dto.PagingDTO" resultMap="accountBookList">
+		SELECT
+			<!-- 가계부 정보 -->
+			AB.AccountBookIdx,
+			AB.HomeIdx,
+			AB.Amount,
+			AB.Category1Idx,
+			AB.Content,
+			AB.AccountDate,
+			
+			<!-- 분류1 정보 -->
+			AC1.CategoryIdx		AS Category1Idx,
+			AC1.CategoryName	AS Category1Name,
+			<!-- 분류2 정보 -->
+			AC2.CategoryIdx		AS Category2Idx,
+			AC2.CategoryName	AS Category2Name,
+			<!-- 분류3 정보 -->
+			AC3.CategoryIdx		AS Category3Idx,
+			AC3.CategoryName	AS Category3Name,
+			<!-- 분류4 정보 -->
+			AC4.CategoryIdx		AS Category4Idx,
+			AC4.CategoryName	AS Category4Name,
+			<!-- 분류5 정보 -->
+			AC5.CategoryIdx		AS Category5Idx,
+			AC5.CategoryName	AS Category5Name
+			
+		FROM AccountBook AS AB
+		
+		<!-- 분류1 JOIN -->
+		LEFT JOIN AccountCategory AS AC1 ON AC1.CategoryIdx = AB.Category1Idx
+		<!-- 분류2 JOIN -->
+		LEFT JOIN AccountCategory AS AC2 ON AC2.CategoryIdx = AB.Category2Idx
+		<!-- 분류3 JOIN -->
+		LEFT JOIN AccountCategory AS AC3 ON AC3.CategoryIdx = AB.Category3Idx
+		<!-- 분류4 JOIN -->
+		LEFT JOIN AccountCategory AS AC4 ON AC4.CategoryIdx = AB.Category4Idx
+		<!-- 분류5 JOIN -->
+		LEFT JOIN AccountCategory AS AC5 ON AC5.CategoryIdx = AB.Category5Idx
+		
+		WHERE HomeIdx = #{model.homeIdx}
+		
+		AND DATE_FORMAT(AccountDate, '%Y%m') = #{startDateStr}
+		
+		<!-- 일자 검색 -->
+		<!-- 
+		<if test='@com.ds.homes.tools.util.StringUtil@isNotEmpty(startDateStr)'>
+			AND DATE_FORMAT(AccountDate, '%y%m%d') >= DATE_FORMAT(#{startDateStr}, '%y%m%d')	
+		</if>
+		<if test='@com.ds.homes.tools.util.StringUtil@isNotEmpty(endDateStr)'>
+			AND DATE_FORMAT(AccountDate, '%y%m%d') <![CDATA[<=]]> DATE_FORMAT(#{endDateStr}, '%y%m%d')	
+		</if>
+		 -->
+		 
+		ORDER BY AB.AccountDate DESC, AB.CreateDate DESC
+	</select>
+	
+	<!-- 가계부 등록 -->
+	<insert id="insert" parameterType="accountBook">
+		INSERT INTO AccountBook
+		(
+			HomeIdx,
+			Amount,
+			Category1Idx,
+			Category2Idx,
+			Category3Idx,
+			Category4Idx,
+			Category5Idx,
+			Content,
+			AccountDate
+		)
+		VALUES
+		(
+			#{homeIdx},
+			#{amount},
+			#{category1Idx},
+			#{category2Idx},
+			#{category3Idx},
+			#{category4Idx},
+			#{category5Idx},
+			#{content},
+			#{accountDate}
+		)
+	</insert>
+	
+	<!-- 가계 정보 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM AccountBook
+		 WHERE AccountBookIdx = #{accountBookIdx}
+	</delete>
+</mapper>

@@ -22,7 +22,7 @@ public class BankBook {
 	private Integer bankIdx;
 	private Integer bankBookTypeIdx;
 	private String bankBookName;
-	private String acountNumber;
+	private String accountNumber;
 	private Double totalAmount;
 	private Date openDate;
 	private Date closeDate;

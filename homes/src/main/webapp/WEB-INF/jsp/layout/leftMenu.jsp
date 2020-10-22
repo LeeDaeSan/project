@@ -4,7 +4,7 @@
 #checkMemoDiv{
 	padding			: 5px;
 	top 			: 55px;
-	left 			: -300px;
+	left 			: -302px;
 	width			: 300px;
     height			: 100%;
     background		: #ffffff;
@@ -80,7 +80,7 @@ $(function () {
 	var url = location.href;
 	
 	// 체크 메모 정보 조회
-	checkMemoInfo();
+	//checkMemoInfo();
 	
 	$('.header_tabs li a').each(function (e) {
 		if (url.indexOf($(this).attr('href')) != -1) {
@@ -120,7 +120,7 @@ $(function () {
 	});
 	
 	// 체크리스트 추가 button
-	$('#checkListAddBtn').unbind('click').click(function (e) {
+	$('#checkListAddBtnaa').unbind('click').click(function (e) {
 		e.preventDefault();
 		
 		$('#checkListTable tbody .check_list_empty').remove();
@@ -419,6 +419,7 @@ function checkMemoMerge (checkMemoIdx) {
 	            <a class="collapse-item" href="/views/accountBook/bankBook/list">통장 관리</a>
 	            <a class="collapse-item" href="/views/accountBook/calculate/list">월말 정산</a>
 	            <a class="collapse-item" href="/views/accountBook/statistics/list">연말 통계</a>
+	            <a class="collapse-item" href="/views/accountBook/bankBook/list2">가계 관리</a>
           	</div>
         </div>
     </li>
@@ -443,6 +444,7 @@ function checkMemoMerge (checkMemoIdx) {
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           	<div class="bg-white py-2 collapse-inner rounded">
+            	<a class="collapse-item" href="/views/setting/accountCategory/list">가계부 카테고리 관리</a>
             	<a class="collapse-item" href="/views/setting/category/list">가계부 코드 관리</a>
             	<a class="collapse-item" href="utilities-other.html">부동산 코드 관리</a>
           	</div>
@@ -459,20 +461,20 @@ function checkMemoMerge (checkMemoIdx) {
 
 </ul>
 <!-- End of Sidebar -->
-
+<!-- 
 <div id="checkMemoDiv">
-	<!-- 우측 open / close 버튼 -->
+	우측 open / close 버튼
 	<div id="rightBtn" show="off">&gt;</div>
 	
-	<!-- header -->
+	header
 	<div class="check-list-table">
 		<h4>체크 리스트</h4>
-		<button type="button" class="btn btn-default btn-xs float-right btn-add" id="checkListAddBtn">+</button> 
+		<button type="button" class="btn btn-default btn-xs float-right btn-add" id="checkListAddBtnaa">+</button> 
 	</div>
 	
-	<!-- check list -->
+	check list
 	<div class="check-list-div">
-		<table class="table" id="checkListTable">
+		<table class="table" id="checkListTable1">
 			<colgroup>
 				<col width="10%"/>
 				<col width="auto"/>
@@ -490,4 +492,5 @@ function checkMemoMerge (checkMemoIdx) {
 		<button type="button" class="btn btn-primary btn-xs float-right" id="memoSaveBtn" idx="">메모 저장</button>
 		<textarea id="memoTextarea" class="form-control"></textarea>
 	</div>
-</div>
+</div> 
+-->

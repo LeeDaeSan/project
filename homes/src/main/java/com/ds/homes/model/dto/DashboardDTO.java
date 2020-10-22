@@ -10,4 +10,7 @@ public class DashboardDTO {
 	private String categoryName;
 	private Double totalAmount;
 	
+	private Double inTotalAmount;
+	private Double outTotalAmount;
+	private Double otherTotalAmount;
 }

@@ -30,4 +30,14 @@ public class DashboardRestController {
 	public Map<String, Object> selectChart () {
 		return dashboardService.selectChart();
 	}
+	
+	/**
+	 * 대시보드 금일 체크 목록 조회 Controller
+	 * 
+	 * @return
+	 */
+	@PostMapping("/checkMemo/daily")
+	public Map<String, Object> selectCheckMemoToday () {
+		return dashboardService.selectTodayCheckMemoList();
+	}
 }

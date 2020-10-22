@@ -61,7 +61,7 @@ $(function () {
 					bankBookName 	: $('#bankBookName').val(),				// 은행명
 					openDateStr		: $('#openDate').val(),					// 개설일
 					closeDateStr	: $('#closeDate').val(),				// 만기일
-					acountNumber	: $('#acountNumber').val(),				// 계좌번호 
+					accountNumber	: $('#accountNumber').val(),			// 계좌번호 
 				},
 				success		: function (result) {
 					if (result.status) {
@@ -95,7 +95,7 @@ $(function () {
 					bankBookIdx 	: $('#updateBankBookIdx').val(),
 					bankIdx 		: $('#updateBankSelect').val(),
 					bankBookName 	: $('#updateBankBookName').val(),
-					acountNumber 	: $('#updateAcountNumber').val(),
+					accountNumber 	: $('#updateAccountNumber').val(),
 					bankBookTypeIdx : $('#updateBankBookTypeSelect').val(),
 					totalAmount 	: common.number.onlyNumber($('#updateTotalAmount').val()),
 					openDateStr 	: $('#updateOpenDate').val(),
@@ -215,7 +215,7 @@ function bankBookList () {
 					html += '	<td class="text-tooltip text-center">' + thisData.member.memberName + '</td>';
 					html += '	<td class="text-tooltip">' + common.string.toEmpty(thisData.bankBookName) + '</td>';
 					html += '	<td class="text-tooltip text-center">' + common.string.toEmpty(thisData.bank.bankName) + '</td>';
-					html += '	<td class="text-tooltip">' + common.string.toEmpty(thisData.acountNumber) + '</td>';
+					html += '	<td class="text-tooltip">' + common.string.toEmpty(thisData.accountNumber) + '</td>';
 					html += '	<td class="text-tooltip text-right color-green">' + (thisData.totalAmount ? common.number.addComma(thisData.totalAmount) : 0) + '</td>';
 					html += '	<td class="text-tooltip text-center">' + common.date.toString(new Date(list[i].openDate), '-') + '</td>';
 					html += '	<td class="text-tooltip text-center">' + (list[i].closeDate ? common.date.toString(new Date(list[i].closeDate), '-') : '') + '</td>';
@@ -257,7 +257,7 @@ function bankBookList () {
 							$('#updateBankBookTypeIdx').val(detail.bankBookTypeIdx);
 							$('#updateBankBookTypeSelect').val(detail.bankBookTypeIdx);									// 통장 유형
 							$('#updateBankBookName').val(detail.bankBookName);											// 통장 명
-							$('#updateAcountNumber').val(detail.acountNumber);											// 계좌번호
+							$('#updateAccountNumber').val(detail.accountNumber);										// 계좌번호
 							$('#updateTotalAmount').val(common.number.addComma(detail.totalAmount));					// 잔액
 							$('#updateOpenDate').val(
 									detail.openDate ? common.date.toString(new Date(detail.openDate), '-') : '');		// 개설일
@@ -587,7 +587,7 @@ function checkMainBankBook (selectIdx, type) {
 					<tr>
 						<th>계좌번호</th>
 						<td>
-							<input type="text" class="form-control form-control-sm" id="acountNumber"/>
+							<input type="text" class="form-control form-control-sm" id="accountNumber"/>
 						</td>
 					</tr>
 					<tr>
@@ -647,7 +647,7 @@ function checkMainBankBook (selectIdx, type) {
 					<tr>
 						<th>계좌번호</th>
 						<td>
-							<input type="text" class="form-control form-control-sm" id="updateAcountNumber"/>
+							<input type="text" class="form-control form-control-sm" id="updateAccountNumber"/>
 						</td>
 					</tr>
 					<tr>

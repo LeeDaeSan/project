@@ -1,13 +1,13 @@
 package com.ds.homes.model;
 
-import java.util.List;
+import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
 
 /**
- * 체크 메모 정보 Table
+ * 체크 목록 정보 Table
  * 
  * @author idaesan
  *
@@ -18,7 +18,16 @@ public class CheckMemo {
 
 	private Integer checkMemoIdx;
 	private Integer homeIdx;
-	private String memo;
+	private Integer bankIdx;
+	private String isChecked;
+	private String content;
+	private Date createDate;
+	private String accountNumber;
+	private String accountHolder;
+	private Double Amount;
+	private String transferType;
+	private String transferDate;
+	private Bank bank;
 	
-	private List<CheckList> checkList;
+	private CheckMemo checkMemo;
 }

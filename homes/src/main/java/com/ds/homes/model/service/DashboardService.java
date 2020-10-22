@@ -10,4 +10,11 @@ public interface DashboardService {
 	 * @return
 	 */
 	public Map<String, Object> selectChart();
+	
+	/**
+	 * 금일 체크 목록 조회 Service
+	 * 
+	 * @return
+	 */
+	public Map<String, Object> selectTodayCheckMemoList();
 }

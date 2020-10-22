@@ -77,4 +77,5 @@ public class BankBookDetailRestController {
 	public Map<String, Object> calculateListPopup (BankBookDetail bankBookDetail) {
 		return bankBookDetailService.befCalculateList(bankBookDetail);
 	}
+	
 }

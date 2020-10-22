@@ -252,7 +252,7 @@ function calculateList () {
 	statisticsDetail();
 	
 	$.ajax({
-		url 		: '/rest/bankBookDetail/calculate/list',
+		url 		: '/rest/accountBook/calculate/list',
 		method		: 'POST',
 		dataType	: 'JSON',
 		async		: false,
@@ -266,6 +266,8 @@ function calculateList () {
 			
 			$('#bankBookDetailTable tbody').empty();
 			
+			console.log(result);
+			return false;
 			var inCount 		= 0;
 			var outCount 		= 0;
 			var inTotalAmount 	= result.inTotalAmount;

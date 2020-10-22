@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ds.homes.model.CheckList;
 import com.ds.homes.model.CheckMemo;
+import com.ds.homes.model.dto.CheckMemoDTO;
 import com.ds.homes.model.service.CheckMemoService;
 
 @RestController
@@ -38,29 +38,29 @@ public class CheckMemoRestController {
 	 * @return
 	 */
 	@PostMapping("/merge")
-	public Map<String, Object> merge (CheckMemo checkMemo, @RequestParam(value = "type") String type) {
-		return checkMemoService.merge(checkMemo, type);
+	public Map<String, Object> merge (CheckMemoDTO checkMemoDTO, @RequestParam(value = "type") String type) {
+		return checkMemoService.merge(checkMemoDTO, type);
 	}
 	
 	/**
-	 * 체크리스트 check / uncheck update Controller
+	 * 체크 메모 checked / unchecked Controller
 	 * 
-	 * @param checkList
+	 * @param checkMemo
 	 * @return
 	 */
-	@PostMapping("/checked")
-	public Map<String, Object> checked (CheckList checkList) {
-		return checkMemoService.checked(checkList);
+	@PostMapping("/isChecked")
+	public Map<String, Object> isChecked (CheckMemo checkMemo) {
+		return checkMemoService.isChecked(checkMemo);
 	}
 	
 	/**
-	 * 체크리스트 수정, 삭제 Controller
+	 * 체크 메모 정보 삭제 Controller
 	 * 
-	 * @param checkList
+	 * @param checkMemoIdx
 	 * @return
 	 */
-	@PostMapping("/checkList/merge")
-	public Map<String, Object> merge (CheckList checkList, @RequestParam(value = "type") String type) {
-		return checkMemoService.merge(checkList, type);
+	@PostMapping("/delete")
+	public Map<String, Object> delete (@RequestParam(value = "checkMemoIdx") Integer checkMemoIdx) {
+		return checkMemoService.delete(checkMemoIdx);
 	}
 }

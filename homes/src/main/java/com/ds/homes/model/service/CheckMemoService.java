@@ -2,8 +2,9 @@ package com.ds.homes.model.service;
 
 import java.util.Map;
 
-import com.ds.homes.model.CheckList;
 import com.ds.homes.model.CheckMemo;
+import com.ds.homes.model.CheckMemo;
+import com.ds.homes.model.dto.CheckMemoDTO;
 
 public interface CheckMemoService {
 
@@ -22,21 +23,21 @@ public interface CheckMemoService {
 	 * @param checkMemo
 	 * @return
 	 */
-	public Map<String, Object> merge(CheckMemo checkMemo, String type);
+	public Map<String, Object> merge(CheckMemoDTO checkListDTO, String type);
 	
 	/**
-	 * 체크리스트 check / uncheck update Service
+	 * 체크 메모 checked / unchecked Service
 	 * 
-	 * @param checkList
+	 * @param checkMemo
 	 * @return
 	 */
-	public Map<String, Object> checked(CheckList checkList);
+	public Map<String, Object> isChecked(CheckMemo checkMemo);
 	
 	/**
-	 * 체크리스트 수정, 삭제 Service
+	 * 체크 메모 정보 삭제 Service
 	 * 
-	 * @param checkList
+	 * @param checkMemoIdx
 	 * @return
 	 */
-	public Map<String, Object> merge(CheckList checkList, String type);
+	public Map<String, Object> delete(Integer checkMemoIdx);
 }

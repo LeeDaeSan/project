@@ -1,0 +1,29 @@
+version: "3.3"
+
+services: 
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - 9000:9012
+    depends_on:
+      - homesdb      
+  homesdb: 
+    image: mariadb
+    restart: always
+    container_name: test1
+    environment:
+      - MYSQL_ROOT_PASSWORD=1111
+      - MYSQL_USER="root"
+      - MYSQL_PASSWORD=1111
+#      - MYSQL_ALLOW_EMPTY_PASSWORD="false"
+    ports:
+      - 3307:3306
+    expose:
+      - 3307
+    volumes:
+      - "./database/:/docker-entrypoint-initdb.d/"
+#      - "/Users/idaesan/Desktop/mysql_data/homes:/var/lib/mysql"
+  

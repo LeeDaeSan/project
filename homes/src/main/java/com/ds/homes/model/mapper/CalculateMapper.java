@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.ds.homes.model.BankBookDetail;
+import com.ds.homes.model.AccountBook;
 /**
  * 가계 정산 Mapper
  * 
@@ -20,6 +20,6 @@ public interface CalculateMapper {
 	 * @param homeIdx
 	 * @return
 	 */
-	public List<BankBookDetail> select(BankBookDetail bankBookDetail);
+	public List<AccountBook> select(AccountBook accountBook);
 	
 }

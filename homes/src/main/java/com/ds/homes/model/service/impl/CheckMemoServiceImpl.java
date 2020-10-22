@@ -1,17 +1,14 @@
 package com.ds.homes.model.service.impl;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ds.homes.model.CheckList;
 import com.ds.homes.model.CheckMemo;
-import com.ds.homes.model.mapper.CheckListMapper;
+import com.ds.homes.model.dto.CheckMemoDTO;
 import com.ds.homes.model.mapper.CheckMemoMapper;
 import com.ds.homes.model.service.CheckMemoService;
-import com.ds.homes.tools.constant.Constant;
 import com.ds.homes.tools.constant.UserConstant;
 import com.ds.homes.tools.util.ResponseUtil;
 
@@ -20,8 +17,6 @@ public class CheckMemoServiceImpl implements CheckMemoService {
 	
 	@Autowired
 	private CheckMemoMapper checkMemoMapper;
-	@Autowired
-	private CheckListMapper checkListMapper;
 	
 	/**
 	 * 체크 메모 정보 조회
@@ -49,40 +44,68 @@ public class CheckMemoServiceImpl implements CheckMemoService {
 	 *  -> 등록, 수정
 	 */
 	@Override
-	public Map<String, Object> merge(CheckMemo checkMemo, String type) {
+	public Map<String, Object> merge(CheckMemoDTO checkMemoDTO, String type) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			Integer result = 0;
+			for (CheckMemo checkMemo : checkMemoDTO.getCheckMemoList()) {
+				checkMemo.setHomeIdx(UserConstant.getUser().getHomeIdx());
+				
+				// 등록
+				if (checkMemo.getCheckMemoIdx() == 0) {
+					result = checkMemoMapper.insert(checkMemo);
+					
+				// 수정
+				} else {
+					result = checkMemoMapper.update(checkMemo);
+				}
+			}
+					
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("result", result);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public Map<String, Object> isChecked(CheckMemo checkMemo) {
 		Map<String, Object> resultMap = null;
 		
 		try {
 			checkMemo.setHomeIdx(UserConstant.getUser().getHomeIdx());
-					
-			Integer result = 0;
 			
-			// 등록
-			if (Constant.MERGE_TYPE_INSERT.equals(type)) {
-				result = checkMemoMapper.insert(checkMemo);
-			// 수정
-			} else if (Constant.MERGE_TYPE_UPDATE.equals(type)) {
-				result = checkMemoMapper.update(checkMemo);
+			Integer result = checkMemoMapper.update(checkMemo);
+			
+			if (result == 1) {
+				resultMap = ResponseUtil.successMap();
+			} else {
+				resultMap = ResponseUtil.failureMap();
 			}
 			
-			List<CheckList> checkList = checkMemo.getCheckList();
-			int checkListSize = checkList.size();
-			for (int i = 0; i < checkListSize; i++) {
-				CheckList check = checkList.get(i);
-				check.setCheckMemoIdx(checkMemo.getCheckMemoIdx());
-				
-				// 등록
-				if (check.getCheckListIdx() == null || check.getCheckListIdx() == 0) {
-					result = checkListMapper.insert(check);
-					
-				// 수정
-				} else {
-					result = checkListMapper.update(check);
-				}
-			}
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public Map<String, Object> delete(Integer checkMemoIdx) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			Integer result = checkMemoMapper.delete(checkMemoIdx);
 			
-			resultMap = ResponseUtil.successMap();
-			resultMap.put("result", result);
+			if (result == 1) {
+				resultMap = ResponseUtil.successMap();
+			} else {
+				resultMap = ResponseUtil.failureMap();
+			}
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
@@ -91,53 +114,4 @@ public class CheckMemoServiceImpl implements CheckMemoService {
 		return resultMap;
 	}
 	
-	/**
-	 * 체크리스트 check / uncheck update
-	 */
-	@Override
-	public Map<String, Object> checked(CheckList checkList) {
-		Map<String, Object> resultMap = null;
-		
-		try {
-			resultMap = ResponseUtil.successMap();
-			resultMap.put("result", checkListMapper.update(checkList));
-			
-		} catch (Exception e) {
-			resultMap = ResponseUtil.failureMap();
-			e.printStackTrace();
-		}
-		
-		return resultMap;
-	}
-	
-	/**
-	 * 체크리스트 수정, 삭제
-	 * 
-	 */
-	@Override
-	public Map<String, Object> merge(CheckList checkList, String type) {
-		Map<String, Object> resultMap = null;
-		
-		try {
-			Integer result = 0;
-			
-			// 수정
-			if (Constant.MERGE_TYPE_UPDATE.equals(type)) {
-				result = checkListMapper.update(checkList);
-				
-			// 삭제
-			} else if (Constant.MERGE_TYPE_DELETE.equals(type)) {
-				result = checkListMapper.delete(checkList.getCheckListIdx());
-			}
-			
-			resultMap = ResponseUtil.successMap();
-			resultMap.put("result", result);
-			
-		} catch (Exception e) {
-			resultMap = ResponseUtil.failureMap();
-			e.printStackTrace();
-		}
-		
-		return resultMap;
-	}
 }

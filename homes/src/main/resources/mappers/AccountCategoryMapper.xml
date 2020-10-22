@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.homes.model.mapper.AccountCategoryMapper">
+
+	<!-- 목록 조회 -->
+	<select id="list" parameterType="accountCategory" resultType="accountCategory">
+		SELECT
+			CategoryIdx,
+			CategoryName,
+			Level,
+			OrderLevel,
+			ParentIdx,
+			CreateDate
+			
+		 FROM AccountCategory
+		   
+		ORDER BY OrderLevel ASC
+	</select>
+	
+	<select id="listOfAccountBook" parameterType="accountCategory" resultType="accountCategory">
+		SELECT
+			CategoryIdx,
+			CategoryName,
+			Level,
+			OrderLevel,
+			ParentIdx,
+			CreateDate
+		
+		 FROM AccountCategory
+		WHERE 
+		   <choose>
+		   		<when test="parentIdx == null">
+		   			ParentIdx IS NULL
+		   		</when>
+		   		<otherwise>
+		   			ParentIdx = #{parentIdx}
+		   		</otherwise>
+		   </choose>
+		   
+		ORDER BY OrderLevel ASC
+		
+	</select>
+	
+	<insert id="insert" parameterType="accountCategory">
+		INSERT INTO AccountCategory
+		(
+			CategoryName,
+			ParentIdx,
+			`Level`,
+			OrderLevel
+		)
+		VALUES
+		(
+			#{categoryName},
+			#{parentIdx},
+			(SELECT Level + 1 FROM AccountCategory AS AC1 WHERE AC1.CategoryIdx = #{parentIdx}),
+			IFNULL(
+				(SELECT 
+					(MAX(AC2.OrderLevel) + 
+					(CASE
+						WHEN Level = 2 THEN 1000000
+						WHEN Level = 3 THEN   10000
+						WHEN Level = 4 THEN     100
+						WHEN Level = 5 THEN 	  1
+						ELSE 					  0
+					END))
+	 	 		FROM AccountCategory AS AC2 
+				WHERE AC2.ParentIdx = #{parentIdx})
+				,
+				(SELECT 
+					(MAX(AC3.OrderLevel) + 
+					(CASE
+						WHEN Level = 1 THEN 1000000       
+						WHEN Level = 2 THEN   10000       
+						WHEN Level = 3 THEN     100       
+						WHEN Level = 4 THEN       1       
+						ELSE         	     	  0
+					END))
+	 	 		FROM AccountCategory AS AC3
+				WHERE AC3.CategoryIdx = #{parentIdx})
+			)
+		)
+	</insert>
+	
+</mapper>
