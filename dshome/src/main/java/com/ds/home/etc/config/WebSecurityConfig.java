@@ -1,18 +1,23 @@
 package com.ds.home.etc.config;
-public class WebSecurityConfig {
-}
-/*
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.ds.home.etc.constant.Constant;
+import com.ds.home.etc.security.CustomUserDetailsService;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	/*
-	// @Autowired
-	// private CustomUserDetailsService customUserDetailsService;
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
 	
 	@Autowired
 	private AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -42,9 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and();
 		http.csrf().disable();
 		
-		http.authorizeRequests().anyRequest().permitAll();
-		
-		/*
 		// 접근권한 설정
 		http.authorizeRequests()
 			.antMatchers("/login").permitAll()
@@ -66,4 +68,3 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.invalidateHttpSession(true);
 	}
 }
-*/

@@ -7,6 +7,10 @@ $(function () {
 		$('#customCheck').prop('checked', true);
 		$('#email').val(common.cookie.getCookie('email'));
 		$('#password').val(common.cookie.getCookie('pass'));
+		
+		setTimeout(function () {
+			$('#loginBtn').click();
+		}, 100);
 	}
 	
 	// 로그인
@@ -64,7 +68,7 @@ $(function () {
 								<div class="form-group">
 									<div class="custom-control custom-checkbox small">
 										<input type="checkbox" class="custom-control-input" id="customCheck">
-										<label class="custom-control-label" for="customCheck">Remember Me</label>
+										<label class="custom-control-label" for="customCheck">자동로그인</label>
 									</div>
 								</div>
 								<button type="button" id="loginBtn" class="btn btn-primary btn-user btn-block">Login</button>

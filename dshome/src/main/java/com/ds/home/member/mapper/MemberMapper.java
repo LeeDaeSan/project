@@ -19,5 +19,5 @@ public interface MemberMapper {
 	 * @param member
 	 * @return
 	 */
-	public Member getMemger(Member member);
+	public Member getMember(String memberId);
 }

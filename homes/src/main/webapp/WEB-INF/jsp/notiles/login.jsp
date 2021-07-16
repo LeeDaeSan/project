@@ -7,6 +7,8 @@ $(function () {
 		$('#customCheck').prop('checked', true);
 		$('#email').val(common.cookie.getCookie('email'));
 		$('#password').val(common.cookie.getCookie('pass'));
+		
+		$('#loginBtn').click();
 	}
 	
 	// 로그인

@@ -3,7 +3,7 @@
 <mapper namespace="com.ds.home.member.mapper.MemberMapper">
 
 	<!-- 사용자 로그인 정보 조회 -->
-	<select id="getMember" resultType="member" parameterType="member">
+	<select id="getMember" resultType="member" parameterType="String">
 		SELECT
 			MemberIdx,
 			MemberId,
