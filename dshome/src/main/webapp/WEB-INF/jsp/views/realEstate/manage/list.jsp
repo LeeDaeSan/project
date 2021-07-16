@@ -1,13 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-
-<link rel="stylesheet" href="../../../../lib/sbadmin2/css/all.min.css" />
-<link rel="stylesheet" href="../../../../lib/sbadmin2/css/sb-admin-2.min.css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-<script src="/webjars/jquery/3.3.1/dist/jquery.min.js"></script>
-
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    
 <style>
 	#sidoList, #gugunList, #dongList {
 		width: 32%;
