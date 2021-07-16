@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 @Configuration
-@MapperScan(basePackages = "com.ds.homes.model.mapper")
+@MapperScan("com.ds.home.**.mapper")
 public class DataAccessConfig {
 
 	/**
@@ -28,7 +28,7 @@ public class DataAccessConfig {
 		// data source 설정
 		sessionFactory.setDataSource(dataSource);
 		// type alias 설정
-		sessionFactory.setTypeAliasesPackage("com.ds.homes.model");
+		sessionFactory.setTypeAliasesPackage("com.ds.home.model");
 		// mapper(xml) 위치 설정
 		sessionFactory.setMapperLocations(
 				new PathMatchingResourcePatternResolver().getResources("classpath:mappers/*.xml"));

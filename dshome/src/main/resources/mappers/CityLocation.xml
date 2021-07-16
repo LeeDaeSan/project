@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.home.realestate.mapper.RealEstateMapper">
+
+	<select id="getCityLocationList" resultType="cityLocation" parameterType="cityLocation">
+	
+		SELECT * FROM cityLocation
+		<where>
+			<if test="depth != null and !depth.equals('')">
+				AND depth = #{depth}
+			</if>
+			
+			<if test="cortarNo != null and !cortarNo.equals('')">
+				AND parentCortarNo = #{cortarNo}
+			</if>
+			
+		</where>
+	
+	</select>
+
+</mapper>
