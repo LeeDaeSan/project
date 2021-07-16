@@ -259,34 +259,51 @@ function fn_aptList(dongCode){
 </script>
 
 <body>
-	<div class="card-body">
-		<div>
-			<div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-				<div class="row">
-					<div class="col-sm-12 col-md-6">
-<!-- 						<div id="dataTable_filter" class="dataTables_filter">
-							<label>Search <input type="search" class="form-control" placeholder="" aria-controls="dataTable" style="width: 200px; display: inline-block"></label>
-						</div>
-						<div class="form-group">
-							<select class="form-control-sm" id="sidoList">
-								<option>-선택-</option>
-							</select>
-							<select class="form-control-sm" id="gugunList">
-								<option>-선택-</option>
-							</select>
-							<select class="form-control-sm" id="dongList">
-								<option>-선택-</option>
-							</select>
-						</div>
-						<div class="ui-widget">
- 							<select id="combobox" class="form-control">
-
-							</select> 
-						</div>-->
+<main class="col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+	<div class="panel panel-default">
+		<div class="sbp-preview"> 아파트 기본정보</div>
+			<form class="">
+			
+				<div class="form-group row">
+					<label for="aptName" class="col-sm-2 col-form-label">아파트명</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="aptName">
 					</div>
 				</div>
-
-			</div>
-		</div>
+				<div class="form-group row">
+					<label for="address" class="col-sm-2 col-form-label">주소</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="address">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="station" class="col-sm-2 col-form-label">지하철역</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="station">
+					</div>
+				</div>
+		<!-- 						<div id="dataTable_filter" class="dataTables_filter">
+									<label>Search <input type="search" class="form-control" placeholder="" aria-controls="dataTable" style="width: 200px; display: inline-block"></label>
+								</div>
+								<div class="form-group">
+									<select class="form-control-sm" id="sidoList">
+										<option>-선택-</option>
+									</select>
+									<select class="form-control-sm" id="gugunList">
+										<option>-선택-</option>
+									</select>
+									<select class="form-control-sm" id="dongList">
+										<option>-선택-</option>
+									</select>
+								</div>
+								<div class="ui-widget">
+		 							<select id="combobox" class="form-control">
+		
+									</select> 
+								</div>-->
+						
+				
+			</form>
 	</div>
+</main>
 </body>
