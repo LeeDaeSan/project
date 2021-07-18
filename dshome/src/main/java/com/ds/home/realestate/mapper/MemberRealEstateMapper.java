@@ -22,12 +22,10 @@ public interface MemberRealEstateMapper {
 	 * @param memberRealEstate
 	 * @return
 	 */
-<<<<<<< HEAD
 	public List<MemberRealEstate> select(MemberRealEstate memberRealEstate);
 
 	public void insert(String type, MemberRealEstate memberRealEstate, Integer memberIdx);
 	
-=======
 	public List<MemberRealEstate> select(PagingDTO<MemberRealEstate> pagingDTO);
 	
 	/**
@@ -37,5 +35,4 @@ public interface MemberRealEstateMapper {
 	 * @return
 	 */
 	public Long selectOfTotalCount(PagingDTO<MemberRealEstate> pagingDTO);
->>>>>>> e8abfaaf63cfb71e1aa6e3b84020eb7f469964ab
 }

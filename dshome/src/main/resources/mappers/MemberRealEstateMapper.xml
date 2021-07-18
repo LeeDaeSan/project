@@ -33,7 +33,6 @@
   		 
 	</select>
 	
-<<<<<<< HEAD
 	<insert id="insert">
 		INSERT INTO MemberRealEstate
 			MemberIdx,
@@ -78,7 +77,7 @@
 		)
 			
 	</insert>
-=======
+	
 	<!-- 사용자 부동산 정보 total count 조회 -->
 	<select id="selectOfTotalCount" resultType="Long" parameterType="com.ds.home.model.dto.PagingDTO">
 		SELECT COUNT(MemberRealEstateIdx)
@@ -114,5 +113,5 @@
 			</if>
 		</where>
 	</sql>
->>>>>>> e8abfaaf63cfb71e1aa6e3b84020eb7f469964ab
+	
 </mapper>
