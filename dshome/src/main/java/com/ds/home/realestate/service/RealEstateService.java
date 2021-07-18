@@ -20,4 +20,5 @@ public interface RealEstateService {
 	 */
 	public Map<String, Object> select(MemberRealEstate memberRealEstate);
 	
+	public Map<String, Object> merge(String type, MemberRealEstate memberRealEstate);
 }

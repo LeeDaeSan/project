@@ -54,7 +54,8 @@ public class RealEstateController {
 	 * @param type
 	 */
 	@PostMapping("/merge")
-	public void merge(@RequestParam("type") String type) {
+	public Map<String, Object> merge(@RequestParam("type") String type, MemberRealEstate memberRealEstate) {
+		return realEstateService.merge(type, memberRealEstate);
 	}
 	
 }

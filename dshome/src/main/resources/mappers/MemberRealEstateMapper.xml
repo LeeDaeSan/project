@@ -31,4 +31,49 @@
   		 FROM MemberRealEstate
   		 
 	</select>
+	
+	<insert id="insert">
+		INSERT INTO MemberRealEstate
+			MemberIdx,
+			HouseName,
+			Address,
+			StationLine,
+			StationName,
+			StationRange,
+			UseApproveDate,
+			TotalHouseholdCount,
+			ParkingPossibleCount,
+			DirectionType,
+			Bay,
+			SupplySpace,
+			ExclusiveSpace,
+			DealType,
+			DealPrice,
+			BrokerFee,
+			AcquisitionTax,
+			PropertyTotalTax,
+			Remark
+		VALUES (
+			#{memberIdx},
+			#{houseName},
+			#{address},
+			#{stationLine},
+			#{stationName},
+			#{stationRange},
+			#{useApproveDate},
+			#{totalHouseholdCount},
+			#{parkingPossibleCount},
+			#{directionType},
+			#{bay},
+			#{supplySpace},
+			#{exclusiveSpace},
+			#{dealType},
+			#{dealPrice},
+			#{brokerFee},
+			#{acquisitionTax},
+			#{propertyTotalTax},
+			#{remark}
+		)
+			
+	</insert>
 </mapper>

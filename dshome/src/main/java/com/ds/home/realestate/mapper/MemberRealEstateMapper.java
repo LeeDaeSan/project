@@ -22,4 +22,7 @@ public interface MemberRealEstateMapper {
 	 * @return
 	 */
 	public List<MemberRealEstate> select(MemberRealEstate memberRealEstate);
+
+	public void insert(String type, MemberRealEstate memberRealEstate, Integer memberIdx);
+	
 }

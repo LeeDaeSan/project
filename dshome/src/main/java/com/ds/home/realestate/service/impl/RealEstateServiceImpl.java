@@ -5,7 +5,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ds.home.etc.constant.Constant;
+import com.ds.home.etc.util.DateUtil;
 import com.ds.home.etc.util.ResponseUtil;
+import com.ds.home.model.Member;
 import com.ds.home.model.MemberRealEstate;
 import com.ds.home.realestate.mapper.MemberRealEstateMapper;
 import com.ds.home.realestate.service.RealEstateService;
@@ -43,6 +46,31 @@ public class RealEstateServiceImpl implements RealEstateService {
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public Map<String, Object> merge(String type, MemberRealEstate memberRealEstate) {
+		
+		Map<String, Object> resultMap = null;
+		
+		try {
+			
+			Member member = new Member();
+			member.setMemberIdx(1);
+			memberRealEstate.setUseApproveDate(DateUtil.stringToDate(memberRealEstate.getUseApproveDateStr(), "yyyyMMdd"));
+			if (type.equals(Constant.MERGE_TYPE_INSERT)) {
+				memberRealEstateMapper.insert(type, memberRealEstate, member.getMemberIdx());
+			}
+			
+			// else
+			
+			resultMap = ResponseUtil.successMap();
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
 		}
 		
 		return resultMap;
