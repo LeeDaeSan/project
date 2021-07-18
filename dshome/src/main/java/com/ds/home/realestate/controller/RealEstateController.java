@@ -1,6 +1,6 @@
 package com.ds.home.realestate.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ds.home.model.CityLocation;
+import com.ds.home.model.MemberRealEstate;
 import com.ds.home.realestate.service.RealEstateService;
 
 /**
@@ -30,14 +30,14 @@ public class RealEstateController {
 	private RealEstateService realEstateService;
 	
 	/**
-	 * 부동산 목록 Controller
+	 * 사용자 부동산 목록 Controller
 	 * 
 	 * @param cityLocation
 	 * @return
 	 */
 	@GetMapping("/list")
-	public List<CityLocation> list(CityLocation cityLocation){
-		return realEstateService.getCityLocationList(cityLocation.getCortarNo(), cityLocation.getDepth());
+	public Map<String, Object> list(MemberRealEstate memberRealEstate){
+		return realEstateService.select(memberRealEstate);
 	}
 	
 	/**
