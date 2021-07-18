@@ -5,13 +5,13 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ds.home.model.MemberRealEstate;
+import com.ds.home.model.dto.PagingDTO;
 import com.ds.home.realestate.service.RealEstateService;
 
 /**
@@ -21,7 +21,7 @@ import com.ds.home.realestate.service.RealEstateService;
  *
  */
 @RestController
-@RequestMapping("/realEstate")
+@RequestMapping("/rest/realEstate")
 public class RealEstateController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(RealEstateController.class);
@@ -35,9 +35,10 @@ public class RealEstateController {
 	 * @param cityLocation
 	 * @return
 	 */
-	@GetMapping("/list")
-	public Map<String, Object> list(MemberRealEstate memberRealEstate){
-		return realEstateService.select(memberRealEstate);
+	@PostMapping("/list")
+	public Map<String, Object> list(PagingDTO<MemberRealEstate> pagingDTO, MemberRealEstate memberRealEstate){
+		pagingDTO.setModel(memberRealEstate);
+		return realEstateService.select(pagingDTO);
 	}
 	
 	/**

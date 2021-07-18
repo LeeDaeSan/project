@@ -39,9 +39,12 @@ public class MemberRealEstate {
 	private Date updateDate;
 	
 	private String useApproveDateStr;
+<<<<<<< HEAD
 	private String createDateStr;
 	private String updateDateStr;
 	
+=======
+>>>>>>> e8abfaaf63cfb71e1aa6e3b84020eb7f469964ab
 	/**
 	 * 사용자 정보
 	 */

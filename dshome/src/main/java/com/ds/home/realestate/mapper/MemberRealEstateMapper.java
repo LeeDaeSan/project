@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ds.home.model.MemberRealEstate;
+import com.ds.home.model.dto.PagingDTO;
 
 /**
  * 사용자 부동산 정보 Mapper
@@ -21,8 +22,20 @@ public interface MemberRealEstateMapper {
 	 * @param memberRealEstate
 	 * @return
 	 */
+<<<<<<< HEAD
 	public List<MemberRealEstate> select(MemberRealEstate memberRealEstate);
 
 	public void insert(String type, MemberRealEstate memberRealEstate, Integer memberIdx);
 	
+=======
+	public List<MemberRealEstate> select(PagingDTO<MemberRealEstate> pagingDTO);
+	
+	/**
+	 * 사용자 부동산 정보 total count 조회
+	 * 
+	 * @param pagingDTO
+	 * @return
+	 */
+	public Long selectOfTotalCount(PagingDTO<MemberRealEstate> pagingDTO);
+>>>>>>> e8abfaaf63cfb71e1aa6e3b84020eb7f469964ab
 }

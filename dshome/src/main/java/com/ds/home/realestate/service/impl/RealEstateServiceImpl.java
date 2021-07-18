@@ -10,6 +10,7 @@ import com.ds.home.etc.util.DateUtil;
 import com.ds.home.etc.util.ResponseUtil;
 import com.ds.home.model.Member;
 import com.ds.home.model.MemberRealEstate;
+import com.ds.home.model.dto.PagingDTO;
 import com.ds.home.realestate.mapper.MemberRealEstateMapper;
 import com.ds.home.realestate.service.RealEstateService;
 
@@ -34,7 +35,7 @@ public class RealEstateServiceImpl implements RealEstateService {
 	 * 
 	 */
 	@Override
-	public Map<String, Object> select(MemberRealEstate memberRealEstate) {
+	public Map<String, Object> select(PagingDTO<MemberRealEstate> pagingDTO) {
 		
 		Map<String, Object> resultMap = null;
 		
@@ -42,10 +43,13 @@ public class RealEstateServiceImpl implements RealEstateService {
 			resultMap = ResponseUtil.successMap();
 			
 			// 목록 조회
-			resultMap.put("list", memberRealEstateMapper.select(memberRealEstate));
+			resultMap.put("list", memberRealEstateMapper.select(pagingDTO));
+			// total count
+			resultMap.put("totalCount", memberRealEstateMapper.selectOfTotalCount(pagingDTO));
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
+			System.out.println(e);
 		}
 		
 		return resultMap;

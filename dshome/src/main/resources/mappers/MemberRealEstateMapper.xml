@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ds.home.member.mapper.MemberMapper">
+<mapper namespace="com.ds.home.realestate.mapper.MemberRealEstateMapper">
 
-	<!-- 사용자 부동산 정보 정보 조회 -->
-	<select id="select" resultType="memberRealEstate" parameterType="memberRealEstate">
+	<!-- 사용자 부동산 정보 목록 조회 -->
+	<select id="select" resultType="memberRealEstate" parameterType="com.ds.home.model.dto.PagingDTO">
 		SELECT
 			MemberRealEstateIdx,
 			MemberIdx,
@@ -28,10 +28,12 @@
 			CreateDate,
 			UpdateDate
 			
-  		 FROM MemberRealEstate
+		<!-- 공통 검색 조건 -->
+		<include refid="selectOfWhere"></include>
   		 
 	</select>
 	
+<<<<<<< HEAD
 	<insert id="insert">
 		INSERT INTO MemberRealEstate
 			MemberIdx,
@@ -76,4 +78,41 @@
 		)
 			
 	</insert>
+=======
+	<!-- 사용자 부동산 정보 total count 조회 -->
+	<select id="selectOfTotalCount" resultType="Long" parameterType="com.ds.home.model.dto.PagingDTO">
+		SELECT COUNT(MemberRealEstateIdx)
+		  
+		<!-- 공통 검색 조건 -->
+		<include refid="selectOfWhere"></include>  
+	</select>
+	
+	<!-- 목록 공통 검색 조건 -->
+	<sql id="selectOfWhere">
+		FROM MemberRealEstate
+		
+		<where>
+			<!-- 매물명 -->
+			<if test="@com.ds.home.etc.util.StringUtil@isNotEmpty(model.houseName)">
+				AND HouseName LIKE CONCAT('%', TRIM(#{model.houseName}), '%')
+			</if>
+			<!-- 주소 -->
+			<if test="@com.ds.home.etc.util.StringUtil@isNotEmpty(model.address)">
+				AND Address LIKE CONCAT('%', TRIM(#{model.address}), '%')
+			</if>
+			<!-- 사용승인일 -->
+			<if test="@com.ds.home.etc.util.StringUtil@isNotEmpty(model.useApproveDateStr)">
+				AND DATE_FORMAT(UseApproveDate, '%y%m%d') <![CDATA[<=]]> DATE_FORMAT(#{model.useApproveDateStr}, '%y%m%d')
+			</if>
+			<!-- 호선 -->
+			<if test="@com.ds.home.etc.util.StringUtil@isNotEmpty(model.stationLine)">
+				AND StationLine = #{model.stationLine}
+			</if>
+			<!-- 이름 -->
+			<if test="@com.ds.home.etc.util.StringUtil@isNotEmpty(model.stationName)">
+				AND StationName = #{model.stationName}
+			</if>
+		</where>
+	</sql>
+>>>>>>> e8abfaaf63cfb71e1aa6e3b84020eb7f469964ab
 </mapper>
