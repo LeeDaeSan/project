@@ -3,6 +3,7 @@ package com.ds.home.realestate.service;
 import java.util.Map;
 
 import com.ds.home.model.MemberRealEstate;
+import com.ds.home.model.dto.PagingDTO;
 
 /**
  * 사용자 부동산 정보 Service
@@ -18,6 +19,6 @@ public interface RealEstateService {
 	 * @param memberRealEstate
 	 * @return
 	 */
-	public Map<String, Object> select(MemberRealEstate memberRealEstate);
+	public Map<String, Object> select(PagingDTO<MemberRealEstate> pagingDTO);
 	
 }

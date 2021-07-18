@@ -15,7 +15,7 @@
 		<!-- bootstrap datepicker -->
 		<link rel="stylesheet" type="text/css" href="/lib/bootstrap/bootstrap-datepicker.min.css"/>
 		<!-- common -->	
-		<!-- <link rel="stylesheet" type="text/css" href="/css/common.css"/> -->
+		<link rel="stylesheet" type="text/css" href="/css/common.css"/>
 		<!--------------------------------- CXX LINK END --------------------------------->
 				
 				
@@ -30,7 +30,7 @@
 		<!-- SB Admin 2 -->
 		<script type="text/javascript" src="/lib/sbadmin2/js/sb-admin-2.min.js"></script>
 		<!-- common js -->
-		<!-- <script type="text/javascript" src="/js/common.js"></script> -->
+		<script type="text/javascript" src="/js/common.js"></script>
 		<!-- bootstrap datepicker -->
 		<script type="text/javascript" src="/lib/bootstrap/bootstrap-datepicker.js"></script>
 		
