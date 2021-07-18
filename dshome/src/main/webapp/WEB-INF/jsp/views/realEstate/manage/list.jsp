@@ -53,11 +53,11 @@ function memberRealEstateList (page) {
 			page 		: (page * limit - limit),
 			limit		: limit,
 			
-			houseName 		: $('#searchHouseName').val(),
-			address			: $('#searchAddress').val(),
-			useApproveDate	: $('#searchUseApproveDate').val(),
-			stationLine		: $('#searchStationLine').val(),
-			stationName 	: $('#searchStationName').val(),
+			houseName 			: $('#searchHouseName').val(),
+			address				: $('#searchAddress').val(),
+			useApproveDateStr	: $('#searchUseApproveDate').val(),
+			stationLine			: $('#searchStationLine').val(),
+			stationName 		: $('#searchStationName').val(),
 		},
 		type 		: 'POST',
 		dataType 	: 'JSON'

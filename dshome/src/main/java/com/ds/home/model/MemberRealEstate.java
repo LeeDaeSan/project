@@ -38,6 +38,7 @@ public class MemberRealEstate {
 	private Date createDate;
 	private Date updateDate;
 	
+	private String useApproveDateStr;
 	/**
 	 * 사용자 정보
 	 */

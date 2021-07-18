@@ -55,8 +55,8 @@
 				AND Address LIKE CONCAT('%', TRIM(#{model.address}), '%')
 			</if>
 			<!-- 사용승인일 -->
-			<if test="@com.ds.home.etc.util.StringUtil@isNotEmpty(model.useApproveDate)">
-				AND UseApproveDate LIKE CONCAT('%', TRIM(#{model.useApproveDate}), '%')
+			<if test="@com.ds.home.etc.util.StringUtil@isNotEmpty(model.useApproveDateStr)">
+				AND DATE_FORMAT(UseApproveDate, '%y%m%d') <![CDATA[<=]]> DATE_FORMAT(#{model.useApproveDateStr}, '%y%m%d')
 			</if>
 			<!-- 호선 -->
 			<if test="@com.ds.home.etc.util.StringUtil@isNotEmpty(model.stationLine)">

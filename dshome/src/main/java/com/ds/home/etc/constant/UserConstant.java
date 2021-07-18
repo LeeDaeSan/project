@@ -2,7 +2,7 @@ package com.ds.home.etc.constant;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.ds.homes.tools.security.SecurityUser;
+import com.ds.home.etc.security.SecurityUser;
 
 
 public class UserConstant {
