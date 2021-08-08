@@ -33,8 +33,9 @@
   		 
 	</select>
 	
-	<insert id="insert">
-		INSERT INTO MemberRealEstate
+	<!-- 사용자 부동산 정보 등록 -->
+	<insert id="insert" parameterType="memberRealEstate">
+		INSERT INTO MemberRealEstate (
 			MemberIdx,
 			HouseName,
 			Address,
@@ -54,7 +55,7 @@
 			AcquisitionTax,
 			PropertyTotalTax,
 			Remark
-		VALUES (
+		) VALUES (
 			#{memberIdx},
 			#{houseName},
 			#{address},
@@ -75,8 +76,32 @@
 			#{propertyTotalTax},
 			#{remark}
 		)
-			
 	</insert>
+	
+	<!-- 사용자 부동산 정보 수정 -->
+	<update id="update" parameterType="memberRealEstate">
+		UPDATE	MemberRealEstate
+		   SET	HouseName			= #{houseName},
+				Address				= #{address},
+				StationLine			= #{stationLine},
+				StationName			= #{stationName},
+				StationRange		= #{stationRange},
+				UseApproveDate		= #{useApproveDate},
+				TotalHouseholdCount	= #{totalHouseholdCount},
+				ParkingPossibleCount= #{parkingPossibleCount},
+				DirectionType		= #{directionType},
+				Bay					= #{bay},
+				SupplySpace			= #{supplySpace},
+				ExclusiveSpace		= #{exclusiveSpace},
+				DealType			= #{dealType},
+				DealPrice			= #{dealPrice},
+				BrokerFee			= #{brokerFee},
+				AcquisitionTax		= #{acquisitionTax},
+				PropertyTotalTax	= #{propertyTotalTax},
+				Remark				= #{remark}
+				UpdateDate			= NOW()
+		WHERE MemberIdx = #{memberIdx}
+	</update>
 	
 	<!-- 사용자 부동산 정보 total count 조회 -->
 	<select id="selectOfTotalCount" resultType="Long" parameterType="com.ds.home.model.dto.PagingDTO">

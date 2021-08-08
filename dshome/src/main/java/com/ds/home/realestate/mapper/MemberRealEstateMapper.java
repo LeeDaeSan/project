@@ -24,8 +24,6 @@ public interface MemberRealEstateMapper {
 	 */
 	public List<MemberRealEstate> select(MemberRealEstate memberRealEstate);
 
-	public void insert(String type, MemberRealEstate memberRealEstate, Integer memberIdx);
-	
 	public List<MemberRealEstate> select(PagingDTO<MemberRealEstate> pagingDTO);
 	
 	/**
@@ -35,4 +33,16 @@ public interface MemberRealEstateMapper {
 	 * @return
 	 */
 	public Long selectOfTotalCount(PagingDTO<MemberRealEstate> pagingDTO);
+
+	/**
+	 * 사용자 부동산 정보 등록
+	 * @param memberRealEstate
+	 */
+	public void insert(MemberRealEstate memberRealEstate);
+	
+	/**
+	 * 사용자 부동산 정보 수정
+	 * @param memberRealEstate
+	 */
+	public void update(MemberRealEstate memberRealEstate);
 }
