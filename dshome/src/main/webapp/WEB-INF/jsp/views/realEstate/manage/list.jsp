@@ -39,7 +39,20 @@ var page = 1;
 var limit = 10;
 
 $(function () {
+	
+	/*
+		부동산 목록 조회
+	*/
 	memberRealEstateList();
+	
+	/* 
+		등록 button event
+	*/
+	$('#insertBtn').unbind('click').click(function (e) {
+		e.preventDefault();
+		
+		location.href = '/views/realEstate/manage/detail?type=I';
+	})
 });
 
 function memberRealEstateList (page) {
@@ -75,8 +88,7 @@ function memberRealEstateList (page) {
 			
 			for (var i = 0; i < listLength; i++) {
 				var thisData = list[i];
-				
-				html += '<tr>';
+				html += '<tr class="detail_tr" idx="' + thisData.memberRealEstateIdx + '">';
 				html += '	<td class="text-tooltip text-right">' + (i + 1) + '</td>';
 				html += '	<td class="text-tooltip">' + thisData.houseName + '</td>';
 				html += '	<td class="text-tooltip">' + thisData.address + '</td>';
@@ -104,6 +116,14 @@ function memberRealEstateList (page) {
 
 			// total count
 			$('#totalCount').text(totalCount);
+			
+			// 목록 상세
+			$('.detail_tr').unbind('click').click(function (e) {
+				e.preventDefault();
+				
+				location.href = '/views/realEstate/manage/detail?type=I&idx=' + $(this).attr('idx');
+			});
+			
 		} else {
 			alert('서버 에러');
 		}
@@ -173,7 +193,8 @@ function memberRealEstateList (page) {
 	<!-- list START -->
     <div class="card shadow mb-4">
 	    <div class="card-header py-3">
-	      	<h6 class="m-0 font-weight-bold text-primary">목록</h6>
+	      	<h6 class="m-0 font-weight-bold text-primary" style="float:left;">목록</h6>
+	      	<button type="button" id="insertBtn" class="d-none d-sm-inline-block btn btn-primary shadow-s btn-sm" style="float:right;">등록</button>
 	    </div>
     	<div class="card-body">
     		<div>
