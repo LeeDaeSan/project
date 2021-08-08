@@ -49,6 +49,9 @@ function memberRealEstateList (page) {
 	
 	$.ajax({
 		url 		: '/rest/realEstate/list',
+		type 		: 'POST',
+		dataType 	: 'JSON',
+		async		: false,
 		data 		: {
 			page 		: (page * limit - limit),
 			limit		: limit,
@@ -59,8 +62,6 @@ function memberRealEstateList (page) {
 			stationLine			: $('#searchStationLine').val(),
 			stationName 		: $('#searchStationName').val(),
 		},
-		type 		: 'POST',
-		dataType 	: 'JSON'
 		
 	}).done(function (result) {
 		
