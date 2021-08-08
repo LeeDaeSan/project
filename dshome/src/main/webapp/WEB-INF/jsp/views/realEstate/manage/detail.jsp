@@ -17,6 +17,14 @@ $(function(){
 		fn_save("I");
 	});
 	
+	$("#update").unbind("click").click(function(){
+		fn_save("U");
+	})
+	
+	$("#delete").unbind("click").click(function(){
+		fn_save("D");
+	});
+	
 	// 취소 버튼 클릭 이벤트
 	$("#cancel").unbind("click").click(function(){
 		location.href = "../manage/list";
@@ -309,6 +317,9 @@ function fn_save(type){
 		<div class="align-items-end mb-4 text-right">
 			<button type="button" class="d-none d-sm-inline-block btn btn-danger shadow-sm" id="cancel">
 				<i class="fas fa fa fa-close fa-sm text-white-50"></i> 취소
+			</button>
+			<button type="button" class="d-none d-sm-inline-block btn btn-warning shadow-sm" id="update">
+				<i class="fas fa fa-check fa-sm text-white-50"></i> 수정
 			</button>
 			<button type="button" class="d-none d-sm-inline-block btn btn-primary shadow-sm" id="save">
 				<i class="fas fa fa-check fa-sm text-white-50"></i> 저장
