@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ds.home.realestate.service.CommCodeService;
@@ -22,10 +22,9 @@ public class CommCodeController {
 	@Autowired
 	private CommCodeService commCodeService;
 	
-	@GetMapping("/list/{type}")
-	public Map<String, Object> list(@PathVariable("type") String type){
+	@GetMapping("/list")
+	public Map<String, Object> list(@RequestParam("type") String type){
 		return commCodeService.list(type);
 	}
-	
 	
 }

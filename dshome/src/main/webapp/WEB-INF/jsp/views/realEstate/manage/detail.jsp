@@ -78,7 +78,7 @@ function fn_retrieveCommCode(type, compId){
 
 	$.ajax({
 		
-		url		 	: "/comm/code/list/" + type,
+		url		 	: "/comm/code/list/",
 		type	 	: "GET",
 		dataType 	: "JSON",
 		data		: {type : type},
