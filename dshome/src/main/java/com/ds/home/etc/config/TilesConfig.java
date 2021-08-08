@@ -21,7 +21,7 @@ public class TilesConfig {
 	@Bean
 	public TilesConfigurer tilesConfigurer () {
 		TilesConfigurer tiles = new TilesConfigurer();
-		tiles.setDefinitions("/WEB-INF/tiles/tiles.xml");
+		tiles.setDefinitions(new String[] {"/WEB-INF/tiles/tiles.xml"});
 		return tiles;
 	}
 }
