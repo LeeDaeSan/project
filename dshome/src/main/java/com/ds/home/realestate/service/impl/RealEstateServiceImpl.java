@@ -62,11 +62,22 @@ public class RealEstateServiceImpl implements RealEstateService {
 		
 		try {
 			
-			Member member = new Member();
-			member.setMemberIdx(1);
+			//Member member = new Member();
+			//member.setMemberIdx(1);
+			memberRealEstate.setMemberIdx(1);
 			memberRealEstate.setUseApproveDate(DateUtil.stringToDate(memberRealEstate.getUseApproveDateStr(), "yyyyMMdd"));
+			
+			// INSERT
 			if (type.equals(Constant.MERGE_TYPE_INSERT)) {
-				memberRealEstateMapper.insert(type, memberRealEstate, member.getMemberIdx());
+				memberRealEstateMapper.insert(memberRealEstate);
+				
+			// UPDATE
+			} else if (type.equals(Constant.MERGE_TYPE_UPDATE)) {
+				memberRealEstateMapper.update(memberRealEstate);
+				
+			// DELETE
+			} else if (type.equals(Constant.MERGE_TYPE_DELETE)) {
+				System.out.println("--");
 			}
 			
 			// else

@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class CityLocation {
 
-	private Integer idx;					// INDEX
+	private Integer cityLocationIdx;		// INDEX
 	private String cortarNo;				// 주소지 코드
 	private String cortarName;				// 주소지 명
 	private String centerLat;				// 위도

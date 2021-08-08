@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.home.realestate.mapper.CommCodeMapper">
+
+	<select id="list" resultType="commCode" parameterType="String">
+	
+		SELECT * FROM CommCode
+		<where>
+			<if test="type != null and !type.equals('')">
+				AND Type = #{type}
+			</if>
+		</where>
+	
+	</select>
+
+</mapper>
