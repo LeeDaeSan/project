@@ -13,20 +13,23 @@
 <script>
 $(function(){
 	
+	// 저장 버튼 클릭 이벤트
 	$("#save").unbind("click").click(function(){
 		fn_save("I");
 	});
 	
+	// 수정 버튼 클릭 이벤트
 	$("#update").unbind("click").click(function(){
 		fn_save("U");
 	})
 	
+	// 삭제 버튼 클릭 이벤트
 	$("#delete").unbind("click").click(function(){
 		fn_save("D");
 	});
 	
-	// 취소 버튼 클릭 이벤트
-	$("#cancel").unbind("click").click(function(){
+	// 목록 버튼 클릭 이벤트
+	$("#list").unbind("click").click(function(){
 		location.href = "../manage/list";
 	});
 	
@@ -279,7 +282,7 @@ function fn_save(type){
 									</select>
 								</div>
 								<div class="col-md-3">
-									<input class="form-control" id="dealPrice" placeholder="(억)">
+									<input class="form-control" id="dealPrice" placeholder="(원)">
 								</div>
 							</div>
 							<div class="form-group row">
@@ -315,7 +318,7 @@ function fn_save(type){
 		
 		<!-- 버튼 START -->
 		<div class="align-items-end mb-4 text-right">
-			<button type="button" class="d-none d-sm-inline-block btn btn-danger shadow-sm" id="cancel">
+			<button type="button" class="d-none d-sm-inline-block btn btn-danger shadow-sm" id="list">
 				<i class="fas fa fa fa-close fa-sm text-white-50"></i> 취소
 			</button>
 			<button type="button" class="d-none d-sm-inline-block btn btn-warning shadow-sm" id="update">
@@ -327,7 +330,6 @@ function fn_save(type){
 		</div>
 		<!-- 버튼 END -->
 	</div>
-
 
 	<div class="modal-dialog" style="display: none !important;">
 		<div class="modal-content">
