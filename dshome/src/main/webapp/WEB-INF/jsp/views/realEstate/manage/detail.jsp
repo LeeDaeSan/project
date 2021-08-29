@@ -43,6 +43,7 @@
 <script>
 $(function(){
 	
+<<<<<<< HEAD
 	fn_setDateBox();
 	
 	var urlParams	 = new URLSearchParams(window.location.search);
@@ -62,18 +63,28 @@ $(function(){
 		$("#delete").remove();
 	}
 	
+=======
+>>>>>>> master
 	// 저장 버튼 클릭 이벤트
 	$("#save").unbind("click").click(function(){
 		fn_save(urlParamType == "I" ? "I" : "U", urlParamIdx);
 	});
 	
+<<<<<<< HEAD
+=======
+	// 수정 버튼 클릭 이벤트
+	$("#update").unbind("click").click(function(){
+		fn_save("U");
+	})
+	
+>>>>>>> master
 	// 삭제 버튼 클릭 이벤트
 	$("#delete").unbind("click").click(function(){
 		fn_save("D", urlParamIdx);
 	});
 	
-	// 취소 버튼 클릭 이벤트
-	$("#cancel").unbind("click").click(function(){
+	// 목록 버튼 클릭 이벤트
+	$("#list").unbind("click").click(function(){
 		location.href = "../manage/list";
 	});
 	
@@ -890,7 +901,7 @@ function fn_retrieveAptInfo (aptCode, latitude, longitude){
 									</select>
 								</div>
 								<div class="col-md-3">
-									<input class="form-control" id="dealPrice" placeholder="(억)">
+									<input class="form-control" id="dealPrice" placeholder="(원)">
 								</div>
 							</div>
 							<div class="form-group row">
@@ -926,8 +937,13 @@ function fn_retrieveAptInfo (aptCode, latitude, longitude){
 		
 		<!-- 버튼 START -->
 		<div class="align-items-end mb-4 text-right">
+<<<<<<< HEAD
 			<button type="button" class="d-none d-sm-inline-block btn btn-danger shadow-sm" id="cancel">
 				<i class="fas fa fa-th-list fa-sm text-white-50"></i> 목록
+=======
+			<button type="button" class="d-none d-sm-inline-block btn btn-danger shadow-sm" id="list">
+				<i class="fas fa fa fa-close fa-sm text-white-50"></i> 취소
+>>>>>>> master
 			</button>
 			<button type="button" class="d-none d-sm-inline-block btn btn-warning shadow-sm" id="delete" style="display: none !important;">
 				<i class="fas fa-check fa-sm text-white-50"></i> 삭제
@@ -938,7 +954,6 @@ function fn_retrieveAptInfo (aptCode, latitude, longitude){
 		</div>
 		<!-- 버튼 END -->
 	</div>
-
 
 	<div class="modal-dialog" style="display: none !important;">
 		<div class="modal-content">
