@@ -21,5 +21,20 @@ public interface RealEstateService {
 	 */
 	public Map<String, Object> select(PagingDTO<MemberRealEstate> pagingDTO);
 	
+	/**
+	 * 사용자 부동상 정보 등록/수정/삭제
+	 * 
+	 * @param type
+	 * @param memberRealEstate
+	 * @return
+	 */
 	public Map<String, Object> merge(String type, MemberRealEstate memberRealEstate);
+
+	/**
+	 * 사용자 부동산 상세 정보
+	 * 
+	 * @param idx
+	 * @return
+	 */
+	public Map<String, Object> detail(Integer memberRealEstateIdx);
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ds.home.etc.constant.Constant;
+import com.ds.home.etc.constant.UserConstant;
 import com.ds.home.etc.util.DateUtil;
 import com.ds.home.etc.util.ResponseUtil;
 import com.ds.home.model.Member;
@@ -62,10 +63,7 @@ public class RealEstateServiceImpl implements RealEstateService {
 		
 		try {
 			
-			//Member member = new Member();
-			//member.setMemberIdx(1);
-			memberRealEstate.setMemberIdx(1);
-			memberRealEstate.setUseApproveDate(DateUtil.stringToDate(memberRealEstate.getUseApproveDateStr(), "yyyyMMdd"));
+			memberRealEstate.setMemberIdx(UserConstant.getUser().getIdx());
 			
 			// INSERT
 			if (type.equals(Constant.MERGE_TYPE_INSERT)) {
@@ -77,12 +75,31 @@ public class RealEstateServiceImpl implements RealEstateService {
 				
 			// DELETE
 			} else if (type.equals(Constant.MERGE_TYPE_DELETE)) {
-				System.out.println("--");
+				memberRealEstateMapper.delete(memberRealEstate);
 			}
 			
 			// else
 			
 			resultMap = ResponseUtil.successMap();
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
+		}
+		
+		return resultMap;
+	}
+	
+	
+	@Override
+	public Map<String, Object> detail(Integer memberRealEstateIdx) {
+		
+		Map<String, Object> resultMap = null;
+		
+		try {
+			
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("detail", memberRealEstateMapper.detail(memberRealEstateIdx, UserConstant.getUser().getIdx()));
+			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
 			e.printStackTrace();

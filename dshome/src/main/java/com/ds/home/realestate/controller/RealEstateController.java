@@ -44,9 +44,12 @@ public class RealEstateController {
 	/**
 	 * 부동산 상세 Controller
 	 * 
+	 * @param idx
+	 * @return
 	 */
 	@PostMapping("/detail")
-	public void detail () {
+	public Map<String, Object> detail (@RequestParam("memberRealEstateIdx") Integer memberRealEstateIdx) {
+		return realEstateService.detail(memberRealEstateIdx);
 	}
 	
 	/**
@@ -56,8 +59,6 @@ public class RealEstateController {
 	 */
 	@PostMapping("/merge")
 	public Map<String, Object> merge(@RequestParam("type") String type, MemberRealEstate memberRealEstate) {
-		System.out.println(type);
-		System.out.println(memberRealEstate);
 		return realEstateService.merge(type, memberRealEstate);
 	}
 	

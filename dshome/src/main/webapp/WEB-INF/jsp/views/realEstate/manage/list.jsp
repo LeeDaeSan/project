@@ -88,17 +88,18 @@ function memberRealEstateList (page) {
 			
 			for (var i = 0; i < listLength; i++) {
 				var thisData = list[i];
+				console.log(thisData);
 				html += '<tr class="detail_tr" idx="' + thisData.memberRealEstateIdx + '">';
 				html += '	<td class="text-tooltip text-right">' + (i + 1) + '</td>';
 				html += '	<td class="text-tooltip">' + thisData.houseName + '</td>';
 				html += '	<td class="text-tooltip">' + thisData.address + '</td>';
-				html += '	<td class="text-tooltip text-center">' + common.date.toString(new Date(thisData.useApproveDate), '-') + '</td>';
-				html += '	<td class="text-tooltip">' + thisData.stationLine + '</td>';
+				html += '	<td class="text-tooltip text-center">' + thisData.useApproveDate.substr(0,4) + "-" + thisData.useApproveDate.substr(4,2) + "-" + thisData.useApproveDate.substr(6,2) + '</td>';
+				html += '	<td class="text-tooltip">' + thisData.stationLineName + '</td>';
 				html += '	<td class="text-tooltip">' + thisData.stationName + '</td>';
 				html += '	<td class="text-tooltip text-right">' + common.number.addComma(thisData.stationRange) + '</td>';
 				html += '	<td class="text-tooltip text-right">' + common.number.addComma(thisData.totalHouseholdCount) + '</td>';
 				html += '	<td class="text-tooltip text-right">' + common.number.addComma(thisData.parkingPossibleCount) + '</td>';
-				html += '	<td class="text-tooltip text-center">' + thisData.directionType + '</td>';
+				html += '	<td class="text-tooltip text-center">' + thisData.directionTypeName + '</td>';
 				html += '	<td class="text-tooltip text-right">' + common.number.addComma(thisData.bay) + '</td>';
 				html += '	<td class="text-tooltip text-right">' + thisData.supplySpace + '</td>';
 				html += '	<td class="text-tooltip text-right">' + thisData.exclusiveSpace + '</td>';
@@ -121,7 +122,7 @@ function memberRealEstateList (page) {
 			$('.detail_tr').unbind('click').click(function (e) {
 				e.preventDefault();
 				
-				location.href = '/views/realEstate/manage/detail?type=I&idx=' + $(this).attr('idx');
+				location.href = '/views/realEstate/manage/detail?type=U&idx=' + $(this).attr('idx');
 			});
 			
 		} else {

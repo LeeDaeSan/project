@@ -19,10 +19,10 @@ public class MemberRealEstate {
 	private Integer memberIdx;
 	private String houseName;
 	private String address;
-	private String stationLine;
-	private String stationName;
+	private String stationLineNo;
+	private String stationNo;
 	private String stationRange;
-	private Date useApproveDate;
+	private String useApproveDate;
 	private String totalHouseholdCount;
 	private String parkingPossibleCount;
 	private String directionType;
@@ -38,7 +38,10 @@ public class MemberRealEstate {
 	private Date createDate;
 	private Date updateDate;
 	
-	private String useApproveDateStr;
+	private String stationName;
+	private String stationLineName;
+	private String directionTypeName;
+	
 	private String createDateStr;
 	private String updateDateStr;
 	

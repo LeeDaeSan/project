@@ -8,5 +8,5 @@ public interface CommCodeService {
 
 	// 공통 코드 리스트
 	public Map<String, Object> list(String type);
-	
+
 }

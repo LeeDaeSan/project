@@ -7,26 +7,26 @@ import org.springframework.stereotype.Service;
 
 import com.ds.home.etc.util.ResponseUtil;
 import com.ds.home.etc.util.StringUtil;
-import com.ds.home.realestate.mapper.CommCodeMapper;
-import com.ds.home.realestate.service.CommCodeService;
+import com.ds.home.realestate.mapper.CityLocationMapper;
+import com.ds.home.realestate.service.CityLocationService;
 
 @Service
-public class CommCodeServiceImpl implements CommCodeService {
-	
+public class CityLocationServiceImpl implements CityLocationService {
+
 	@Autowired
-	private CommCodeMapper commCodeMapper;
+	private CityLocationMapper cityLocationMapper;
 	
 	@Override
-	public Map<String, Object> list(String type) {
-		
+	public Map<String, Object> list(String depth, String cortarNo) {
+
 		Map<String, Object> resultMap = null;
 		
 		try {
 			
-			if (StringUtil.isNotEmpty(type)) {
+			if (StringUtil.isNotEmpty(depth) ) {
 				
 				resultMap = ResponseUtil.successMap();
-				resultMap.put("list", commCodeMapper.list(type));
+				resultMap.put("list", cityLocationMapper.list(depth, cortarNo));
 				
 			}
 			
@@ -37,5 +37,6 @@ public class CommCodeServiceImpl implements CommCodeService {
 		
 		return resultMap;
 	}
+
 	
 }

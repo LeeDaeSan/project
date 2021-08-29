@@ -2,7 +2,6 @@ var common = {
 	
 	date : {
 		toString : function (date, pattern) {
-			
 			var y = date.getFullYear();
 			var m = (date.getMonth() + 1);
 				m = m < 10 ? '0' + m : m;
@@ -10,7 +9,7 @@ var common = {
 				d = d < 10 ? '0' + d : d;
 				
 			return [y, m, d].join(pattern);
-		} 
+		},
 	},
 
 	string : {

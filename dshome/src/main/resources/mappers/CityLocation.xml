@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ds.home.realestate.mapper.RealEstateMapper">
+<mapper namespace="com.ds.home.realestate.mapper.CityLocationMapper">
 
-	<select id="getCityLocationList" resultType="cityLocation" parameterType="cityLocation">
+	<select id="list" resultType="cityLocation" parameterType="cityLocation">
 	
-		SELECT * FROM cityLocation
+		SELECT * FROM CityLocation
 		<where>
 			<if test="depth != null and !depth.equals('')">
-				AND depth = #{depth}
+				AND Depth = #{depth}
 			</if>
 			
 			<if test="cortarNo != null and !cortarNo.equals('')">
-				AND parentCortarNo = #{cortarNo}
+				AND ParentCortarNo = #{cortarNo}
 			</if>
 			
 		</where>
