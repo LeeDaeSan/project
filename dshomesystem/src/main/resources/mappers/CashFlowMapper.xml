@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dshome.system.model.cashflow.mapper.CashFlowMapper">
+
+	<!-- 사용자 현금흐름표 정보 목록 조회 -->
+	<select id="select" parameterType="com.dshome.system.model.dto.PagingDTO" resultType="cashFlow">
+		SELECT
+			CashFlowIdx	,
+			MemberIdx	,
+			FlowType	,
+			FlowDate	,
+			Category1	,
+			Category2	,
+			Category3	,
+			Price		,
+			CreateDate	,
+			UpdateDate
+			
+		<!-- 공통 검색 조건 -->
+		<include refid="selectOfWhere"></include>
+  		 
+  		ORDER BY FlowDate DESC
+	</select>
+	
+	<!-- 사용자 현금흐름표 통계 정보 목록 조회 -->
+	<select id="selectOfStatistics" parameterType="com.dshome.system.model.dto.PagingDTO" resultType="com.dshome.system.model.dto.CashFlowDTO">
+		SELECT
+			Category1,
+			SUM(Price) AS TotalPrice
+		
+		<!-- 공통 검색 조건 -->
+		<include refid="selectOfWhere"></include>
+		
+		<!-- 분류1 group -->
+		GROUP BY Category1
+		
+		<!-- 총액 기준 정렬 -->
+		ORDER BY TotalPrice DESC
+	</select>
+	
+	<!-- 사용자 현금흐름표 등록 -->
+	<insert id="insert" parameterType="cashFlow">
+		INSERT INTO CashFlow
+		(
+			MemberIdx		,
+			FlowType		,
+			FlowDate		,
+			Category1		,
+			Category2		,
+			Category3		,
+			Price
+		)
+		VALUES
+		(
+			#{memberIdx}	,
+			#{flowType}		,
+			#{flowDate}		,
+			#{category1}	,
+			#{category2}	,
+			#{category3}	,
+			#{price}
+		)
+	</insert>
+	
+	<!-- 목록 공통 검색 조건 -->
+	<sql id="selectOfWhere">
+		FROM CashFlow
+		
+		<where>
+			
+			<!-- 유형 검색 -->
+			<if test="@com.dshome.system.etc.util.StringUtil@isNotEmpty(model.flowType)">
+				FlowType = #{model.flowType}
+			</if>
+			
+			<!-- 날짜 검색 -->
+			<if test="@com.dshome.system.etc.util.StringUtil@isNotEmpty(model.flowDateStr)">
+				AND DATE_FORMAT(flowDate, '%Y%m') = #{model.flowDateStr}
+			</if>
+			
+		</where>
+	</sql>
+</mapper>

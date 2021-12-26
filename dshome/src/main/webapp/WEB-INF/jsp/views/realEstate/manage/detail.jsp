@@ -63,21 +63,16 @@ $(function(){
 		$("#delete").remove();
 	}
 	
-=======
->>>>>>> master
 	// 저장 버튼 클릭 이벤트
 	$("#save").unbind("click").click(function(){
 		fn_save(urlParamType == "I" ? "I" : "U", urlParamIdx);
 	});
 	
-<<<<<<< HEAD
-=======
 	// 수정 버튼 클릭 이벤트
 	$("#update").unbind("click").click(function(){
 		fn_save("U");
 	})
 	
->>>>>>> master
 	// 삭제 버튼 클릭 이벤트
 	$("#delete").unbind("click").click(function(){
 		fn_save("D", urlParamIdx);
@@ -102,7 +97,6 @@ $(function(){
 		var exclusiveSpace = $("#exclusiveSpace").val() / 3.3058;
 		
 		$(this).find("span").text(exclusiveSpace.toFixed(2));
-		
 	});
 	
 	// 총 금액 계산

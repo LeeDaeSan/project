@@ -88,7 +88,6 @@ function memberRealEstateList (page) {
 			
 			for (var i = 0; i < listLength; i++) {
 				var thisData = list[i];
-				console.log(thisData);
 				html += '<tr class="detail_tr" idx="' + thisData.memberRealEstateIdx + '">';
 				html += '	<td class="text-tooltip text-right">' + (i + 1) + '</td>';
 				html += '	<td class="text-tooltip">' + thisData.houseName + '</td>';

@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+.table th, .table td {
+	padding			: 3px !important;
+	font-size		: 13px !important;
+}
+.table td {
+	color			: #484848;
+}
+.align-center {
+    text-align 		: center;
+}
+.align-right {
+	text-align		: right;
+}
+.border-bottom-theme {
+	border-bottom 	: 2px solid #375dcd !important;
+}
